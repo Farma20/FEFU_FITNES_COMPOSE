@@ -1,6 +1,7 @@
 package com.example.fefu_fitnes_compose.Screens.MainMenuPackage
 
 import android.media.metrics.Event
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,71 +44,80 @@ private val newsItems = listOf<String>(
 @Preview(showBackground = true)
 @Composable
 fun MainMenuUI() {
-    Column(
-        modifier = Modifier.verticalScroll(rememberScrollState())
-    ) {
+    Column() {
         UppBar()
-        NewsList()
-        Text(
-            modifier = Modifier.padding(top=20.dp, start = 8.dp, bottom = 8.dp),
-            text = "Ближайшая запись",
-            fontSize = 20.sp,
-        )
-        EventCard()
-        Text(
-            modifier = Modifier.padding(top=20.dp, start = 8.dp, bottom = 8.dp),
-            text = "Активность",
-            fontSize = 20.sp,
-        )
-        UserActive()
-        Spacer(modifier = Modifier.padding(30.dp))
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            NewsList()
+            Text(
+                modifier = Modifier
+                    .padding(top = 20.dp, start = 8.dp, bottom = 8.dp),
+                text = "Ближайшая запись",
+                fontSize = 20.sp,
+            )
+            EventCard()
+            Text(
+                modifier = Modifier.padding(top=20.dp, start = 8.dp, bottom = 8.dp),
+                text = "Активность",
+                fontSize = 20.sp,
+            )
+            UserActive()
+            Spacer(modifier = Modifier.padding(30.dp))
+        }
     }
 }
 
 @Composable
 private fun UppBar() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        BlueDark,
-                        BlueLight
-                    )
-                )
-            ),
+    Surface(
+        elevation = 10.dp,
+        modifier = Modifier.clip(RoundedCornerShape(
+            bottomStart = 10.dp,
+            bottomEnd = 10.dp,
+            ))
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.qr_code),
-            contentDescription = "qrCode",
+        Row(
             modifier = Modifier
-                .width(140.dp)
-                .height(140.dp)
-                .padding(16.dp)
-        )
-
-        Column(
-            modifier = Modifier.padding(10.dp),
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            BlueDark,
+                            BlueLight
+                        )
+                    )
+                ),
         ) {
-            Text(
-                modifier = Modifier.padding(top= 5.dp),
-                text = "Привет, Юра!",
-                color = Color.White,
-                fontSize = 30.sp
+            Image(
+                painter = painterResource(id = R.drawable.qr_code),
+                contentDescription = "qrCode",
+                modifier = Modifier
+                    .width(140.dp)
+                    .height(140.dp)
+                    .padding(16.dp)
             )
-            Text(
-                modifier = Modifier.padding(top= 5.dp),
-                text = "Покажи QR-код",
-                color = Color.White,
-                fontSize = 16.sp
-            )
-            Text(
-                text = "администратору",
-                color = Color.White,
-                fontSize = 16.sp
-            )
+
+            Column(
+                modifier = Modifier.padding(10.dp),
+            ) {
+                Text(
+                    modifier = Modifier.padding(top= 5.dp),
+                    text = "Привет, Юра!",
+                    color = Color.White,
+                    fontSize = 30.sp
+                )
+                Text(
+                    modifier = Modifier.padding(top= 5.dp),
+                    text = "Покажи QR-код",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+                Text(
+                    text = "администратору",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+            }
         }
     }
 }
