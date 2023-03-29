@@ -32,6 +32,20 @@ class DateGenerator() {
         return initMonthData
     }
 
+    fun addWeekToStart(monthData: MonthData):MonthData {
+        val updateMonthData = monthData.copy()
+        updateMonthData.weekList.add(0,
+            weekGenerate(
+                monthData
+                    .weekList[monthData.weekList.size - 1]
+                    .dayLists[0]
+                    .day
+                    .plusDays(7)
+            )
+        )
+        return updateMonthData
+    }
+
     fun addWeekToEnd(monthData: MonthData):MonthData {
         val updateMonthData = monthData.copy()
         updateMonthData.weekList.add(

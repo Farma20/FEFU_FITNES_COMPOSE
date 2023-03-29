@@ -75,7 +75,6 @@ fun Calendar(){
     val itemSizePx = with(density) { itemSize.toPx() }
     val itemsScrollCount = 7
 
-    weeks = dateGenerator.initData()
 
     Row(
         modifier = Modifier
@@ -86,6 +85,9 @@ fun Calendar(){
     ) {
         IconButton(
             onClick = {
+                weeks = dateGenerator.addWeekToStart(weeks)
+                daysCount = weeks.getAllDays().count()
+
                 coroutineScope.launch {
                     listState.animateScrollBy(
                         value = -itemSizePx * itemsScrollCount,
@@ -136,10 +138,11 @@ fun Calendar(){
                     }
                 }
 
-                //Стартовая позиция
-                coroutineScope.launch {
-                    listState.scrollToItem(7)
-                }
+
+            }
+            //Стартовая позиция
+            coroutineScope.launch {
+                listState.scrollToItem(7)
             }
             Row(modifier = Modifier
                 .width((42 * 7).dp)
@@ -151,7 +154,8 @@ fun Calendar(){
         IconButton(
             onClick = {
 
-
+                weeks = dateGenerator.addWeekToEnd(weeks)
+                daysCount = weeks.getAllDays().count()
 
                 coroutineScope.launch {
                     coroutineScope.launch {
@@ -161,10 +165,6 @@ fun Calendar(){
                         )
                     }
                 }
-
-//                weeks = dateGenerator.addWeekToEnd(weeks)
-//                println(weeks)
-//                daysCount = weeks.getAllDays().size
 
             },
             modifier = Modifier.size(width = 13.dp, height = 23.dp)
