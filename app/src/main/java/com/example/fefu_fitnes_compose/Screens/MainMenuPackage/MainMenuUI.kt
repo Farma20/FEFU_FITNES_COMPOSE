@@ -9,6 +9,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -44,9 +46,9 @@ private val newsItems = listOf<String>(
 @Preview(showBackground = true)
 @Composable
 fun MainMenuUI() {
-    Column() {
+    Column(Modifier.verticalScroll(rememberScrollState())) {
         UppBar()
-        Column(Modifier.verticalScroll(rememberScrollState())) {
+        Column() {
             NewsList()
             Text(
                 modifier = Modifier
@@ -70,10 +72,12 @@ fun MainMenuUI() {
 private fun UppBar() {
     Surface(
         elevation = 10.dp,
-        modifier = Modifier.clip(RoundedCornerShape(
-            bottomStart = 10.dp,
-            bottomEnd = 10.dp,
+        modifier = Modifier
+            .clip(RoundedCornerShape(
+                bottomStart = 10.dp,
+                bottomEnd = 10.dp,
             ))
+            .shadow(AppBarDefaults.TopAppBarElevation)
     ) {
         Row(
             modifier = Modifier

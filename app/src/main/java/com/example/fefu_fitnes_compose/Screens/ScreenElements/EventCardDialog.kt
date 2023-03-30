@@ -52,7 +52,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                         fontWeight = FontWeight.Medium
                     )
                     Column(
-
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             modifier = Modifier.padding(top = 4.dp),

@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 
 @Composable
@@ -33,7 +34,7 @@ fun EventCard() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp)
+            .padding(start = 8.dp, end = 8.dp, top = 8.dp)
             .clickable {
                 openDialog.value = !openDialog.value
             }
@@ -43,66 +44,76 @@ fun EventCard() {
             EventCardDialog(openDialog)
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            Column(
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(0.5f),
-                    text = "Групповое занятие по аэробике",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 2,
-                )
-                Row(
-                    modifier = Modifier.padding(top = 4.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.location_icon),
-                        contentDescription = "loc_ic"
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 4.dp),
-                        text = "Корпус S, зал аэробики",
-                        fontSize = 12.sp
-                    )
-                }
-                Row(
-                    modifier = Modifier.padding(top = 4.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.couch_icon),
-                        contentDescription = "loc_ic"
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 4.dp),
-                        text = "Кердун Юлия Олеговна",
-                        fontSize = 12.sp,
-                    )
-                }
+        Row() {
+            Box(
+                modifier = Modifier
+                    .width(7.dp)
+                    .height(98.dp)
+                    .background(BlueLight)
+            ){
+
             }
-            Column(
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Text(
-                    text = "Сегодня",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    text = "14:00 - 16:00",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    modifier = Modifier.padding(top = 16.0.dp),
-                    text = "Оплачено",
-                    fontSize = 18.sp,
-                    color = Color.Gray,
-                )
+                Column(
+                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(0.5f),
+                        text = "Групповое занятие по аэробике",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 2,
+                    )
+                    Row(
+                        modifier = Modifier.padding(top = 4.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.location_icon),
+                            contentDescription = "loc_ic"
+                        )
+                        Text(
+                            modifier = Modifier.padding(start = 4.dp),
+                            text = "Корпус S, зал аэробики",
+                            fontSize = 12.sp
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.padding(top = 4.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.couch_icon),
+                            contentDescription = "loc_ic"
+                        )
+                        Text(
+                            modifier = Modifier.padding(start = 4.dp),
+                            text = "Кердун Юлия Олеговна",
+                            fontSize = 12.sp,
+                        )
+                    }
+                }
+                Column(
+                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+                ) {
+                    Text(
+                        text = "Сегодня",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Text(
+                        text = "14:00 - 16:00",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Text(
+                        modifier = Modifier.padding(top = 16.0.dp),
+                        text = "Оплачено",
+                        fontSize = 18.sp,
+                        color = Color.Gray,
+                    )
+                }
             }
         }
     }
