@@ -1,33 +1,30 @@
-package com.example.fefu_fitnes_compose.Screens.TimeTablePackage
+package com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI
 
-import android.annotation.SuppressLint
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.EventCard
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.TimeTableViewModel
 import com.example.fefu_fitnes_compose.ui.theme.Blue
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
@@ -36,22 +33,27 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 @Preview(showBackground = true)
 @Composable
 fun TimeTableUI(){
     Column() {
-        UpBar()
-        TabLayout()
+
+        val currentData = remember {
+            mutableStateOf(LocalDate.now())
+        }
+
+
+
+        UpBar(currentData)
+        TabLayout(currentData)
     }
 }
 
 @Composable
-private fun UpBar(){
+private fun UpBar(currentData:MutableState<LocalDate>){
     Surface(
         modifier = Modifier
             .padding(bottom = 5.dp)
@@ -105,19 +107,26 @@ private fun UpBar(){
                     contentDescription = null,
                 )
             }
-            Calendar()
+
+            Calendar(currentData)
         }
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun TabLayout(){
+private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: TimeTableViewModel = viewModel()){
 
     val buttonList = listOf("Все занятия", "Мои занятия")
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
+
+    val bookingEvents by timeTableViewModel.userEvents.observeAsState()
+    val allEvents by timeTableViewModel.allEvents.observeAsState()
+    val selectEvents = selectEvents(allEvents!!, currentData.value)
+    val userEvents = getUserEvents(allEvents!!, bookingEvents!!)
+    val selectedUserEvents = selectEvents(userEvents, currentData.value)
 
     Column(
     ) {
@@ -127,9 +136,9 @@ private fun TabLayout(){
                 .shadow(AppBarDefaults.TopAppBarElevation),
             selectedTabIndex = tabIndex,
             indicator = {tabPosition ->
-                        TabRowDefaults.Indicator(
-                            Modifier.pagerTabIndicatorOffset(pagerState, tabPosition)
-                        )
+                TabRowDefaults.Indicator(
+                    Modifier.pagerTabIndicatorOffset(pagerState, tabPosition)
+                )
             },
             backgroundColor = Blue,
             contentColor = Yellow
@@ -160,17 +169,35 @@ private fun TabLayout(){
                 modifier = Modifier.fillMaxSize()
             ){
                 if(index == 0){
-                    items(32){
-                        EventCard()
+                    items(selectEvents.size){id->
+                        EventCard(selectEvents[id])
                     }
                 }
-                if(index == 1){
-                    items(1){
-                        EventCard()
+                if (index == 1){
+                    items(selectedUserEvents.size){id->
+                        EventCard(selectEvents[id])
                     }
                 }
-
             }
         }
     }
+}
+
+fun selectEvents(allEvents: List<UpdateEventDataModel>, day:LocalDate):List<UpdateEventDataModel>{
+    val dayEventList = mutableListOf<UpdateEventDataModel>()
+    for(item in allEvents){
+        if (item.date == day)
+            dayEventList.add(item)
+    }
+    return dayEventList
+}
+
+fun getUserEvents(allEvents: List<UpdateEventDataModel>, booking: List<BookingDataModel>):List<UpdateEventDataModel>{
+    val userEvents = mutableListOf<UpdateEventDataModel>()
+    val bookingIdList = booking.map{it.eventId}
+    for(item in allEvents){
+        if (item.eventId in bookingIdList)
+            userEvents.add(item)
+    }
+    return userEvents
 }

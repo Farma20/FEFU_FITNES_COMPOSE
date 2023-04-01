@@ -1,4 +1,4 @@
-package com.example.fefu_fitnes_compose.Screens.TimeTablePackage
+package com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI
 
 import java.time.LocalDate
 
@@ -19,7 +19,7 @@ private val convertNumInMonth = mapOf<Int, String>(
 
 class DateGenerator() {
 
-    fun initData():MonthData{
+    fun initData(): MonthData {
         val currentDate = LocalDate.now()
         val monday = currentDate.minusDays((currentDate.dayOfWeek.value - 1).toLong())
 
@@ -32,7 +32,7 @@ class DateGenerator() {
     }
 
 
-    fun addWeekToEnd(monthData: MonthData):MonthData {
+    fun addWeekToEnd(monthData: MonthData): MonthData {
         val updateMonthData = monthData.copy()
         updateMonthData.weekList.add(
             weekGenerate(
@@ -46,7 +46,7 @@ class DateGenerator() {
         return updateMonthData
     }
 
-    private fun weekGenerate(_monday_:LocalDate):WeekData{
+    private fun weekGenerate(_monday_:LocalDate): WeekData {
         val week = WeekData(convertNumInMonth[_monday_.month.value]!!, mutableListOf())
         for (day in 1..7){
             val dayDate = _monday_.plusDays(day.toLong() - 1)

@@ -1,19 +1,16 @@
-package com.example.fefu_fitnes_compose.Screens.TimeTablePackage
+package com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.*
-import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -25,11 +22,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.TimeTableViewModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
-import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -52,7 +49,7 @@ data class MonthData(var weekList: MutableList<WeekData>) {
 @OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun Calendar(){
+fun Calendar(currentData:MutableState<LocalDate>){
 
     val dateGenerator = DateGenerator()
 
@@ -169,6 +166,7 @@ fun Calendar(){
                                 .clip(CircleShape),
                             onClick = {
                                 selectDayIndex = itemId
+                                currentData.value = weeks.getAllDays()[itemId].day
                             }
                         ) {
                             Column(

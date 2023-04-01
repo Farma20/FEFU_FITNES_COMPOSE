@@ -6,6 +6,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +14,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -21,11 +23,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.TimeTableViewModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
+import com.example.fefu_fitnes_compose.ui.theme.Yellow
 
 @Composable
-fun EventCardDialog(openDialog: MutableState<Boolean>) {
+fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataModel, timeTableViewModel: TimeTableViewModel = viewModel()) {
     Dialog(
         onDismissRequest = { openDialog.value = false }
     ) {
@@ -42,11 +49,11 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(start = 8.dp, end = 8.dp, top= 12.dp, bottom = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Групповое занятие по аэробике",
+                        text = event.eventName,
                         modifier = Modifier.fillMaxWidth(0.6f),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Medium
@@ -56,15 +63,10 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                     ) {
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
-                            text = "14:00 - 16:00",
+                            text = "${event.startEventTime} - ${event.endEventTime}",
                             fontSize = 16.sp,
                             maxLines = 1,
                             fontWeight = FontWeight.Medium
-                        )
-                        Text(
-                            text = "Оплачено",
-                            fontSize = 18.sp,
-                            color = Color.Gray,
                         )
                     }
 
@@ -79,7 +81,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(start = 8.dp, end = 8.dp, top= 12.dp, bottom = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Row(
@@ -93,7 +95,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                         Column() {
                             Text(
                                 modifier = Modifier.fillMaxWidth(0.55f),
-                                text = "Кердун Юлия Олеговна",
+                                text = event.couchName,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -117,7 +119,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                                     .padding(end = 2.dp)
                             )
                             Text(
-                                text = "8 (999) 618 10 12",
+                                text = event.couchPhone,
                                 fontSize = 11.sp,
                                 color = BlueURL
                             )
@@ -128,13 +130,13 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.mail_icon),
-                                contentDescription = "phone_icon",
+                                contentDescription = "",
                                 modifier = Modifier
                                     .size(11.dp)
                                     .padding(end = 2.dp)
                             )
                             Text(
-                                text = "96kerdun.iuol@dvfu.ru", fontSize = 11.sp,
+                                text = event.couchEmail, fontSize = 11.sp,
                                 color = BlueURL
                             )
                         }
@@ -151,7 +153,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 4.dp),
+                        .padding(start = 8.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
@@ -163,7 +165,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                             .padding(end = 4.dp)
                     )
                     Text(
-                        text = "Корпус S, зал аэробики",
+                        text = event.eventLocation,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -172,7 +174,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp),
-                    text = "Степ аэробика – это специализированный тренинг, который идеально подходит для похудения, проработки мышц ног и ягодиц. Занятие на степ платформе состоит из набора базовых шагов. Они объединены в комбинации и выполняются в разных вариациях, которые отличаются по типу сложности. За счет изменения высоты шага уменьшается или увеличивается нагрузка. ",
+                    text = event.eventDescription,
                     fontSize = 13.sp,
                 )
 
@@ -185,8 +187,10 @@ fun EventCardDialog(openDialog: MutableState<Boolean>) {
                 )
 
                 LazyRow(
-                    modifier = Modifier.padding(8.dp)
-                ) {
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 8.dp, top= 12.dp, bottom = 12.dp),
+
+                    ) {
                     items(5) { id ->
                         Image(
                             painter = painterResource(id = image[id]),

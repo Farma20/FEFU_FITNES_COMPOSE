@@ -1,14 +1,13 @@
 package com.example.fefu_fitnes_compose.Screens.BottomNavigate
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.MainMenuUI
 import com.example.fefu_fitnes_compose.Screens.ProfilePackage.ProfileUI
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.ServicesUI
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.TimeTableUI
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI.TimeTableUI
 
 @Composable
 fun BottomNavGraph(navController: NavHostController){

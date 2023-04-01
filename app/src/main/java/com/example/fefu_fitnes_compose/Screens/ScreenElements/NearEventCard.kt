@@ -1,31 +1,25 @@
 package com.example.fefu_fitnes_compose.Screens.ScreenElements
 
-import android.widget.ImageButton
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.ButtonDefaults.buttonColors
-import androidx.compose.runtime.*
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
@@ -33,7 +27,7 @@ import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
 
 @Composable
-fun EventCard(event: UpdateEventDataModel) {
+fun NearEventCard(event: UpdateEventDataModel) {
     val openDialog = remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
@@ -52,14 +46,6 @@ fun EventCard(event: UpdateEventDataModel) {
         }
 
         Row() {
-            Box(
-                modifier = Modifier
-                    .width(10.dp)
-                    .height(110.dp)
-                    .background(BlueLight)
-            ){
-
-            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
@@ -108,6 +94,11 @@ fun EventCard(event: UpdateEventDataModel) {
                 Column(
                     modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
                 ) {
+                    Text(
+                        text = "Сегодня",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium
+                    )
 
                     Text(
                         text = "${event.startEventTime} - ${event.endEventTime}",
@@ -115,28 +106,15 @@ fun EventCard(event: UpdateEventDataModel) {
                         fontWeight = FontWeight.Medium
                     )
 
-                    Row(
-                        modifier = Modifier.padding(top = 1.dp),
-                    ) {
-                        Text(
-                            text = "Свободных мест ",
-                            fontSize = 10.sp,
-                        )
-                        Text(
-                            text = "${event.occupiedSpaces}/${event.totalSpaces}",
-                            fontSize = 10.sp,
-                            color = BlueURL
-                        )
-                    }
 
                     TextButton(
                         onClick = {},
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = Yellow,
+                            backgroundColor = Color.Gray,
                             contentColor = Color.White
                         ),
                         modifier = Modifier
-                            .padding(top = 17.dp)
+                            .padding(top = 11.dp)
                             .width(100.dp)
                             .height(30.dp),
                         shape = RoundedCornerShape(10.dp),
@@ -148,7 +126,7 @@ fun EventCard(event: UpdateEventDataModel) {
                         )
                     ) {
                         Text(
-                            text = "Записаться",
+                            text = "Отменить",
                             fontSize = 14.sp
                         )
                     }
