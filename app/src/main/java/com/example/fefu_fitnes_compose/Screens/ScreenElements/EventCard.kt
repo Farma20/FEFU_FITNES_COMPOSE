@@ -26,14 +26,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.TimeTableViewModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
 
 @Composable
-fun EventCard(event: UpdateEventDataModel) {
+fun EventCard(event: UpdateEventDataModel,  timeTableViewModel: TimeTableViewModel = viewModel()) {
     val openDialog = remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
@@ -130,7 +132,9 @@ fun EventCard(event: UpdateEventDataModel) {
                     }
 
                     TextButton(
-                        onClick = {},
+                        onClick = {
+                                  timeTableViewModel.addUserEvent(event.eventId)
+                        },
                         colors = ButtonDefaults.textButtonColors(
                             backgroundColor = Yellow,
                             contentColor = Color.White

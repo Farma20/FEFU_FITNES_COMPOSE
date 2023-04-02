@@ -126,7 +126,7 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
     val allEvents by timeTableViewModel.allEvents.observeAsState()
     val selectEvents = selectEvents(allEvents!!, currentData.value)
     val userEvents = getUserEvents(allEvents!!, bookingEvents!!)
-    val selectedUserEvents = selectEvents(userEvents, currentData.value)
+    val selectUserEvents = selectEvents(userEvents, currentData.value)
 
     Column(
     ) {
@@ -174,8 +174,8 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
                     }
                 }
                 if (index == 1){
-                    items(selectedUserEvents.size){id->
-                        EventCard(selectEvents[id])
+                    items(selectUserEvents.size){id->
+                        EventCard(selectUserEvents[id])
                     }
                 }
             }

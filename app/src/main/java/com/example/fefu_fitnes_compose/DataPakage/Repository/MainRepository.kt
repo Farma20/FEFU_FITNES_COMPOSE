@@ -113,9 +113,7 @@ object MainRepository: ViewModel() {
 
 
     init {
-
         _currentUserEvents.value = listOf(BookingDataModel())
-
         _currentUser.value = UserDataModel("Райан", "Гослинг", "№583057349", "0 занятий")
         _currentNews.value = listOf(
             NewsDataModel("Чемпионат АССК по настольному теннису"),

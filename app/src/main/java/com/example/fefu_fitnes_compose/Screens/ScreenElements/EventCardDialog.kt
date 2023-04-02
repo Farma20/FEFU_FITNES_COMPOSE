@@ -32,7 +32,7 @@ import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
 
 @Composable
-fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataModel, timeTableViewModel: TimeTableViewModel = viewModel()) {
+fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataModel) {
     Dialog(
         onDismissRequest = { openDialog.value = false }
     ) {
