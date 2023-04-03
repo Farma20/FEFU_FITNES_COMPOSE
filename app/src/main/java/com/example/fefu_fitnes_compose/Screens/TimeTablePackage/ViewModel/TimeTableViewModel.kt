@@ -14,23 +14,20 @@ class TimeTableViewModel:ViewModel() {
     private val _allEvents = MutableLiveData<List<UpdateEventDataModel>>()
     val allEvents:LiveData<List<UpdateEventDataModel>> = _allEvents
 
-    private val _userEvents = MutableLiveData<List<BookingDataModel>>()
-    val userEvents: LiveData<List<BookingDataModel>> = _userEvents
+    private val _userEvents = MutableLiveData<MutableList<BookingDataModel>>()
+    val userEvents: LiveData<MutableList<BookingDataModel>> = _userEvents
 
 
     fun addUserEvent(bookingId: Int){
         for(event in _allEvents.value!!)
             if(event.eventId == bookingId){
-                val newUserEvents = _userEvents.value!! as MutableList
+                val newUserEvents = _userEvents.value!!
                 newUserEvents.add(BookingDataModel(eventId = bookingId))
                 _userEvents.value = newUserEvents
                 break
             }
     }
 
-    fun setMainEvent(workout:UpdateEventDataModel){
-        MainRepository.setEvent(workout)
-    }
 
     fun pushNewBooking(bookingId: Int){
         MainRepository.pushNewBookingOnServer(bookingId)
@@ -65,34 +62,22 @@ class TimeTableViewModel:ViewModel() {
     }
 
     init {
-        _userEvents.value = listOf(BookingDataModel())
-        _allEvents.value = listOf(UpdateEventDataModel(
-            0,
-            "Групповое занятие по аэробике",
-            LocalDate.now(),
-            "10:00",
-            "12:00",
-            "Корпус S, зал аэробики",
-            "Кердун Юлия Олеговна",
-            "8 (999) 618 10 12",
-            "96kerdun.iuol@dvfu.ru",
-            20,
-            10,
-            "Степ аэробика – это специализированный тренинг, который идеально подходит для похудения, проработки мышц ног и ягодиц. Занятие на степ платформе состоит из набора базовых шагов. Они объединены в комбинации и выполняются в разных вариациях, которые отличаются по типу сложности. За счет изменения высоты шага уменьшается или увеличивается нагрузка."
-            )
-        )
-
-        MainRepository.getUserEventsFromSever().observeForever{
+        MainRepository.currentUserEvents.observeForever{
             _userEvents.value = it
-        }
-
-        MainRepository.getAllEventFromServer().observeForever{
-            MainRepository.setAllEvents(convertEvents(it.toList()))
         }
 
         MainRepository.allEvents.observeForever{
             _allEvents.value = it
         }
+
+//        MainRepository.getUserEventsFromSever().observeForever{
+//            _userEvents.value = it as MutableList<BookingDataModel>
+//        }
+
+//        MainRepository.getAllEventFromServer().observeForever{
+//            MainRepository.setAllEvents(convertEvents(it.toList()))
+//        }
+
     }
 
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.TimeTableViewModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
@@ -35,8 +37,16 @@ import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
 
 @Composable
-fun EventCard(event: UpdateEventDataModel,  timeTableViewModel: TimeTableViewModel = viewModel()) {
+fun EventCard(
+    event: UpdateEventDataModel,
+    timeTableViewModel: TimeTableViewModel = viewModel()
+) {
     val openDialog = remember { mutableStateOf(false) }
+    val bookingEvents by timeTableViewModel.userEvents.observeAsState()
+    val isBooking = remember {
+        mutableStateOf(isBooking(event, bookingEvents!!))
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -131,12 +141,17 @@ fun EventCard(event: UpdateEventDataModel,  timeTableViewModel: TimeTableViewMod
                         )
                     }
 
+
+
                     TextButton(
                         onClick = {
-                                  timeTableViewModel.addUserEvent(event.eventId)
+                            if(!isBooking.value){
+                                timeTableViewModel.addUserEvent(event.eventId)
+                                isBooking.value = isBooking(event, bookingEvents!!)
+                            }
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = Yellow,
+                            backgroundColor = if(isBooking.value) Color.Gray else Yellow,
                             contentColor = Color.White
                         ),
                         modifier = Modifier
@@ -152,7 +167,7 @@ fun EventCard(event: UpdateEventDataModel,  timeTableViewModel: TimeTableViewMod
                         )
                     ) {
                         Text(
-                            text = "Записаться",
+                            text = if(isBooking.value) "Отменить" else "Записаться",
                             fontSize = 14.sp
                         )
                     }
@@ -161,4 +176,8 @@ fun EventCard(event: UpdateEventDataModel,  timeTableViewModel: TimeTableViewMod
             }
         }
     }
+}
+
+fun isBooking(event: UpdateEventDataModel, userEvents: MutableList<BookingDataModel>):Boolean{
+    return event.eventId in userEvents.map { it.eventId }
 }

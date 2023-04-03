@@ -13,6 +13,7 @@ import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookin
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 
 object MainRepository: ViewModel() {
@@ -23,14 +24,12 @@ object MainRepository: ViewModel() {
     private val _currentNews = MutableLiveData<List<NewsDataModel>>()
     val currentNews:LiveData<List<NewsDataModel>> = _currentNews
 
-    private val _currentUserEvents = MutableLiveData<List<BookingDataModel>>()
-    val currentUserEvents: LiveData<List<BookingDataModel>> = _currentUserEvents
-
-    private val _currentEvent = MutableLiveData<UpdateEventDataModel>()
-    val currentEvent: LiveData<UpdateEventDataModel> = _currentEvent
+    private val _currentUserEvents = MutableLiveData<MutableList<BookingDataModel>>()
+    val currentUserEvents: LiveData<MutableList<BookingDataModel>> = _currentUserEvents
 
     private val _allEvents = MutableLiveData<List<UpdateEventDataModel>>()
     val allEvents: LiveData<List<UpdateEventDataModel>> = _allEvents
+
 
 
     //связь с API
@@ -93,6 +92,8 @@ object MainRepository: ViewModel() {
 
 
 
+
+
     //Сеттеры
     fun setUser(user:UserDataModel){
         _currentUser.value = user
@@ -102,9 +103,6 @@ object MainRepository: ViewModel() {
         _allEvents.value = workouts
     }
 
-    fun setEvent(workout:UpdateEventDataModel){
-        _currentEvent.value = workout
-    }
 
     fun setNews(events:List<NewsDataModel>){
         _currentNews.value = events
@@ -113,7 +111,37 @@ object MainRepository: ViewModel() {
 
 
     init {
-        _currentUserEvents.value = listOf(BookingDataModel())
+        _currentUserEvents.value = mutableListOf()
+        _allEvents.value = listOf(
+            UpdateEventDataModel(
+                0,
+                "Групповое занятие по аэробике",
+                LocalDate.now(),
+                "10:00",
+                "12:00",
+                "Корпус S, зал аэробики",
+                "Кердун Юлия Олеговна",
+                "8 (999) 618 10 12",
+                "96kerdun.iuol@dvfu.ru",
+                20,
+                10,
+                "Степ аэробика – это специализированный тренинг, который идеально подходит для похудения, проработки мышц ног и ягодиц. Занятие на степ платформе состоит из набора базовых шагов. Они объединены в комбинации и выполняются в разных вариациях, которые отличаются по типу сложности. За счет изменения высоты шага уменьшается или увеличивается нагрузка."
+            ),
+            UpdateEventDataModel(
+                1,
+                "Групповое занятие по шахматам",
+                LocalDate.now(),
+                "10:00",
+                "12:00",
+                "Корпус S, зал аэробики",
+                "Кердун Юлия Олеговна",
+                "8 (999) 618 10 12",
+                "96kerdun.iuol@dvfu.ru",
+                20,
+                10,
+                "Степ аэробика – это специализированный тренинг, который идеально подходит для похудения, проработки мышц ног и ягодиц. Занятие на степ платформе состоит из набора базовых шагов. Они объединены в комбинации и выполняются в разных вариациях, которые отличаются по типу сложности. За счет изменения высоты шага уменьшается или увеличивается нагрузка."
+            )
+        )
         _currentUser.value = UserDataModel("Райан", "Гослинг", "№583057349", "0 занятий")
         _currentNews.value = listOf(
             NewsDataModel("Чемпионат АССК по настольному теннису"),
@@ -123,18 +151,6 @@ object MainRepository: ViewModel() {
             NewsDataModel("III этап зимнего сезона Студенческой Гребной Лиги"),
             NewsDataModel("Чем заняться в свободное время на каникулах?")
         )
-        _currentEvent.value = UpdateEventDataModel()
-
-
-//        allServices.value = listOf(
-//            ServicesModel("Студентам и сотрудникам", "— Разовое посещение", "300"),
-//            ServicesModel("Студентам и сотрудникам", "— 3 посещения", "800"),
-//            ServicesModel("Студентам и сотрудникам", "— 5 посещений", "1200"),
-//            ServicesModel("Гостям кампуса", "— 3 посещения", "900"),
-//            ServicesModel("Гостям кампуса", "— 5 посещений", "1400"),
-//        )
-
-
     }
 
 }

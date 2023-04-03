@@ -56,22 +56,16 @@ fun MainMenuUI(mainMenuViewModel: MainMenuViewModel = viewModel()) {
                 text = "Ближайшая запись",
                 fontSize = 20.sp,
             )
-            NearEventCard(UpdateEventDataModel(
-                0,
-                "Групповое занятие по аэробике",
-                LocalDate.now(),
-                "10:00",
-                "12:00",
-                "Корпус S, зал аэробики",
-                "Кердун Юлия Олеговна",
-                "8 (999) 618 10 12",
-                "96kerdun.iuol@dvfu.ru",
-                20,
-                10,
-                "Степ аэробика – это специализированный тренинг, который идеально подходит для похудения, проработки мышц ног и ягодиц. Занятие на степ платформе состоит из набора базовых шагов. Они объединены в комбинации и выполняются в разных вариациях, которые отличаются по типу сложности. За счет изменения высоты шага уменьшается или увеличивается нагрузка."
 
-            ))
-//            EmptyCard()
+            val nearUserEvent by mainMenuViewModel.nearUserEvent.observeAsState()
+            if (nearUserEvent!!.isEmpty()){
+                EmptyCard()
+            }
+            else{
+                NearEventCard(event = nearUserEvent!![0])
+            }
+
+
             Text(
                 modifier = Modifier.padding(top=20.dp, start = 8.dp, bottom = 8.dp),
                 text = "Активность",

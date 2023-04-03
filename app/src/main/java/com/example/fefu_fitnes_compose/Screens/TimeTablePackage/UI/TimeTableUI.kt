@@ -1,5 +1,6 @@
 package com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI
 
+import android.media.metrics.Event
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
