@@ -108,8 +108,8 @@ private fun UpBar(currentData:MutableState<LocalDate>){
                     contentDescription = null,
                 )
             }
-
             Calendar(currentData)
+
         }
     }
 }
@@ -162,9 +162,10 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
             }
         }
 
-        val currentPage = remember {
-            mutableStateOf(0)
+        LaunchedEffect(pagerState){
+            println("__________${pagerState.currentPage}____________")
         }
+
 
         HorizontalPager(
             count = buttonList.size,

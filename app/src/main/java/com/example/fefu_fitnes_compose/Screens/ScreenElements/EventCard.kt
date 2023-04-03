@@ -141,7 +141,7 @@ fun EventCard(
                         )
                     }
 
-
+                    isBooking.value = isBooking(event, bookingEvents!!)
 
                     TextButton(
                         onClick = {

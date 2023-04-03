@@ -153,4 +153,15 @@ object MainRepository: ViewModel() {
         )
     }
 
+    fun deleteUserEvent(bookingId: Int){
+        for(id in _currentUserEvents.value!!.indices){
+            if(_currentUserEvents.value!![id].eventId == bookingId){
+                _currentUserEvents.value!!.removeAt(id)
+                val newCurrentUserEvents = _currentUserEvents.value!!
+                _currentUserEvents.value = newCurrentUserEvents
+                break
+            }
+        }
+    }
+
 }

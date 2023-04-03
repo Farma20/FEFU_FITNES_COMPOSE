@@ -20,7 +20,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.ViewModel.MainMenuViewModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
@@ -108,7 +111,9 @@ fun NearEventCard(event: UpdateEventDataModel) {
 
 
                     TextButton(
-                        onClick = {},
+                        onClick = {
+                            MainRepository.deleteUserEvent(event.eventId)
+                        },
                         colors = ButtonDefaults.textButtonColors(
                             backgroundColor = Color.Gray,
                             contentColor = Color.White
