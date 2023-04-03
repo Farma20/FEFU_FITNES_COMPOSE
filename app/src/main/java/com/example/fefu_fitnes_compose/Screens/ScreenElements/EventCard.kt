@@ -149,6 +149,10 @@ fun EventCard(
                                 timeTableViewModel.addUserEvent(event.eventId)
                                 isBooking.value = isBooking(event, bookingEvents!!)
                             }
+                            else if (isBooking.value){
+                                timeTableViewModel.deleteUserEvent(event.eventId)
+                                isBooking.value = isBooking(event, bookingEvents!!)
+                            }
                         },
                         colors = ButtonDefaults.textButtonColors(
                             backgroundColor = if(isBooking.value) Color.Gray else Yellow,
@@ -179,5 +183,6 @@ fun EventCard(
 }
 
 fun isBooking(event: UpdateEventDataModel, userEvents: MutableList<BookingDataModel>):Boolean{
+    println("_______________${event.eventId in userEvents.map { it.eventId }} ${event.eventId}_____________________")
     return event.eventId in userEvents.map { it.eventId }
 }

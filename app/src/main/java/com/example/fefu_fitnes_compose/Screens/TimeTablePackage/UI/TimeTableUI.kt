@@ -161,13 +161,18 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
                 )
             }
         }
+
+        val currentPage = remember {
+            mutableStateOf(0)
+        }
+
         HorizontalPager(
             count = buttonList.size,
             state = pagerState,
             modifier = Modifier.weight(1f)
         ) {index ->
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ){
                 if(index == 0){
                     items(selectEvents.size){id->

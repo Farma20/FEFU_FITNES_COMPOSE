@@ -28,6 +28,15 @@ class TimeTableViewModel:ViewModel() {
             }
     }
 
+    fun deleteUserEvent(bookingId: Int){
+        for(id in _userEvents.value!!.indices){
+            if(_userEvents.value!![id].eventId == bookingId){
+                _userEvents.value!!.removeAt(id)
+                break
+            }
+        }
+    }
+
 
     fun pushNewBooking(bookingId: Int){
         MainRepository.pushNewBookingOnServer(bookingId)
