@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FEFU_FITNES_COMPOSE</string>
+    <string name="emptyEmailError">Почта не может быть пустой</string>
 </resources>
