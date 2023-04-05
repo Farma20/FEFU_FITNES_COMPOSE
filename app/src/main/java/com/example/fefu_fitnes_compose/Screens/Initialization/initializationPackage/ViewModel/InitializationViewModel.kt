@@ -43,11 +43,12 @@ class InitializationViewModel(
 
         val hasErrors = listOf(emailResult, passwordResult).any { !it.successful }
 
+        state = state.copy(
+            emailError = emailResult.errorMessage,
+            passwordError = passwordResult.errorMessage
+        )
+
         if(hasErrors){
-            state = state.copy(
-                emailError = emailResult.errorMessage,
-                passwordError = passwordResult.errorMessage
-            )
             return
         }
 
