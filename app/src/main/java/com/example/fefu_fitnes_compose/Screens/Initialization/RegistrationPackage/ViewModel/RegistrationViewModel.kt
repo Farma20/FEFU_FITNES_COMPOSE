@@ -5,8 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fefu_fitnes_compose.Domain.use_case.ValidateEmail
-import com.example.fefu_fitnes_compose.Domain.use_case.ValidatePassword
+import com.example.fefu_fitnes_compose.Domain.use_case.*
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Controllers.RegistrationFormEvent
 import kotlinx.coroutines.channels.Channel
@@ -31,6 +30,9 @@ class RegistrationViewModel: ViewModel() {
             is RegistrationFormEvent.EmailChanged->{
                 state = state.copy(email = event.email)
             }
+            is RegistrationFormEvent.GenderChanged->{
+                state = state.copy(gender = event.gender)
+            }
             is RegistrationFormEvent.BirthdayChanged->{
                 state = state.copy(birthday = event.birthday)
             }
@@ -40,6 +42,9 @@ class RegistrationViewModel: ViewModel() {
             is RegistrationFormEvent.RepeatPasswordChanged->{
                 state = state.copy(repeatPassword = event.repeatPassword)
             }
+            is RegistrationFormEvent.TermsChanged->{
+                state = state.copy(terms = event.terms)
+            }
             is RegistrationFormEvent.Submit->{
                 submitData()
             }
@@ -47,14 +52,32 @@ class RegistrationViewModel: ViewModel() {
     }
 
     private fun submitData() {
+        val loginResult = ValidateLogin().execute(state.login)
+        val phoneResult = ValidatePhone().execute(state.phone)
         val emailResult = ValidateEmail().execute(state.email)
+        val birthdayResult = ValidateBirthday().execute(state.birthday)
         val passwordResult = ValidatePassword().execute(state.password)
+        val repeatPasswordResult = ValidateRepeatedPassword().execute(state.password, state.repeatPassword)
+        val termsResult = ValidateTerms().execute(state.terms)
 
-        val hasErrors = listOf(emailResult, passwordResult).any{!it.successful}
+        val hasErrors = listOf(
+            loginResult,
+            phoneResult,
+            emailResult,
+            passwordResult,
+            repeatPasswordResult,
+            termsResult,
+            birthdayResult,
+        ).any{!it.successful}
 
         state = state.copy(
+            loginError = loginResult.errorMessage,
             emailError = emailResult.errorMessage,
-            passwordError = passwordResult.errorMessage
+            passwordError = passwordResult.errorMessage,
+            repeatPasswordError = repeatPasswordResult.errorMessage,
+            termsError = termsResult.errorMessage,
+            birthdayError = birthdayResult.errorMessage,
+            phoneError = phoneResult.errorMessage
         )
 
         if (hasErrors){

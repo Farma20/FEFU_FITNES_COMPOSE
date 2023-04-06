@@ -13,5 +13,7 @@ data class RegistrationFromStateModel(
     var password:String = "",
     var passwordError:String? = null,
     var repeatPassword:String = "",
-    var repeatPasswordError:String? = null
+    var repeatPasswordError:String? = null,
+    var terms: Boolean = false,
+    var termsError: String? = null
 )

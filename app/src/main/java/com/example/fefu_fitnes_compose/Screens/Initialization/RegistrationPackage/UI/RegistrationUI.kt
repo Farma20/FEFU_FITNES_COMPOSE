@@ -78,7 +78,7 @@ fun RegistrationUI() {
             Spacer(modifier = Modifier.height(spacerPadding))
             RegistrationEmail(state, registrationViewModel)
             Spacer(modifier = Modifier.height(spacerPadding))
-            RegistrationGender()
+            RegistrationGender(state, registrationViewModel)
             Spacer(modifier = Modifier.height(spacerPadding))
             RegistrationBirthday(state, registrationViewModel, context)
             Spacer(modifier = Modifier.height(spacerPadding-10.dp))
@@ -86,7 +86,7 @@ fun RegistrationUI() {
             Spacer(modifier = Modifier.height(spacerPadding))
             RegistrationRepeatPassword(state, registrationViewModel)
             Spacer(modifier = Modifier.height(spacerPadding))
-            RegistrationCheckBox()
+            RegistrationCheckBox(state, registrationViewModel)
             Spacer(modifier = Modifier.height(60.dp))
             RegistrationSubmitButton(registrationViewModel)
             Spacer(modifier = Modifier.height(60.dp))
@@ -97,121 +97,145 @@ fun RegistrationUI() {
 
 @Composable
 private fun RegistrationLogin(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
-    TextField(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        value = state.login,
-        onValueChange = {
-            viewModel.onEvent(RegistrationFormEvent.LoginChanged(it))
-        },
-        isError = false,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email
-        ),
-        placeholder = {
-            Row() {
-                Text(
-                    text = "Логин",
+    Column(){
+        TextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = state.login,
+            onValueChange = {
+                viewModel.onEvent(RegistrationFormEvent.LoginChanged(it))
+            },
+            isError = false,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email
+            ),
+            placeholder = {
+                Row() {
+                    Text(
+                        text = "Логин",
+                    )
+                    Text(
+                        text = "*",
+                        color = Color.Red
+                    )
+                }
+            },
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.registration_user),
+                    contentDescription = null,
                 )
-                Text(
-                    text = "*",
-                    color = Color.Red
-                )
-            }
-        },
-        leadingIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.registration_user),
-                contentDescription = null,
+            },
+            singleLine = true,
+            textStyle = TextStyle(fontSize = 16.sp),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+            ),
+        )
+        if(state.loginError != null){
+            Text(
+                text = state.loginError!!,
+                color = MaterialTheme.colors.error
             )
-        },
-        singleLine = true,
-        textStyle = TextStyle(fontSize = 16.sp),
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.Transparent,
-        ),
-    )
+        }
+    }
 }
 
 @Composable
 private fun RegistrationPhone(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
-    TextField(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        value = state.phone,
-        onValueChange = {
-            viewModel.onEvent(RegistrationFormEvent.PhoneChanged(it))
-        },
-        isError = false,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Phone
-        ),
-        placeholder = {
-            Row() {
-                Text(
-                    text = "Номер телефона",
+    Column() {
+        TextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = state.phone,
+            onValueChange = {
+                viewModel.onEvent(RegistrationFormEvent.PhoneChanged(it))
+            },
+            isError = false,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Phone
+            ),
+            placeholder = {
+                Row() {
+                    Text(
+                        text = "Номер телефона",
+                    )
+                    Text(
+                        text = "*",
+                        color = Color.Red
+                    )
+                }
+            },
+            leadingIcon = {
+                Image(
+                    modifier = Modifier
+                        .width(25.dp)
+                        .height(27.dp),
+                    painter = painterResource(id = R.drawable.phone_icon),
+                    contentDescription = null,
                 )
-                Text(
-                    text = "*",
-                    color = Color.Red
-                )
-            }
-        },
-        leadingIcon = {
-            Image(
-                modifier = Modifier
-                    .width(25.dp)
-                    .height(27.dp),
-                painter = painterResource(id = R.drawable.phone_icon),
-                contentDescription = null,
+            },
+            singleLine = true,
+            textStyle = TextStyle(fontSize = 16.sp),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+            ),
+        )
+        if(state.phoneError != null){
+            Text(
+                text = state.phoneError!!,
+                color = MaterialTheme.colors.error
             )
-        },
-        singleLine = true,
-        textStyle = TextStyle(fontSize = 16.sp),
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.Transparent,
-        ),
-    )
+        }
+    }
 }
 
 @Composable
 private fun RegistrationEmail(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
-    TextField(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        value = state.email,
-        onValueChange = {
-            viewModel.onEvent(RegistrationFormEvent.EmailChanged(it))
-        },
-        isError = false,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email
-        ),
-        placeholder = {
-            Row() {
-                Text(
-                    text = "Почта",
+    Column() {
+        TextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = state.email,
+            onValueChange = {
+                viewModel.onEvent(RegistrationFormEvent.EmailChanged(it))
+            },
+            isError = false,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email
+            ),
+            placeholder = {
+                Row() {
+                    Text(
+                        text = "Почта",
+                    )
+                    Text(
+                        text = "*",
+                        color = Color.Red
+                    )
+                }
+            },
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.registration_email),
+                    contentDescription = null,
                 )
-                Text(
-                    text = "*",
-                    color = Color.Red
-                )
-            }
-        },
-        leadingIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.registration_email),
-                contentDescription = null,
+            },
+            singleLine = true,
+            textStyle = TextStyle(fontSize = 16.sp),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+            ),
+        )
+        if(state.emailError != null){
+            Text(
+                text = state.emailError!!,
+                color = MaterialTheme.colors.error
             )
-        },
-        singleLine = true,
-        textStyle = TextStyle(fontSize = 16.sp),
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.Transparent,
-        ),
-    )
+        }
+    }
+
 }
 
 @Composable
-private fun RegistrationGender(){
-    val state = remember { mutableStateOf(true) }
+private fun RegistrationGender(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
     Row(
         modifier = Modifier.fillMaxWidth(0.9f),
         verticalAlignment = Alignment.CenterVertically,
@@ -229,8 +253,10 @@ private fun RegistrationGender(){
                     colors = RadioButtonDefaults.colors(
                         selectedColor = BlueLight
                     ),
-                    selected = state.value,
-                    onClick = { state.value = true },
+                    selected = state.gender,
+                    onClick = {
+                              viewModel.onEvent(RegistrationFormEvent.GenderChanged(true))
+                    },
                 )
                 Text(
                     text = "Мужской",
@@ -243,8 +269,10 @@ private fun RegistrationGender(){
                     colors = RadioButtonDefaults.colors(
                         selectedColor = BlueLight
                     ),
-                    selected = !state.value,
-                    onClick = { state.value = false },
+                    selected = !state.gender,
+                    onClick = {
+                        viewModel.onEvent(RegistrationFormEvent.GenderChanged(false))
+                    },
                 )
                 Text(
                     text = "Женский",
@@ -258,8 +286,6 @@ private fun RegistrationGender(){
 
 @Composable
 private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: RegistrationViewModel, context: Context){
-    val dateText = remember { mutableStateOf("Выберите дату рождения") }
-
     val currentDate = LocalDate.now()
 
     val year:Int = currentDate.year
@@ -273,31 +299,39 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: R
         },year, month, day
     )
 
-    Row(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        Text(
-            text = "Дата рождения",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Light
-        )
-        TextButton(
+    Column() {
+        Row(
             modifier = Modifier.fillMaxWidth(0.9f),
-            onClick = {
-                datePickerDialog.show()
-            },
-            border = BorderStroke(1.dp, Color.Black),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.textButtonColors(
-                contentColor = Color.Black
-            )
-        ) {
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
             Text(
-                text = if(state.birthday.isEmpty()) "Выберите дату рождения" else state.birthday,
-                fontWeight = FontWeight.Light,
-                fontSize = 14.sp
+                text = "Дата рождения",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Light
+            )
+            TextButton(
+                modifier = Modifier.fillMaxWidth(0.9f),
+                onClick = {
+                    datePickerDialog.show()
+                },
+                border = BorderStroke(1.dp, Color.Black),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = Color.Black
+                )
+            ) {
+                Text(
+                    text = if(state.birthday.isEmpty()) "Выберите дату рождения" else state.birthday,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 14.sp
+                )
+            }
+        }
+        if(state.birthdayError != null){
+            Text(
+                text = state.birthdayError!!,
+                color = MaterialTheme.colors.error
             )
         }
     }
@@ -305,100 +339,128 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: R
 
 @Composable
 private fun RegistrationPassword(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
-    TextField(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        value = state.password,
-        onValueChange = {
-            viewModel.onEvent(RegistrationFormEvent.PasswordChanged(it))
-        },
-        isError = false,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password
-        ),
-        placeholder = {
-            Row() {
-                Text(
-                    text = "Пароль",
+    Column() {
+        TextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = state.password,
+            onValueChange = {
+                viewModel.onEvent(RegistrationFormEvent.PasswordChanged(it))
+            },
+            isError = false,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
+            placeholder = {
+                Row() {
+                    Text(
+                        text = "Пароль",
+                    )
+                    Text(
+                        text = "*",
+                        color = Color.Red
+                    )
+                }
+            },
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.registration_password),
+                    contentDescription = null,
                 )
-                Text(
-                    text = "*",
-                    color = Color.Red
-                )
-            }
-        },
-        leadingIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.registration_password),
-                contentDescription = null,
+            },
+            singleLine = true,
+            textStyle = TextStyle(fontSize = 16.sp),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+            ),
+        )
+        if(state.passwordError != null){
+            Text(
+                text = state.passwordError!!,
+                color = MaterialTheme.colors.error
             )
-        },
-        singleLine = true,
-        textStyle = TextStyle(fontSize = 16.sp),
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.Transparent,
-        ),
-    )
+        }
+    }
 }
 
 @Composable
 private fun RegistrationRepeatPassword(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
-    TextField(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        value = state.repeatPassword,
-        onValueChange = {
-            viewModel.onEvent(RegistrationFormEvent.RepeatPasswordChanged(it))
-        },
-        isError = false,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password
-        ),
-        placeholder = {
-            Row() {
-                Text(
-                    text = "Повторите пароль",
+    Column() {
+        TextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = state.repeatPassword,
+            onValueChange = {
+                viewModel.onEvent(RegistrationFormEvent.RepeatPasswordChanged(it))
+            },
+            isError = false,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
+            placeholder = {
+                Row() {
+                    Text(
+                        text = "Повторите пароль",
+                    )
+                    Text(
+                        text = "*",
+                        color = Color.Red
+                    )
+                }
+            },
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.registration_password),
+                    contentDescription = null,
                 )
-                Text(
-                    text = "*",
-                    color = Color.Red
-                )
-            }
-        },
-        leadingIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.registration_password),
-                contentDescription = null,
+            },
+            singleLine = true,
+            textStyle = TextStyle(fontSize = 16.sp),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+            ),
+        )
+        if(state.repeatPasswordError != null){
+            Text(
+                text = state.repeatPasswordError!!,
+                color = MaterialTheme.colors.error
             )
-        },
-        singleLine = true,
-        textStyle = TextStyle(fontSize = 16.sp),
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.Transparent,
-        ),
-    )
+        }
+    }
 }
 
 @Composable
-private fun RegistrationCheckBox(){
-    val checkedState = remember { mutableStateOf(false) }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 5.dp),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        Checkbox(
-            colors = CheckboxDefaults.colors(
-                uncheckedColor = BlueLight,
-                checkedColor = Yellow
-            ),
-            checked = checkedState.value,
-            onCheckedChange = {checkedState.value = it},
-        )
-        Text(
-            "Я согласен на обработку персональных даннных*",
-            fontWeight = FontWeight.Light
-        )
+private fun RegistrationCheckBox(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+    Column(){
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 5.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Checkbox(
+                colors = CheckboxDefaults.colors(
+                    uncheckedColor = BlueLight,
+                    checkedColor = Yellow
+                ),
+                checked = state.terms,
+                onCheckedChange = {
+                    viewModel.onEvent(RegistrationFormEvent.TermsChanged(!state.terms))
+                },
+            )
+            Text(
+                "Я согласен на обработку персональных даннных*",
+                fontWeight = FontWeight.Light
+            )
+        }
+        if(state.termsError != null){
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 18.dp),
+                text = state.termsError!!,
+                color = MaterialTheme.colors.error
+            )
+        }
     }
 }
 
