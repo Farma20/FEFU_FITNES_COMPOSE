@@ -1,0 +1,74 @@
+package com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.ViewModel
+
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.fefu_fitnes_compose.Domain.use_case.ValidateEmail
+import com.example.fefu_fitnes_compose.Domain.use_case.ValidatePassword
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Controllers.RegistrationFormEvent
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+
+class RegistrationViewModel: ViewModel() {
+
+    var state by mutableStateOf(RegistrationFromStateModel())
+
+    private val validationEventChannel = Channel<ValidationEvent>()
+    val validationEvents = validationEventChannel.receiveAsFlow()
+
+    fun onEvent(event: RegistrationFormEvent){
+        when(event){
+            is RegistrationFormEvent.LoginChanged->{
+                state = state.copy(login = event.login)
+            }
+            is RegistrationFormEvent.PhoneChanged->{
+                state = state.copy(phone = event.phone)
+            }
+            is RegistrationFormEvent.EmailChanged->{
+                state = state.copy(email = event.email)
+            }
+            is RegistrationFormEvent.BirthdayChanged->{
+                state = state.copy(birthday = event.birthday)
+            }
+            is RegistrationFormEvent.PasswordChanged->{
+                state = state.copy(password = event.password)
+            }
+            is RegistrationFormEvent.RepeatPasswordChanged->{
+                state = state.copy(repeatPassword = event.repeatPassword)
+            }
+            is RegistrationFormEvent.Submit->{
+                submitData()
+            }
+        }
+    }
+
+    private fun submitData() {
+        val emailResult = ValidateEmail().execute(state.email)
+        val passwordResult = ValidatePassword().execute(state.password)
+
+        val hasErrors = listOf(emailResult, passwordResult).any{!it.successful}
+
+        state = state.copy(
+            emailError = emailResult.errorMessage,
+            passwordError = passwordResult.errorMessage
+        )
+
+        if (hasErrors){
+            return
+        }
+
+        viewModelScope.launch {
+            validationEventChannel.send(ValidationEvent.Success)
+        }
+
+    }
+
+    sealed class ValidationEvent{
+        object Success: ValidationEvent()
+    }
+
+}

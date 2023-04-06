@@ -27,6 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Controllers.RegistrationFormEvent
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.ViewModel.RegistrationViewModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.TopBars.RegistrationTopBar
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Controllers.InitializationFormEvent
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.ViewModel.InitializationViewModel
@@ -38,6 +41,11 @@ import java.time.LocalDate
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun RegistrationUI() {
+
+    val registrationViewModel = viewModel<RegistrationViewModel>()
+    val state = registrationViewModel.state
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {RegistrationTopBar(text = "Регистрация")}
     ) {
@@ -48,152 +56,52 @@ fun RegistrationUI() {
                 .padding(top = 100.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val spacerPadding = 20.dp
-            RegistrationLogin()
-            Spacer(modifier = Modifier.height(spacerPadding))
-            RegistrationPhone()
-            Spacer(modifier = Modifier.height(spacerPadding))
-            RegistrationEmail()
-            Spacer(modifier = Modifier.height(spacerPadding))
-            RegistrationGender()
-            Spacer(modifier = Modifier.height(spacerPadding))
-            RegistrationBirthday()
-            Spacer(modifier = Modifier.height(spacerPadding-10.dp))
-            RegistrationPassword()
-            Spacer(modifier = Modifier.height(spacerPadding))
-            RegistrationRepeatPassword()
-            Spacer(modifier = Modifier.height(spacerPadding))
-            RegistrationCheckBox()
-            Spacer(modifier = Modifier.height(60.dp))
-            RegistrationSubmitButton()
-            Spacer(modifier = Modifier.height(60.dp))
-        }
-    }
-}
 
-@Composable
-private fun RegistrationInput(){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 60.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        val initializationViewModel = viewModel<InitializationViewModel>()
-        val state = initializationViewModel.state
-        val context = LocalContext.current
-
-        LaunchedEffect(key1 = context ){
-            initializationViewModel.validationEvents.collect{ event->
-                when(event){
-                    is InitializationViewModel.ValidationEvent.Success ->{
-                        Toast.makeText(
-                            context,
-                            "Вход произведен успешно",
-                            Toast.LENGTH_LONG
-                        ).show()
+            LaunchedEffect(key1 = context){
+                registrationViewModel.validationEvents.collect{ event ->
+                    when(event){
+                        is RegistrationViewModel.ValidationEvent.Success->{
+                            Toast.makeText(
+                                context,
+                                "Регистрация произедена успешно",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }
-        }
 
-        TextField(
-            modifier = Modifier.fillMaxWidth(0.9f),
-            value = state.email,
-            onValueChange = {
-                initializationViewModel.onEvent(InitializationFormEvent.EmailChanged(it))
-            },
-            isError = state.emailError != null,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
-            ),
-            placeholder = {
-                Text(
-                    text = "Почта",
-                )
-            },
-            leadingIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.registration_email),
-                    contentDescription = null,
-                )
-            },
-            singleLine = true,
-            textStyle = TextStyle(fontSize = 16.sp),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-            ),
-        )
-        if(state.emailError != null){
-            Text(
-                text = state.emailError!!,
-                color = MaterialTheme.colors.error
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextField(
-            modifier = Modifier.fillMaxWidth(0.9f),
-            value = state.password,
-            onValueChange = {
-                initializationViewModel.onEvent(InitializationFormEvent.PasswordChanged(it))
-            },
-            isError = state.passwordError != null,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password
-            ),
-            placeholder = {
-                Text(text = "Пароль")
-            },
-            leadingIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.registration_password),
-                    contentDescription = null,
-                )
-            },
-            singleLine = true,
-            textStyle = TextStyle(fontSize = 16.sp),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-            ),
-        )
-        if(state.passwordError != null){
-            Text(
-                text = state.passwordError!!,
-                color = MaterialTheme.colors.error
-            )
-        }
-        Spacer(modifier = Modifier.height(45.dp))
-
-        Button(
-            modifier = Modifier
-                .height(50.dp)
-                .fillMaxWidth(0.9f)
-                .clip(RoundedCornerShape(16.dp)),
-            onClick = {
-                initializationViewModel.onEvent(InitializationFormEvent.Submit)
-            },
-            colors = ButtonDefaults.textButtonColors(
-                backgroundColor =  Yellow,
-                contentColor = Color.White
-            ),
-        ) {
-            Text(
-                text = "Войти",
-                fontSize = 19.sp
-            )
+            val spacerPadding = 20.dp
+            RegistrationLogin(state, registrationViewModel)
+            Spacer(modifier = Modifier.height(spacerPadding))
+            RegistrationPhone(state, registrationViewModel)
+            Spacer(modifier = Modifier.height(spacerPadding))
+            RegistrationEmail(state, registrationViewModel)
+            Spacer(modifier = Modifier.height(spacerPadding))
+            RegistrationGender()
+            Spacer(modifier = Modifier.height(spacerPadding))
+            RegistrationBirthday(state, registrationViewModel, context)
+            Spacer(modifier = Modifier.height(spacerPadding-10.dp))
+            RegistrationPassword(state, registrationViewModel)
+            Spacer(modifier = Modifier.height(spacerPadding))
+            RegistrationRepeatPassword(state, registrationViewModel)
+            Spacer(modifier = Modifier.height(spacerPadding))
+            RegistrationCheckBox()
+            Spacer(modifier = Modifier.height(60.dp))
+            RegistrationSubmitButton(registrationViewModel)
+            Spacer(modifier = Modifier.height(60.dp))
         }
     }
 }
 
+
 @Composable
-private fun RegistrationLogin(){
+private fun RegistrationLogin(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
     TextField(
         modifier = Modifier.fillMaxWidth(0.9f),
-        value = "",
+        value = state.login,
         onValueChange = {
-
+            viewModel.onEvent(RegistrationFormEvent.LoginChanged(it))
         },
         isError = false,
         keyboardOptions = KeyboardOptions(
@@ -225,12 +133,12 @@ private fun RegistrationLogin(){
 }
 
 @Composable
-private fun RegistrationPhone(){
+private fun RegistrationPhone(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
     TextField(
         modifier = Modifier.fillMaxWidth(0.9f),
-        value = "",
+        value = state.phone,
         onValueChange = {
-
+            viewModel.onEvent(RegistrationFormEvent.PhoneChanged(it))
         },
         isError = false,
         keyboardOptions = KeyboardOptions(
@@ -265,12 +173,12 @@ private fun RegistrationPhone(){
 }
 
 @Composable
-private fun RegistrationEmail(){
+private fun RegistrationEmail(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
     TextField(
         modifier = Modifier.fillMaxWidth(0.9f),
-        value = "",
+        value = state.email,
         onValueChange = {
-
+            viewModel.onEvent(RegistrationFormEvent.EmailChanged(it))
         },
         isError = false,
         keyboardOptions = KeyboardOptions(
@@ -349,9 +257,8 @@ private fun RegistrationGender(){
 }
 
 @Composable
-private fun RegistrationBirthday(){
+private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: RegistrationViewModel, context: Context){
     val dateText = remember { mutableStateOf("Выберите дату рождения") }
-    val context = LocalContext.current
 
     val currentDate = LocalDate.now()
 
@@ -362,7 +269,7 @@ private fun RegistrationBirthday(){
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, day: Int ->
-            dateText.value = "$day.$month.$year"
+            viewModel.onEvent(RegistrationFormEvent.BirthdayChanged("$day.$month.$year"))
         },year, month, day
     )
 
@@ -388,7 +295,7 @@ private fun RegistrationBirthday(){
             )
         ) {
             Text(
-                text = dateText.value,
+                text = if(state.birthday.isEmpty()) "Выберите дату рождения" else state.birthday,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp
             )
@@ -397,12 +304,12 @@ private fun RegistrationBirthday(){
 }
 
 @Composable
-private fun RegistrationPassword(){
+private fun RegistrationPassword(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
     TextField(
         modifier = Modifier.fillMaxWidth(0.9f),
-        value = "",
+        value = state.password,
         onValueChange = {
-
+            viewModel.onEvent(RegistrationFormEvent.PasswordChanged(it))
         },
         isError = false,
         keyboardOptions = KeyboardOptions(
@@ -434,12 +341,12 @@ private fun RegistrationPassword(){
 }
 
 @Composable
-private fun RegistrationRepeatPassword(){
+private fun RegistrationRepeatPassword(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
     TextField(
         modifier = Modifier.fillMaxWidth(0.9f),
-        value = "",
+        value = state.repeatPassword,
         onValueChange = {
-
+            viewModel.onEvent(RegistrationFormEvent.RepeatPasswordChanged(it))
         },
         isError = false,
         keyboardOptions = KeyboardOptions(
@@ -496,14 +403,14 @@ private fun RegistrationCheckBox(){
 }
 
 @Composable
-private fun RegistrationSubmitButton(){
+private fun RegistrationSubmitButton(viewModel: RegistrationViewModel){
     Button(
         modifier = Modifier
             .height(50.dp)
             .fillMaxWidth(0.8f)
             .clip(RoundedCornerShape(16.dp)),
         onClick = {
-
+            viewModel.onEvent(RegistrationFormEvent.Submit)
         },
         colors = ButtonDefaults.textButtonColors(
             backgroundColor =  Yellow,
