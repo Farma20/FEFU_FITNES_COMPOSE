@@ -11,7 +11,7 @@ import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI.TimeTableUI
 
 @Composable
 fun BottomNavGraph(navController: NavHostController){
-    NavHost(navController = navController, startDestination = BottomBarScreen.TimeTable.rout){
+    NavHost(navController = navController, startDestination = BottomBarScreen.Main.rout){
         composable(route = BottomBarScreen.Main.rout){
             MainMenuUI()
         }

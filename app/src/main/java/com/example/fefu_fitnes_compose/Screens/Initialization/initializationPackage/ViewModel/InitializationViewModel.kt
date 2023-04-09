@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fefu_fitnes.UI.RegisterPackage.Models.UserEnterModel
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
+import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Domain.use_case.ValidateEmail
 import com.example.fefu_fitnes_compose.Domain.use_case.ValidatePassword
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Controllers.InitializationFormEvent
@@ -48,11 +51,19 @@ class InitializationViewModel(
             passwordError = passwordResult.errorMessage
         )
 
+        val correctUser =
+            MainRepository.registrationUserData.value!!.email == state.email &&
+            MainRepository.registrationUserData.value!!.password == state.password
+
         if(hasErrors){
             return
         }
 
         viewModelScope.launch {
+             RegisterRepository.pushLoginData(UserEnterModel(
+                email = state.email,
+                pass = state.password
+            ))
             validationEventChannel.send(ValidationEvent.Success)
         }
     }

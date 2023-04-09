@@ -162,10 +162,6 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
             }
         }
 
-        LaunchedEffect(pagerState){
-            println("__________${pagerState.currentPage}____________")
-        }
-
 
         HorizontalPager(
             count = buttonList.size,

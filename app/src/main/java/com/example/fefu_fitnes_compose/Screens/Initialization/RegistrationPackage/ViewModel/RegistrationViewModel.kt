@@ -5,9 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
+import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Domain.use_case.*
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Controllers.RegistrationFormEvent
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.UserRegisterModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -85,6 +88,12 @@ class RegistrationViewModel: ViewModel() {
         }
 
         viewModelScope.launch {
+//            MainRepository.registrationUserData.value = state
+            RegisterRepository.registerNewUser(UserRegisterModel(
+                userLogin = state.login,
+                userPassword = state.password,
+                userEmail = state.email
+            ))
             validationEventChannel.send(ValidationEvent.Success)
         }
 

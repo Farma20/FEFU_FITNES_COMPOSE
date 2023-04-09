@@ -20,7 +20,11 @@ class MainMenuViewModel:ViewModel() {
     val nearUserEvent: LiveData<MutableList<UpdateEventDataModel>> = _nearUserEvent
 
     init {
-        _currentUser.value = UserDataModel("Райан")
+        _currentUser.value = UserDataModel("Юра")
+
+//        MainRepository.getUserDataFromServer().observeForever{
+//            _currentUser.value = it
+//        }
 
         MainRepository.allEvents.observeForever{
             _nearUserEvent.value = getUserEvents(it, MainRepository.currentUserEvents.value!!)
@@ -30,14 +34,9 @@ class MainMenuViewModel:ViewModel() {
             _nearUserEvent.value = getUserEvents(MainRepository.allEvents.value!!, it)
         }
 
-        _currentNews.value = listOf(
-            NewsDataModel("Чемпионат АССК по настольному теннису"),
-            NewsDataModel("III этап зимнего сезона Студенческой Гребной Лиги"),
-            NewsDataModel("Чем заняться в свободное время на каникулах?"),
-            NewsDataModel("Чемпионат АССК по настольному теннису"),
-            NewsDataModel("III этап зимнего сезона Студенческой Гребной Лиги"),
-            NewsDataModel("Чем заняться в свободное время на каникулах?"),
-        )
+        MainRepository.currentNews.observeForever{
+            _currentNews.value = it
+        }
     }
 
     fun getUserEvents(allEvents: List<UpdateEventDataModel>, booking: List<BookingDataModel>):MutableList<UpdateEventDataModel>{
@@ -49,6 +48,4 @@ class MainMenuViewModel:ViewModel() {
         }
         return userEvents
     }
-
-
 }

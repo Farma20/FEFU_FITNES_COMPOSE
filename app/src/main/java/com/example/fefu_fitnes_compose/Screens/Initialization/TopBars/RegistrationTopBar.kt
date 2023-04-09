@@ -6,6 +6,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -17,6 +18,7 @@ fun RegistrationTopBar(text:String) {
         modifier = Modifier
             .height(40.dp)
             .fillMaxWidth()
+            .shadow(elevation = 1.dp, ambientColor = Color.Black)
     ){
         TopAppBar(
             modifier = Modifier.fillMaxSize(),

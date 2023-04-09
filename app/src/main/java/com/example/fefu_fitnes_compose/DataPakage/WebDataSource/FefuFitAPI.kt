@@ -1,5 +1,7 @@
 package com.example.fefu_fitnes.adadadad.WebDataSource
 
+import com.example.fefu_fitnes.UI.RegisterPackage.Models.UserEnterModel
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.UserRegisterModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookingDataModel
 import retrofit2.http.Body
@@ -14,15 +16,15 @@ interface FefuFitAPI {
     suspend fun getAllEvents():String
 
     @GET("/api/booking/getAllBooking")
-    suspend fun getUserEvents():List<BookingDataModel>
+    suspend fun getUserEvents():MutableList<BookingDataModel>
 
     @POST("/api/booking/addNewBooking")
     suspend fun newBooking(@Body newBooking: NewBookingDataModel)
 
-//    @POST("/api/user/login")
-//    suspend fun pushLoginData(@Body userEnterData:UserEnterModel):Map<String, String>
+    @POST("/api/user/login")
+    suspend fun pushLoginData(@Body userEnterData: UserEnterModel):Map<String, String>
 
-//    @POST("/api/user/signup")
-//    suspend fun registerUser(@Body registerData:UserRegisterModel)
+    @POST("/api/user/signup")
+    suspend fun registerUser(@Body registerData: UserRegisterModel)
 
 }

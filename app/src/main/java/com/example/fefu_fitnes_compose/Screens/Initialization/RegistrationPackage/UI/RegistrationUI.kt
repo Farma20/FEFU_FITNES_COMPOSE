@@ -53,7 +53,7 @@ fun RegistrationUI() {
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
-                .padding(top = 100.dp),
+                .padding(top = 50.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -87,7 +87,7 @@ fun RegistrationUI() {
             RegistrationRepeatPassword(state, registrationViewModel)
             Spacer(modifier = Modifier.height(spacerPadding))
             RegistrationCheckBox(state, registrationViewModel)
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             RegistrationSubmitButton(registrationViewModel)
             Spacer(modifier = Modifier.height(60.dp))
         }
@@ -295,7 +295,19 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: R
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, day: Int ->
-            viewModel.onEvent(RegistrationFormEvent.BirthdayChanged("$day.$month.$year"))
+            val myDay = if(day.toString().length == 1){
+                "0${day}"
+            }else{
+                day.toString()
+            }
+
+            val myMonth = if(month.toString().length == 1){
+                "0${month}"
+            }else{
+                month.toString()
+            }
+
+            viewModel.onEvent(RegistrationFormEvent.BirthdayChanged("$myDay.$myMonth.$year"))
         },year, month, day
     )
 
@@ -324,7 +336,7 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: R
                 Text(
                     text = if(state.birthday.isEmpty()) "Выберите дату рождения" else state.birthday,
                     fontWeight = FontWeight.Light,
-                    fontSize = 14.sp
+                    fontSize = 12.sp
                 )
             }
         }
