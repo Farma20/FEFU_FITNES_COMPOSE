@@ -1,5 +1,8 @@
 package com.example.fefu_fitnes_compose.DataPakage.Repository
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +13,7 @@ import kotlinx.coroutines.launch
 
 object RegisterRepository: ViewModel() {
 
-    private var userInit = MutableLiveData<Boolean>()
+    var userInit by mutableStateOf(false)
 
     private val registerUserList = MutableLiveData<MutableList<UserRegisterModel>>()
 
@@ -20,7 +23,7 @@ object RegisterRepository: ViewModel() {
             try {
                 val result = FefuFitRetrofit.retrofitService.pushLoginData(loginData)
                 if(result["status"] == "sucsess"){
-                    setUserInit(true)
+                    userInit = true
                 }
 
             }catch (e:Exception){
@@ -49,22 +52,13 @@ object RegisterRepository: ViewModel() {
     }
 
 
-    fun setUserInit(bool:Boolean){
-        userInit.value = bool
-    }
-
     //геттеры
     fun getUserList(): List<UserRegisterModel>?{
         return registerUserList.value
     }
-    fun getUserInit(): MutableLiveData<Boolean> {
-        return userInit
-    }
 
     init {
         registerUserList.value = mutableListOf(UserRegisterModel())
-        userInit.value = false
-
     }
 
 }

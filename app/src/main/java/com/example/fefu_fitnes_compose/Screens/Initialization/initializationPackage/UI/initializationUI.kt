@@ -18,6 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -124,6 +126,14 @@ private fun InitializationInput(successInitialization: MutableState<Boolean>){
         }
         Spacer(modifier = Modifier.height(16.dp))
 
+        var passwordVisibility by remember { mutableStateOf(false) }
+
+        val icon = if(passwordVisibility){
+            painterResource(id = R.drawable.baseline_visibility_off_24)
+        }else{
+            painterResource(id = R.drawable.baseline_visibility_24)
+        }
+
         TextField(
             modifier = Modifier.fillMaxWidth(0.9f),
             value = state.password,
@@ -143,6 +153,15 @@ private fun InitializationInput(successInitialization: MutableState<Boolean>){
                     contentDescription = null,
                 )
             },
+            trailingIcon = {
+                IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                    Icon(
+                        painter = icon,
+                        contentDescription = null
+                    )
+                }
+            },
+            visualTransformation = if(passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             
             singleLine = true,
             textStyle = TextStyle(fontSize = 16.sp),

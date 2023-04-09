@@ -64,7 +64,8 @@ class InitializationViewModel(
                 email = state.email,
                 pass = state.password
             ))
-            validationEventChannel.send(ValidationEvent.Success)
+
+                validationEventChannel.send(ValidationEvent.Success)
         }
     }
 

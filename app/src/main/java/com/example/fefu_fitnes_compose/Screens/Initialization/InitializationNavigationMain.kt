@@ -8,16 +8,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.fefu_fitnes_compose.Screens.Initialization.Navigation.Screen
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.UI.RegistrationUI
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.InitializationUI
+import com.example.fefu_fitnes_compose.Screens.SplashScreen.SplashScreenUI
 
 @Composable
 fun InitializationNavigationMain(successInitialization: MutableState<Boolean>) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.InitializationScreen.route){
+    NavHost(navController = navController, startDestination = Screen.SplashScreen.route){
         composable(route = Screen.InitializationScreen.route){
             InitializationUI(navController = navController, successInitialization)
         }
         composable(route = Screen.RegistrationScreen.route){
             RegistrationUI()
+        }
+        composable(route = Screen.SplashScreen.route){
+            SplashScreenUI(navController = navController)
         }
     }
 }
