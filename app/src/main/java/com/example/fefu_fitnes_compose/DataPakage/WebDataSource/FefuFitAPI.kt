@@ -1,7 +1,9 @@
 package com.example.fefu_fitnes.adadadad.WebDataSource
 
 import com.example.fefu_fitnes.UI.RegisterPackage.Models.UserEnterModel
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.UserRegisterModel
+import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookingDataModel
 import retrofit2.http.Body
@@ -26,5 +28,13 @@ interface FefuFitAPI {
 
     @POST("/api/user/signup")
     suspend fun registerUser(@Body registerData: UserRegisterModel)
+
+    //новый сервер
+    @POST("/api/auth/signup")
+    suspend fun registerData(@Body registerData: RegistrationDataModel)
+
+    @POST("/api/auth/login")
+    suspend fun pushLogin(@Body userEnterData: EnterDataModel):Map<String, String>
+
 
 }

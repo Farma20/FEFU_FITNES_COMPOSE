@@ -11,11 +11,11 @@ import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPack
 import com.example.fefu_fitnes_compose.Screens.SplashScreen.SplashScreenUI
 
 @Composable
-fun InitializationNavigationMain(successInitialization: MutableState<Boolean>) {
+fun InitializationNavigationMain() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.SplashScreen.route){
         composable(route = Screen.InitializationScreen.route){
-            InitializationUI(navController = navController, successInitialization)
+            InitializationUI(navController = navController)
         }
         composable(route = Screen.RegistrationScreen.route){
             RegistrationUI()

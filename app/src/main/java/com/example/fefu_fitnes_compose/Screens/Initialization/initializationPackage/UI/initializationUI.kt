@@ -35,13 +35,13 @@ import com.example.fefu_fitnes_compose.ui.theme.Yellow
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun InitializationUI(navController: NavController, successInitialization: MutableState<Boolean>) {
+fun InitializationUI(navController: NavController) {
     Scaffold(topBar = { MainTopBar(text = "") },){
         Column(
             modifier = Modifier.padding(top = 60.dp)
         ) {
             Label()
-            InitializationInput(successInitialization)
+            InitializationInput()
             Spacer(modifier = Modifier.height(60.dp))
             RegistrationURL(navController)
         }
@@ -69,7 +69,7 @@ private fun Label(){
 }
 
 @Composable
-private fun InitializationInput(successInitialization: MutableState<Boolean>){
+private fun InitializationInput(){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,7 +85,7 @@ private fun InitializationInput(successInitialization: MutableState<Boolean>){
             initializationViewModel.validationEvents.collect{ event->
                 when(event){
                     is InitializationViewModel.ValidationEvent.Success ->{
-                        successInitialization.value = true
+
                     }
                 }
             }

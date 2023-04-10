@@ -12,7 +12,9 @@ import com.example.fefu_fitnes_compose.Domain.use_case.ValidateEmail
 import com.example.fefu_fitnes_compose.Domain.use_case.ValidatePassword
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Controllers.InitializationFormEvent
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.InitializationFormStateModel
+import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -60,11 +62,13 @@ class InitializationViewModel(
         }
 
         viewModelScope.launch {
-             RegisterRepository.pushLoginData(UserEnterModel(
+             RegisterRepository.pushLogin(
+                 EnterDataModel(
                 email = state.email,
-                pass = state.password
-            ))
-
+                password = state.password
+            )
+             )
+            if (RegisterRepository.userInit)
                 validationEventChannel.send(ValidationEvent.Success)
         }
     }

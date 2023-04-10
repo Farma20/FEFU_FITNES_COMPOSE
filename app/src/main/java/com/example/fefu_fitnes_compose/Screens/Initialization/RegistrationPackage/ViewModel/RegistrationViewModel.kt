@@ -10,6 +10,7 @@ import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Domain.use_case.*
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Controllers.RegistrationFormEvent
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.UserRegisterModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -24,8 +25,14 @@ class RegistrationViewModel: ViewModel() {
 
     fun onEvent(event: RegistrationFormEvent){
         when(event){
-            is RegistrationFormEvent.LoginChanged->{
-                state = state.copy(login = event.login)
+            is RegistrationFormEvent.FirstNameChanged->{
+                state = state.copy(firstName = event.firstName)
+            }
+            is RegistrationFormEvent.SecondNameChanged->{
+                state = state.copy(secondName = event.secondName)
+            }
+            is RegistrationFormEvent.MiddleNameChanged->{
+                state = state.copy(middleName = event.middleName)
             }
             is RegistrationFormEvent.PhoneChanged->{
                 state = state.copy(phone = event.phone)
@@ -35,6 +42,9 @@ class RegistrationViewModel: ViewModel() {
             }
             is RegistrationFormEvent.GenderChanged->{
                 state = state.copy(gender = event.gender)
+            }
+            is RegistrationFormEvent.StatusChanged->{
+                state = state.copy(status = event.status)
             }
             is RegistrationFormEvent.BirthdayChanged->{
                 state = state.copy(birthday = event.birthday)
@@ -55,7 +65,8 @@ class RegistrationViewModel: ViewModel() {
     }
 
     private fun submitData() {
-        val loginResult = ValidateLogin().execute(state.login)
+        val firstNameResult = ValidateFirstName().execute(state.firstName)
+        val secondNameResult = ValidateSecondName().execute(state.secondName)
         val phoneResult = ValidatePhone().execute(state.phone)
         val emailResult = ValidateEmail().execute(state.email)
         val birthdayResult = ValidateBirthday().execute(state.birthday)
@@ -64,7 +75,8 @@ class RegistrationViewModel: ViewModel() {
         val termsResult = ValidateTerms().execute(state.terms)
 
         val hasErrors = listOf(
-            loginResult,
+            firstNameResult,
+            secondNameResult,
             phoneResult,
             emailResult,
             passwordResult,
@@ -74,7 +86,8 @@ class RegistrationViewModel: ViewModel() {
         ).any{!it.successful}
 
         state = state.copy(
-            loginError = loginResult.errorMessage,
+            firstNameError = firstNameResult.errorMessage,
+            secondNameError = secondNameResult.errorMessage,
             emailError = emailResult.errorMessage,
             passwordError = passwordResult.errorMessage,
             repeatPasswordError = repeatPasswordResult.errorMessage,
@@ -88,12 +101,20 @@ class RegistrationViewModel: ViewModel() {
         }
 
         viewModelScope.launch {
-//            MainRepository.registrationUserData.value = state
-            RegisterRepository.registerNewUser(UserRegisterModel(
-                userLogin = state.login,
-                userPassword = state.password,
-                userEmail = state.email
-            ))
+            MainRepository.registrationUserData.value = state
+            RegisterRepository.registrationData(
+                RegistrationDataModel(
+                    state.firstName,
+                    state.secondName,
+                    state.middleName,
+                    state.email,
+                    state.birthday,
+                    if (state.gender) "m" else "f",
+                    state.status,
+                    state.phone,
+                    state.password
+                )
+            )
             validationEventChannel.send(ValidationEvent.Success)
         }
 

@@ -74,13 +74,19 @@ fun RegistrationUI() {
             }
 
             val spacerPadding = 20.dp
-            RegistrationLogin(state, registrationViewModel)
+            RegistrationSecondName(state, registrationViewModel)
+            Spacer(modifier = Modifier.height(spacerPadding))
+            RegistrationFirstName(state, registrationViewModel)
+            Spacer(modifier = Modifier.height(spacerPadding))
+            RegistrationMiddleName(state, registrationViewModel)
             Spacer(modifier = Modifier.height(spacerPadding))
             RegistrationPhone(state, registrationViewModel)
             Spacer(modifier = Modifier.height(spacerPadding))
             RegistrationEmail(state, registrationViewModel)
             Spacer(modifier = Modifier.height(spacerPadding))
             RegistrationGender(state, registrationViewModel)
+            Spacer(modifier = Modifier.height(spacerPadding))
+            RegistrationStatus(state, registrationViewModel)
             Spacer(modifier = Modifier.height(spacerPadding))
             RegistrationBirthday(state, registrationViewModel, context)
             Spacer(modifier = Modifier.height(spacerPadding-10.dp))
@@ -98,13 +104,13 @@ fun RegistrationUI() {
 
 
 @Composable
-private fun RegistrationLogin(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+private fun RegistrationSecondName(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
     Column(){
         TextField(
             modifier = Modifier.fillMaxWidth(0.9f),
-            value = state.login,
+            value = state.secondName,
             onValueChange = {
-                viewModel.onEvent(RegistrationFormEvent.LoginChanged(it))
+                viewModel.onEvent(RegistrationFormEvent.SecondNameChanged(it))
             },
             isError = false,
             keyboardOptions = KeyboardOptions(
@@ -113,7 +119,7 @@ private fun RegistrationLogin(state: RegistrationFromStateModel, viewModel: Regi
             placeholder = {
                 Row() {
                     Text(
-                        text = "Логин",
+                        text = "Фамилия",
                     )
                     Text(
                         text = "*",
@@ -121,26 +127,108 @@ private fun RegistrationLogin(state: RegistrationFromStateModel, viewModel: Regi
                     )
                 }
             },
-            leadingIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.registration_user),
-                    contentDescription = null,
-                )
-            },
+//            leadingIcon = {
+//                Image(
+//                    painter = painterResource(id = R.drawable.registration_user),
+//                    contentDescription = null,
+//                )
+//            },
             singleLine = true,
             textStyle = TextStyle(fontSize = 16.sp),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
             ),
         )
-        if(state.loginError != null){
+        if(state.secondNameError != null){
             Text(
-                text = state.loginError!!,
+                text = state.secondNameError!!,
                 color = MaterialTheme.colors.error
             )
         }
     }
 }
+
+@Composable
+private fun RegistrationFirstName(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+    Column(){
+        TextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = state.firstName,
+            onValueChange = {
+                viewModel.onEvent(RegistrationFormEvent.FirstNameChanged(it))
+            },
+            isError = false,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email
+            ),
+            placeholder = {
+                Row() {
+                    Text(
+                        text = "Имя",
+                    )
+                    Text(
+                        text = "*",
+                        color = Color.Red
+                    )
+                }
+            },
+//            leadingIcon = {
+//                Image(
+//                    painter = painterResource(id = R.drawable.registration_user),
+//                    contentDescription = null,
+//                )
+//            },
+            singleLine = true,
+            textStyle = TextStyle(fontSize = 16.sp),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+            ),
+        )
+        if(state.firstNameError != null){
+            Text(
+                text = state.firstNameError!!,
+                color = MaterialTheme.colors.error
+            )
+        }
+    }
+}
+
+@Composable
+private fun RegistrationMiddleName(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+    Column(){
+        TextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = state.middleName,
+            onValueChange = {
+                viewModel.onEvent(RegistrationFormEvent.MiddleNameChanged(it))
+            },
+            isError = false,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email
+            ),
+            placeholder = {
+                Row() {
+                    Text(
+                        text = "Отчество",
+                    )
+                }
+            },
+//            leadingIcon = {
+//                Image(
+//                    painter = painterResource(id = R.drawable.registration_user),
+//                    contentDescription = null,
+//                )
+//            },
+            singleLine = true,
+            textStyle = TextStyle(fontSize = 16.sp),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+            ),
+        )
+    }
+}
+
+
 
 @Composable
 private fun RegistrationPhone(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
@@ -166,15 +254,15 @@ private fun RegistrationPhone(state: RegistrationFromStateModel, viewModel: Regi
                     )
                 }
             },
-            leadingIcon = {
-                Image(
-                    modifier = Modifier
-                        .width(25.dp)
-                        .height(27.dp),
-                    painter = painterResource(id = R.drawable.phone_icon),
-                    contentDescription = null,
-                )
-            },
+//            leadingIcon = {
+//                Image(
+//                    modifier = Modifier
+//                        .width(25.dp)
+//                        .height(27.dp),
+//                    painter = painterResource(id = R.drawable.phone_icon),
+//                    contentDescription = null,
+//                )
+//            },
             singleLine = true,
             textStyle = TextStyle(fontSize = 16.sp),
             colors = TextFieldDefaults.textFieldColors(
@@ -214,12 +302,12 @@ private fun RegistrationEmail(state: RegistrationFromStateModel, viewModel: Regi
                     )
                 }
             },
-            leadingIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.registration_email),
-                    contentDescription = null,
-                )
-            },
+//            leadingIcon = {
+//                Image(
+//                    painter = painterResource(id = R.drawable.registration_email),
+//                    contentDescription = null,
+//                )
+//            },
             singleLine = true,
             textStyle = TextStyle(fontSize = 16.sp),
             colors = TextFieldDefaults.textFieldColors(
@@ -278,6 +366,77 @@ private fun RegistrationGender(state: RegistrationFromStateModel, viewModel: Reg
                 )
                 Text(
                     text = "Женский",
+                    fontWeight = FontWeight.Light,
+                    fontSize = 16.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+//        verticalAlignment = Alignment.CenterVertically,
+//        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Text(
+            modifier = Modifier.padding(start = 20.dp),
+            text = "Статус",
+            fontWeight = FontWeight.Light,
+            fontSize = 16.sp
+        )
+        Row(modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 5.dp, end = 20.dp)
+            .selectableGroup(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = BlueLight
+                    ),
+                    selected = state.status == "student",
+                    onClick = {
+                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("student"))
+                    },
+                )
+                Text(
+                    text = "Студент",
+                    fontWeight = FontWeight.Light,
+                    fontSize = 16.sp
+                )
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = BlueLight
+                    ),
+                    selected = state.status == "guest",
+                    onClick = {
+                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("guest"))
+                    },
+                )
+                Text(
+                    text = "Гость",
+                    fontWeight = FontWeight.Light,
+                    fontSize = 16.sp
+                )
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = BlueLight
+                    ),
+                    selected = state.status == "employee",
+                    onClick = {
+                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("employee"))
+                    },
+                )
+                Text(
+                    text = "Сотрудник",
                     fontWeight = FontWeight.Light,
                     fontSize = 16.sp
                 )
@@ -383,12 +542,12 @@ private fun RegistrationPassword(state: RegistrationFromStateModel, viewModel: R
                     )
                 }
             },
-            leadingIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.registration_password),
-                    contentDescription = null,
-                )
-            },
+//            leadingIcon = {
+//                Image(
+//                    painter = painterResource(id = R.drawable.registration_password),
+//                    contentDescription = null,
+//                )
+//            },
             trailingIcon = {
                 IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                     Icon(
@@ -444,12 +603,12 @@ private fun RegistrationRepeatPassword(state: RegistrationFromStateModel, viewMo
                     )
                 }
             },
-            leadingIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.registration_password),
-                    contentDescription = null,
-                )
-            },
+//            leadingIcon = {
+//                Image(
+//                    painter = painterResource(id = R.drawable.registration_password),
+//                    contentDescription = null,
+//                )
+//            },
             trailingIcon = {
                 IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                     Icon(

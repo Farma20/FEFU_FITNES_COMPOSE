@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.fefu_fitnes.UI.RegisterPackage.Models.UserEnterModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.UserRegisterModel
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
+import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import kotlinx.coroutines.launch
 
 object RegisterRepository: ViewModel() {
@@ -16,7 +18,6 @@ object RegisterRepository: ViewModel() {
     var userInit by mutableStateOf(false)
 
     private val registerUserList = MutableLiveData<MutableList<UserRegisterModel>>()
-
 
     fun pushLoginData(loginData: UserEnterModel){
         viewModelScope.launch {
@@ -38,6 +39,32 @@ object RegisterRepository: ViewModel() {
                 FefuFitRetrofit.retrofitService.registerUser(registerData)
             }
             catch (e:Exception){
+                println(e.message)
+            }
+        }
+    }
+
+    //Новый сервер
+    fun registrationData(registerData: RegistrationDataModel){
+        viewModelScope.launch {
+            try {
+                FefuFitRetrofit.retrofitService.registerData(registerData)
+            }
+            catch (e:Exception){
+                println(e.message)
+            }
+        }
+    }
+
+    fun pushLogin(loginData: EnterDataModel){
+        viewModelScope.launch {
+            try {
+                val result = FefuFitRetrofit.retrofitService.pushLogin(loginData)
+                if(!result["token"]!!.isEmpty()){
+                    userInit = true
+                }
+
+            }catch (e:Exception){
                 println(e.message)
             }
         }
