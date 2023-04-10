@@ -34,7 +34,7 @@ interface FefuFitAPI {
     suspend fun registerData(@Body registerData: RegistrationDataModel)
 
     @POST("/api/auth/login")
-    suspend fun pushLogin(@Body userEnterData: EnterDataModel):Map<String, String>
+    suspend fun pushLogin(@Body userEnterData: EnterDataModel):Map<String,Any>
 
 
 }

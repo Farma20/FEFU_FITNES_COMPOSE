@@ -17,6 +17,8 @@ object RegisterRepository: ViewModel() {
 
     var userInit by mutableStateOf(false)
 
+    var userToken by mutableStateOf("")
+
     private val registerUserList = MutableLiveData<MutableList<UserRegisterModel>>()
 
     fun pushLoginData(loginData: UserEnterModel){
@@ -60,8 +62,11 @@ object RegisterRepository: ViewModel() {
         viewModelScope.launch {
             try {
                 val result = FefuFitRetrofit.retrofitService.pushLogin(loginData)
-                if(!result["token"]!!.isEmpty()){
+                if(result["status"]!! == "success"){
                     userInit = true
+                    val data = result["data"] as Map<String, String>
+                    userToken = data["token"]!!
+
                 }
 
             }catch (e:Exception){
