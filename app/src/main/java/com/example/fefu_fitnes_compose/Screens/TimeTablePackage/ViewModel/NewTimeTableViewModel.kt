@@ -12,10 +12,19 @@ import java.time.LocalDate
 class NewTimeTableViewModel: ViewModel() {
 
     var allEventData by mutableStateOf(listOf(UpdateEventDataModel()))
+    var bookingEventData by mutableStateOf(listOf(UpdateEventDataModel()))
+
+    fun addNewBooking(eventId:Int){
+        MainRepository.addEventsBookingOnServer(eventId)
+    }
 
     init {
         MainRepository.getEventsAllFromServer().observeForever{
             allEventData = convertAllEventsToUpdate(it!!)
+        }
+
+        MainRepository.getEventsBookingFromServer().observeForever{
+            bookingEventData = convertAllEventsToUpdate(it!!)
         }
     }
 }

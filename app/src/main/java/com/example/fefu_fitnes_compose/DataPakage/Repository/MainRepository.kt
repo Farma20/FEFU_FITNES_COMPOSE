@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
+import com.example.fefu_fitnes_compose.DataPakage.Models.AddNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.NewsDataModel
@@ -100,15 +101,6 @@ object MainRepository: ViewModel() {
     }
 
     //Новый сервер
-
-//    private val eventsAll = MutableLiveData<List<EventAllDataModel>>().also {
-//        getEventsAllFromServer()
-//    }
-//
-//    fun getEventAll():MutableLiveData<List<EventAllDataModel>>{
-//        return eventsAll
-//    }
-
     fun getEventsAllFromServer(token: String = RegisterRepository.userToken): MutableLiveData<List<EventAllDataModel>>{
         val result = MutableLiveData<List<EventAllDataModel>>()
         viewModelScope.launch {
@@ -119,6 +111,29 @@ object MainRepository: ViewModel() {
             }
         }
         return result
+    }
+
+    fun getEventsBookingFromServer(token: String = RegisterRepository.userToken): MutableLiveData<List<EventAllDataModel>>{
+        val result = MutableLiveData<List<EventAllDataModel>>()
+        viewModelScope.launch {
+            try {
+                result.postValue(FefuFitRetrofit.retrofitService.getEventsBooking(mapOf("token" to token)))
+            }catch (e:Exception){
+                println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            }
+        }
+        return result
+    }
+
+    fun addEventsBookingOnServer(eventId: Int, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                val result = FefuFitRetrofit.retrofitService.addEventsBooking(AddNewBookingDataModel(eventId, token))
+                if (result["msg"] == "booking add success"){}
+            }catch (e:Exception){
+                println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            }
+        }
     }
 
 

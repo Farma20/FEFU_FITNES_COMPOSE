@@ -28,8 +28,6 @@ fun EventCard(
     timeTableViewModel: NewTimeTableViewModel = viewModel()
 ) {
     val openDialog = remember { mutableStateOf(false) }
-
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -126,10 +124,12 @@ fun EventCard(
 
                     TextButton(
                         onClick = {
-
+                            println("_______________${event.bookingStatus!!}___________________")
+                            if(event.bookingStatus!! == "not booked")
+                                timeTableViewModel.addNewBooking(event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = Yellow,
+                            backgroundColor = if(event.bookingStatus!! == "booked") Color.Gray else Yellow,
                             contentColor = Color.White
                         ),
                         modifier = Modifier
@@ -145,7 +145,7 @@ fun EventCard(
                         )
                     ) {
                         Text(
-                            text = "Записаться",
+                            text = if(event.bookingStatus!! == "booked") "Отменить" else "Записаться",
                             fontSize = 14.sp
                         )
                     }

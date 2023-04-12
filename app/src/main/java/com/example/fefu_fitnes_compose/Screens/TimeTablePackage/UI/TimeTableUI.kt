@@ -120,8 +120,6 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
     val tabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
 
-
-
     Column(
     ) {
         TabRow(
@@ -165,15 +163,17 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
                 modifier = Modifier.fillMaxSize(),
             ){
                 if(index == 0){
-                    items(timeTableViewModel.allEventData.size){id->
-                        EventCard(timeTableViewModel.allEventData[id])
+                    val currentDayEvents = selectEvents(timeTableViewModel.allEventData, currentData.value)
+                    items(currentDayEvents.size){id->
+                        EventCard(currentDayEvents[id])
                     }
                 }
-//                if (index == 1){
-//                    items(timeTableViewModel.eventAll.size){id->
-//                        EventCard(timeTableViewModel.eventAll[id])
-//                    }
-//                }
+                if (index == 1){
+                    val currentDayBookingEvent = selectEvents(timeTableViewModel.bookingEventData, currentData.value)
+                    items(currentDayBookingEvent.size){id->
+                        EventCard(currentDayBookingEvent[id])
+                    }
+                }
             }
         }
     }
@@ -188,12 +188,3 @@ fun selectEvents(allEvents: List<UpdateEventDataModel>, day:LocalDate):List<Upda
     return dayEventList
 }
 
-fun getUserEvents(allEvents: List<UpdateEventDataModel>, booking: List<BookingDataModel>):List<UpdateEventDataModel>{
-    val userEvents = mutableListOf<UpdateEventDataModel>()
-    val bookingIdList = booking.map{it.eventId}
-    for(item in allEvents){
-        if (item.eventId in bookingIdList)
-            userEvents.add(item)
-    }
-    return userEvents
-}
