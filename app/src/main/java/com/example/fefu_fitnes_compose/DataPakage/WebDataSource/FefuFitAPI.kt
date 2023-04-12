@@ -6,6 +6,7 @@ import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackag
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookingDataModel
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewServer.EventAllDataModel
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -23,11 +24,6 @@ interface FefuFitAPI {
     @POST("/api/booking/addNewBooking")
     suspend fun newBooking(@Body newBooking: NewBookingDataModel)
 
-    @POST("/api/user/login")
-    suspend fun pushLoginData(@Body userEnterData: UserEnterModel):Map<String, String>
-
-    @POST("/api/user/signup")
-    suspend fun registerUser(@Body registerData: UserRegisterModel)
 
     //новый сервер
     @POST("/api/auth/signup")
@@ -35,6 +31,9 @@ interface FefuFitAPI {
 
     @POST("/api/auth/login")
     suspend fun pushLogin(@Body userEnterData: EnterDataModel):Map<String,Any>
+
+    @POST("/api/timetable/event/user/view_all")
+    suspend fun getEventsAll(@Body token:Map<String, String>):List<EventAllDataModel>
 
 
 }

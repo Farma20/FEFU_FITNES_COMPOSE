@@ -1,12 +1,9 @@
 package com.example.fefu_fitnes_compose.Screens.ScreenElements
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +11,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -23,13 +19,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.TimeTableViewModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
-import com.example.fefu_fitnes_compose.ui.theme.Yellow
 
 @Composable
 fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataModel) {
@@ -53,7 +45,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataMod
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = event.eventName,
+                        text = if(event.eventName == null) "Нет" else event.eventName!!,
                         modifier = Modifier.fillMaxWidth(0.6f),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Medium
@@ -95,7 +87,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataMod
                         Column() {
                             Text(
                                 modifier = Modifier.fillMaxWidth(0.55f),
-                                text = event.couchName,
+                                text = if(event.couchName == null) "Нет" else event.couchName!!,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -119,7 +111,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataMod
                                     .padding(end = 2.dp)
                             )
                             Text(
-                                text = event.couchPhone,
+                                text = if(event.couchPhone == null) "Нет" else event.couchPhone!!,
                                 fontSize = 11.sp,
                                 color = BlueURL
                             )
@@ -136,7 +128,8 @@ fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataMod
                                     .padding(end = 2.dp)
                             )
                             Text(
-                                text = event.couchEmail, fontSize = 11.sp,
+                                text = if(event.couchEmail == null) "Нет" else event.couchEmail!!,
+                                fontSize = 11.sp,
                                 color = BlueURL
                             )
                         }
@@ -165,7 +158,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataMod
                             .padding(end = 4.dp)
                     )
                     Text(
-                        text = event.eventLocation,
+                        text = if(event.eventLocation == null) "Нет" else event.eventLocation!!,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -174,7 +167,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataMod
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp),
-                    text = event.eventDescription,
+                    text = if(event.eventDescription == null) "Нет" else event.eventDescription!!,
                     fontSize = 13.sp,
                 )
 

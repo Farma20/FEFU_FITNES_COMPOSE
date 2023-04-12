@@ -1,37 +1,23 @@
 package com.example.fefu_fitnes_compose.Screens.ScreenElements
 
-import android.widget.ImageButton
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.TimeTableViewModel
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.NewTimeTableViewModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
@@ -39,13 +25,10 @@ import com.example.fefu_fitnes_compose.ui.theme.Yellow
 @Composable
 fun EventCard(
     event: UpdateEventDataModel,
-    timeTableViewModel: TimeTableViewModel = viewModel()
+    timeTableViewModel: NewTimeTableViewModel = viewModel()
 ) {
     val openDialog = remember { mutableStateOf(false) }
-    val bookingEvents by timeTableViewModel.userEvents.observeAsState()
-    val isBooking = remember {
-        mutableStateOf(isBooking(event, bookingEvents!!))
-    }
+
 
     Card(
         modifier = Modifier
@@ -85,7 +68,7 @@ fun EventCard(
                         modifier = Modifier
                             .fillMaxWidth(0.5f)
                             .height(38.dp),
-                        text = event.eventName,
+                        text = if(event.eventName == null) "Нет" else event.eventName!!,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Medium,
                         maxLines = 2,
@@ -99,7 +82,7 @@ fun EventCard(
                         )
                         Text(
                             modifier = Modifier.padding(start = 4.dp),
-                            text = event.eventLocation,
+                            text = if(event.eventLocation == null) "Нет" else event.eventLocation!!,
                             fontSize = 12.sp
                         )
                     }
@@ -112,7 +95,7 @@ fun EventCard(
                         )
                         Text(
                             modifier = Modifier.padding(start = 4.dp),
-                            text = event.couchName,
+                            text = if(event.couchName == null) "Нет" else event.couchName!!,
                             fontSize = 12.sp,
                         )
                     }
@@ -141,21 +124,12 @@ fun EventCard(
                         )
                     }
 
-                    isBooking.value = isBooking(event, bookingEvents!!)
-
                     TextButton(
                         onClick = {
-                            if(!isBooking.value){
-                                timeTableViewModel.addUserEvent(event.eventId)
-                                isBooking.value = isBooking(event, bookingEvents!!)
-                            }
-                            else if (isBooking.value){
-                                timeTableViewModel.deleteUserEvent(event.eventId)
-                                isBooking.value = isBooking(event, bookingEvents!!)
-                            }
+
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = if(isBooking.value) Color.Gray else Yellow,
+                            backgroundColor = Yellow,
                             contentColor = Color.White
                         ),
                         modifier = Modifier
@@ -171,7 +145,7 @@ fun EventCard(
                         )
                     ) {
                         Text(
-                            text = if(isBooking.value) "Отменить" else "Записаться",
+                            text = "Записаться",
                             fontSize = 14.sp
                         )
                     }
@@ -180,9 +154,4 @@ fun EventCard(
             }
         }
     }
-}
-
-fun isBooking(event: UpdateEventDataModel, userEvents: MutableList<BookingDataModel>):Boolean{
-    println("_______________${event.eventId in userEvents.map { it.eventId }} ${event.eventId}_____________________")
-    return event.eventId in userEvents.map { it.eventId }
 }

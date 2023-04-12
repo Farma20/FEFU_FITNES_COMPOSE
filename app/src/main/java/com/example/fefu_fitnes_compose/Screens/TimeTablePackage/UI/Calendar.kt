@@ -23,9 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.TimeTableViewModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
 import kotlinx.coroutines.launch

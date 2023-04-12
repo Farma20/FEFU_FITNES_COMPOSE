@@ -17,34 +17,10 @@ object RegisterRepository: ViewModel() {
 
     var userInit by mutableStateOf(false)
 
-    var userToken by mutableStateOf("")
+    var userToken by mutableStateOf("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNjkxNjQ5NDAxfQ.dh21Mqx-ydJGh3Q2_d4ib7CcCwpPtxDmFBUV6zhlsSM")
 
     private val registerUserList = MutableLiveData<MutableList<UserRegisterModel>>()
 
-    fun pushLoginData(loginData: UserEnterModel){
-        viewModelScope.launch {
-            try {
-                val result = FefuFitRetrofit.retrofitService.pushLoginData(loginData)
-                if(result["status"] == "sucsess"){
-                    userInit = true
-                }
-
-            }catch (e:Exception){
-                println(e.message)
-            }
-        }
-    }
-
-    fun registerNewUser(registerData: UserRegisterModel){
-        viewModelScope.launch {
-            try {
-                FefuFitRetrofit.retrofitService.registerUser(registerData)
-            }
-            catch (e:Exception){
-                println(e.message)
-            }
-        }
-    }
 
     //Новый сервер
     fun registrationData(registerData: RegistrationDataModel){
@@ -73,20 +49,6 @@ object RegisterRepository: ViewModel() {
                 println(e.message)
             }
         }
-    }
-
-
-    //сеттеры
-    fun addNewUser(userData: UserRegisterModel?){
-        if (userData != null) {
-            registerUserList.value?.add(userData)
-        }
-    }
-
-
-    //геттеры
-    fun getUserList(): List<UserRegisterModel>?{
-        return registerUserList.value
     }
 
     init {

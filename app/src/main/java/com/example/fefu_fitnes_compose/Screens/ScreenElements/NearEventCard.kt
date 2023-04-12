@@ -62,7 +62,7 @@ fun NearEventCard(event: UpdateEventDataModel) {
                         modifier = Modifier
                             .fillMaxWidth(0.5f)
                             .height(38.dp),
-                        text = event.eventName,
+                        text = if(event.eventName == null) "Нет" else event.eventName!!,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Medium,
                         maxLines = 2,
@@ -76,7 +76,7 @@ fun NearEventCard(event: UpdateEventDataModel) {
                         )
                         Text(
                             modifier = Modifier.padding(start = 4.dp),
-                            text = event.eventLocation,
+                            text = if(event.eventLocation == null) "Нет" else event.eventLocation!!,
                             fontSize = 12.sp
                         )
                     }
@@ -89,7 +89,7 @@ fun NearEventCard(event: UpdateEventDataModel) {
                         )
                         Text(
                             modifier = Modifier.padding(start = 4.dp),
-                            text = event.couchName,
+                            text = if(event.couchName == null) "Нет" else event.couchName!!,
                             fontSize = 12.sp,
                         )
                     }
@@ -112,7 +112,7 @@ fun NearEventCard(event: UpdateEventDataModel) {
 
                     TextButton(
                         onClick = {
-                            MainRepository.deleteUserEvent(event.eventId)
+
                         },
                         colors = ButtonDefaults.textButtonColors(
                             backgroundColor = Color.Gray,

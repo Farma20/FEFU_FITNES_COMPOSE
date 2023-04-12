@@ -22,12 +22,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
-            val userInitialization = RegisterRepository.userInit
-
-            if(!userInitialization)
-                InitializationNavigationMain()
-            else
+//            val userInitialization = RegisterRepository.userInit
+//
+//            if(!userInitialization)
+//                InitializationNavigationMain()
+//            else
                 MainScreen()
 
         }

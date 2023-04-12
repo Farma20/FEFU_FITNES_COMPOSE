@@ -1,6 +1,5 @@
 package com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI
 
-import android.media.metrics.Event
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,7 +7,6 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,11 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.EventCard
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.TimeTableViewModel
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.NewTimeTableViewModel
 import com.example.fefu_fitnes_compose.ui.theme.Blue
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
@@ -45,8 +44,6 @@ fun TimeTableUI(){
         val currentData = remember {
             mutableStateOf(LocalDate.now())
         }
-
-
 
         UpBar(currentData)
         TabLayout(currentData)
@@ -116,18 +113,14 @@ private fun UpBar(currentData:MutableState<LocalDate>){
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: TimeTableViewModel = viewModel()){
+private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: NewTimeTableViewModel = viewModel()){
 
     val buttonList = listOf("Все занятия", "Мои занятия")
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
 
-    val bookingEvents by timeTableViewModel.userEvents.observeAsState()
-    val allEvents by timeTableViewModel.allEvents.observeAsState()
-    val selectEvents = selectEvents(allEvents!!, currentData.value)
-    val userEvents = getUserEvents(allEvents!!, bookingEvents!!)
-    val selectUserEvents = selectEvents(userEvents, currentData.value)
+
 
     Column(
     ) {
@@ -172,15 +165,15 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
                 modifier = Modifier.fillMaxSize(),
             ){
                 if(index == 0){
-                    items(selectEvents.size){id->
-                        EventCard(selectEvents[id])
+                    items(timeTableViewModel.allEventData.size){id->
+                        EventCard(timeTableViewModel.allEventData[id])
                     }
                 }
-                if (index == 1){
-                    items(selectUserEvents.size){id->
-                        EventCard(selectUserEvents[id])
-                    }
-                }
+//                if (index == 1){
+//                    items(timeTableViewModel.eventAll.size){id->
+//                        EventCard(timeTableViewModel.eventAll[id])
+//                    }
+//                }
             }
         }
     }
