@@ -1,5 +1,6 @@
 package com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,17 +15,22 @@ class NewTimeTableViewModel: ViewModel() {
     var allEventData by mutableStateOf(listOf(UpdateEventDataModel()))
     var bookingEventData by mutableStateOf(listOf(UpdateEventDataModel()))
 
-    fun addNewBooking(eventId:Int){
+    fun addNewBooking(eventId:Int, selected:MutableState<Boolean>){
         MainRepository.addEventsBookingOnServer(eventId)
     }
 
+    fun cancelBooking(eventId: Int){
+        MainRepository.cancelEventsBookingOnServer(eventId)
+    }
+
+
     init {
         MainRepository.getEventsAllFromServer().observeForever{
-            allEventData = convertAllEventsToUpdate(it!!)
+            allEventData = convertAllEventsToUpdate(it!!).sortedBy { it.startEventTime }
         }
 
         MainRepository.getEventsBookingFromServer().observeForever{
-            bookingEventData = convertAllEventsToUpdate(it!!)
+            bookingEventData = convertAllEventsToUpdate(it!!).sortedBy { it.startEventTime }
         }
     }
 }

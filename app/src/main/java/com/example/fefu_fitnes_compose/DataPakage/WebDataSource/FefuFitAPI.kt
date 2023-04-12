@@ -1,9 +1,7 @@
 package com.example.fefu_fitnes.adadadad.WebDataSource
 
-import com.example.fefu_fitnes.UI.RegisterPackage.Models.UserEnterModel
-import com.example.fefu_fitnes_compose.DataPakage.Models.AddNewBookingDataModel
+import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
-import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.UserRegisterModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookingDataModel
@@ -43,7 +41,11 @@ interface FefuFitAPI {
     suspend fun getEventsBooking(@Body token:Map<String, String>):List<EventAllDataModel>
 
     @POST("api/timetable/booking/user/add")
-    suspend fun addEventsBooking(@Body addBookingData:AddNewBookingDataModel):Map<String, String>
+    suspend fun addEventsBooking(@Body addBookingData:PushNewBookingDataModel):Map<String, String>
+
+    @POST("api/timetable/booking/user/cancel")
+    suspend fun cancelEventsBooking(@Body addBookingData:PushNewBookingDataModel):Map<String, String>
+
 
 
 }

@@ -122,14 +122,18 @@ fun EventCard(
                         )
                     }
 
+                    var selected = remember { mutableStateOf(false) }
+                    selected.value = event.bookingStatus!! != "booked"
+
                     TextButton(
                         onClick = {
-                            println("_______________${event.bookingStatus!!}___________________")
-                            if(event.bookingStatus!! == "not booked")
-                                timeTableViewModel.addNewBooking(event.eventId!!)
+                            if(selected.value)
+                                timeTableViewModel.addNewBooking(event.eventId!!, selected)
+                            else
+                                timeTableViewModel.cancelBooking(event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = if(event.bookingStatus!! == "booked") Color.Gray else Yellow,
+                            backgroundColor = if(selected.value) Yellow else Color.Gray,
                             contentColor = Color.White
                         ),
                         modifier = Modifier
@@ -145,7 +149,7 @@ fun EventCard(
                         )
                     ) {
                         Text(
-                            text = if(event.bookingStatus!! == "booked") "Отменить" else "Записаться",
+                            text = if(selected.value) "Записаться" else "Отменить",
                             fontSize = 14.sp
                         )
                     }
