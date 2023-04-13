@@ -119,26 +119,31 @@ object MainRepository: ViewModel() {
         return result
     }
 
-    fun addEventsBookingOnServer(eventId: Int, token: String = RegisterRepository.userToken){
+
+    fun addEventsBookingOnServer(eventId: Int ,token: String = RegisterRepository.userToken):MutableLiveData<Boolean>{
+        val answer = MutableLiveData<Boolean>()
         viewModelScope.launch {
             try {
                 val result = FefuFitRetrofit.retrofitService.addEventsBooking(PushNewBookingDataModel(eventId, token))
-                if (result["msg"] == "booking add success"){}
+                answer.value = result["msg"] == "booking add success"
             }catch (e:Exception){
                 println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             }
         }
+        return answer
     }
 
-    fun cancelEventsBookingOnServer(eventId: Int, token: String = RegisterRepository.userToken){
+    fun cancelEventsBookingOnServer(eventId: Int, token: String = RegisterRepository.userToken):MutableLiveData<Boolean>{
+        val answer = MutableLiveData<Boolean>()
         viewModelScope.launch {
             try {
                 val result = FefuFitRetrofit.retrofitService.cancelEventsBooking(PushNewBookingDataModel(eventId, token))
-                if (result["msg"] == "booking already cancelled"){}
+                answer.value = result["msg"] == "booking cancel success"
             }catch (e:Exception){
                 println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             }
         }
+        return answer
     }
 
 

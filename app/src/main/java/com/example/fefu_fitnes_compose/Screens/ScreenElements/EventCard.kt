@@ -28,6 +28,10 @@ fun EventCard(
     timeTableViewModel: NewTimeTableViewModel = viewModel()
 ) {
     val openDialog = remember { mutableStateOf(false) }
+    val selected = remember { mutableStateOf(false) }
+    val occupiedSpace = remember { mutableStateOf(0) }
+    occupiedSpace.value = event.occupiedSpaces!!
+    selected.value = event.bookingStatus!! != "booked"
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -98,6 +102,7 @@ fun EventCard(
                         )
                     }
                 }
+
                 Column(
                     modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
                 ) {
@@ -116,21 +121,31 @@ fun EventCard(
                             fontSize = 10.sp,
                         )
                         Text(
-                            text = "${event.occupiedSpaces}/${event.totalSpaces}",
+                            text = "${occupiedSpace.value}/${event.totalSpaces}",
                             fontSize = 10.sp,
                             color = BlueURL
                         )
                     }
 
-                    var selected = remember { mutableStateOf(false) }
-                    selected.value = event.bookingStatus!! != "booked"
+
 
                     TextButton(
                         onClick = {
-                            if(selected.value)
-                                timeTableViewModel.addNewBooking(event.eventId!!, selected)
+                            if(selected.value){
+                                timeTableViewModel.addNewBooking(event.eventId!!).observeForever{
+                                    selected.value = !it
+                                    occupiedSpace.value = occupiedSpace.value+1
+                                    event.occupiedSpaces = occupiedSpace.value
+                                    event.bookingStatus = "booked"
+                                }
+                            }
                             else
-                                timeTableViewModel.cancelBooking(event.eventId!!)
+                                timeTableViewModel.cancelBooking(event.eventId!!).observeForever{
+                                    selected.value = it
+                                    occupiedSpace.value = occupiedSpace.value-1
+                                    event.occupiedSpaces = occupiedSpace.value
+                                    event.bookingStatus = "cancelled"
+                                }
                         },
                         colors = ButtonDefaults.textButtonColors(
                             backgroundColor = if(selected.value) Yellow else Color.Gray,
