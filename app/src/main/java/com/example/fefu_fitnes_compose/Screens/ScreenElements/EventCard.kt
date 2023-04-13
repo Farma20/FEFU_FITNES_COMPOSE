@@ -137,6 +137,7 @@ fun EventCard(
                                     occupiedSpace.value = occupiedSpace.value+1
                                     event.occupiedSpaces = occupiedSpace.value
                                     event.bookingStatus = "booked"
+                                    addUINewBooking(timeTableViewModel, event)
                                 }
                             }
                             else
@@ -145,6 +146,7 @@ fun EventCard(
                                     occupiedSpace.value = occupiedSpace.value-1
                                     event.occupiedSpaces = occupiedSpace.value
                                     event.bookingStatus = "cancelled"
+                                    cancelUINewBooking(timeTableViewModel, event)
                                 }
                         },
                         colors = ButtonDefaults.textButtonColors(
@@ -173,4 +175,19 @@ fun EventCard(
             }
         }
     }
+}
+
+fun addUINewBooking(timeTableViewModel: NewTimeTableViewModel, event: UpdateEventDataModel){
+    timeTableViewModel.bookingEventData.add(event)
+    timeTableViewModel.bookingEventData.sortBy { it.startEventTime }
+}
+
+fun cancelUINewBooking(timeTableViewModel: NewTimeTableViewModel, event: UpdateEventDataModel){
+    for(bookingEvent in timeTableViewModel.bookingEventData){
+        if (bookingEvent.eventId == event.eventId){
+            timeTableViewModel.bookingEventData.remove(bookingEvent)
+            return
+        }
+    }
+
 }

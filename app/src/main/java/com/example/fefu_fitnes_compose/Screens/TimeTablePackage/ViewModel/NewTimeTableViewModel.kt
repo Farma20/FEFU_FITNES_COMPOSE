@@ -1,5 +1,6 @@
 package com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,10 +11,11 @@ import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewServer
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import java.time.LocalDate
 
+@SuppressLint("MutableCollectionMutableState")
 class NewTimeTableViewModel: ViewModel() {
 
     var allEventData by mutableStateOf(listOf(UpdateEventDataModel()))
-    var bookingEventData by mutableStateOf(listOf(UpdateEventDataModel()))
+    var bookingEventData by mutableStateOf(mutableListOf(UpdateEventDataModel()))
 
     fun addNewBooking(eventId: Int): MutableLiveData<Boolean> {
         return MainRepository.addEventsBookingOnServer(eventId)
@@ -30,7 +32,8 @@ class NewTimeTableViewModel: ViewModel() {
         }
 
         MainRepository.getEventsBookingFromServer().observeForever{
-            bookingEventData = convertAllEventsToUpdate(it!!).sortedBy { it.startEventTime }
+            bookingEventData = convertAllEventsToUpdate(it!!)
+            bookingEventData.sortBy { it.startEventTime }
         }
     }
 }
@@ -43,7 +46,7 @@ class NewTimeTableViewModel: ViewModel() {
 
 
 //Преобразование входящих данных
-private fun convertAllEventsToUpdate(events: List<EventAllDataModel>):List<UpdateEventDataModel>{
+private fun convertAllEventsToUpdate(events: List<EventAllDataModel>):MutableList<UpdateEventDataModel>{
     val updateEventDataModels = mutableListOf<UpdateEventDataModel>()
     for (event in events){
 
