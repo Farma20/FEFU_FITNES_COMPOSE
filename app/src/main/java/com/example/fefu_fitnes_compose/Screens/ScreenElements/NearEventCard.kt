@@ -30,7 +30,7 @@ import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
 
 @Composable
-fun NearEventCard(event: UpdateEventDataModel) {
+fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewModel = viewModel()) {
     val openDialog = remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
@@ -112,7 +112,7 @@ fun NearEventCard(event: UpdateEventDataModel) {
 
                     TextButton(
                         onClick = {
-
+                            mainMenuViewModel.cancelBooking(event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
                             backgroundColor = Color.Gray,

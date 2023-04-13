@@ -139,7 +139,7 @@ fun EventCard(
                                 timeTableViewModel.cancelBooking(event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = if(selected.value) Yellow else Color.Gray,
+                            backgroundColor = if(selected.value && occupiedSpace.value != event.totalSpaces) Yellow else Color.Gray,
                             contentColor = Color.White
                         ),
                         modifier = Modifier
@@ -155,7 +155,9 @@ fun EventCard(
                         )
                     ) {
                         Text(
-                            text = if(selected.value) "Записаться" else "Отменить",
+                            text = if(occupiedSpace.value == event.totalSpaces) "Нет записи" else{
+                                if(selected.value) "Записаться" else "Отменить"
+                             },
                             fontSize = 14.sp
                         )
                     }

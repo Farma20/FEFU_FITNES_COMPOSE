@@ -3,6 +3,7 @@ package com.example.fefu_fitnes.adadadad.WebDataSource
 import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
+import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewServer.EventAllDataModel
@@ -11,20 +12,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface FefuFitAPI {
-    @GET("/api/user/getAllUserInfo")
-    suspend fun getUserData():String
-
-    @GET("/api/event/getAllEvent")
-    suspend fun getAllEvents():String
-
-    @GET("/api/booking/getAllBooking")
-    suspend fun getUserEvents():MutableList<BookingDataModel>
-
-    @POST("/api/booking/addNewBooking")
-    suspend fun newBooking(@Body newBooking: NewBookingDataModel)
-
-
-    //новый сервер
 
     //Регистрация и инициализация
     @POST("/api/auth/signup")
@@ -32,6 +19,10 @@ interface FefuFitAPI {
 
     @POST("/api/auth/login")
     suspend fun pushLogin(@Body userEnterData: EnterDataModel):Map<String,Any>
+
+    //Данные главной страницы
+    @POST("api/user/user/view_self")
+    suspend fun getUserData(@Body token:Map<String, String>):UserDataModel
 
     //Данные тренировок
     @POST("/api/timetable/event/user/view_all")

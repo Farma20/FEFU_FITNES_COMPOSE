@@ -1,10 +1,11 @@
 package com.example.fefu_fitnes.dadadada.Repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import android.arch.persistence.room.Room
+import android.content.Context
+import androidx.lifecycle.*
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
+import com.example.fefu_fitnes_compose.DataPakage.DataBase.FefuFitDataBase
 import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
@@ -15,13 +16,14 @@ import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookin
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewServer.EventAllDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.internal.NoOpContinuation.context
 import kotlinx.coroutines.launch
+import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
 
-object MainRepository: ViewModel() {
+object MainRepository: AndroidViewModel() {
 
-    private val _currentUser = MutableLiveData<UserDataModel>()
-    val currentUser:LiveData<UserDataModel> = _currentUser
+
 
     private val _currentNews = MutableLiveData<List<NewsDataModel>>()
     val currentNews:LiveData<List<NewsDataModel>> = _currentNews
@@ -29,14 +31,26 @@ object MainRepository: ViewModel() {
     val registrationUserData = MutableLiveData<RegistrationFromStateModel>()
 
 
-    //связь с API
-    private val gson = Gson()
+    //связь с сервером
+    val currentUser = MutableLiveData<UserDataModel>().apply {
+        this.value = UserDataModel()
+    }
+
+    fun getUserDataFromServer(token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                currentUser.postValue(FefuFitRetrofit.retrofitService.getUserData(mapOf("token" to token)))
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
 
     val allEvents = MutableLiveData<List<EventAllDataModel>>().apply {
         this.value = listOf()
     }
 
-    //Новый сервер
     fun getEventsAllFromServer(token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try {
@@ -90,8 +104,8 @@ object MainRepository: ViewModel() {
         }
     }
 
+
     init {
-        _currentUser.value = UserDataModel("Райан", "Гослинг", "№583057349", "0 занятий")
         _currentNews.value = listOf(
             NewsDataModel("Чемпионат АССК по настольному теннису"),
             NewsDataModel("III этап зимнего сезона Студенческой Гребной Лиги"),

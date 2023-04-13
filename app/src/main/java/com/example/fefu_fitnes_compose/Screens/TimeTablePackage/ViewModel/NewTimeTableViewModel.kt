@@ -25,10 +25,6 @@ class NewTimeTableViewModel: ViewModel() {
         MainRepository.cancelEventsBookingOnServer(eventId)
     }
 
-    fun updateAllEventsFromServer(){
-        MainRepository.getEventsAllFromServer()
-    }
-
 
     init {
         MainRepository.getEventsAllFromServer()

@@ -57,12 +57,10 @@ fun MainMenuUI(mainMenuViewModel: MainMenuViewModel = viewModel()) {
                 fontSize = 20.sp,
             )
 
-            val nearUserEvent by mainMenuViewModel.nearUserEvent.observeAsState()
-            if (nearUserEvent!!.isEmpty()){
+            if(mainMenuViewModel.bookingEventData.isEmpty())
                 EmptyCard()
-            }
             else{
-                NearEventCard(event = nearUserEvent!![0])
+                NearEventCard(event = mainMenuViewModel.bookingEventData[0])
             }
 
 
@@ -72,7 +70,6 @@ fun MainMenuUI(mainMenuViewModel: MainMenuViewModel = viewModel()) {
                 fontSize = 20.sp,
             )
             UserActive()
-            Spacer(modifier = Modifier.padding(30.dp))
         }
     }
 }
@@ -117,15 +114,12 @@ private fun UppBar(mainMenuViewModel: MainMenuViewModel) {
                 modifier = Modifier.padding(10.dp),
             ) {
 
-
-                val userData by mainMenuViewModel.currentUser.observeAsState()
-
                 Text(
                     modifier = Modifier
                         .padding(top = 5.dp),
-                    text = "Привет, ${userData!!.firstName}!",
+                    text = if(mainMenuViewModel.userData.firstName == null) "Загрузка" else "Привет, ${mainMenuViewModel.userData.firstName}!",
                     color = Color.White,
-                    fontSize = 30.sp
+                    fontSize = 25.sp
                 )
                 Text(
                     modifier = Modifier.padding(top= 5.dp),

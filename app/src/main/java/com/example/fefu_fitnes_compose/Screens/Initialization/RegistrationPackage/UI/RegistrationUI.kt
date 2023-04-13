@@ -114,7 +114,7 @@ private fun RegistrationSecondName(state: RegistrationFromStateModel, viewModel:
             },
             isError = false,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Text
             ),
             placeholder = {
                 Row() {
@@ -159,7 +159,7 @@ private fun RegistrationFirstName(state: RegistrationFromStateModel, viewModel: 
             },
             isError = false,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Text
             ),
             placeholder = {
                 Row() {
@@ -204,7 +204,7 @@ private fun RegistrationMiddleName(state: RegistrationFromStateModel, viewModel:
             },
             isError = false,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Text
             ),
             placeholder = {
                 Row() {
