@@ -17,21 +17,28 @@ class NewTimeTableViewModel: ViewModel() {
     var allEventData by mutableStateOf(listOf(UpdateEventDataModel()))
     var bookingEventData by mutableStateOf(mutableListOf(UpdateEventDataModel()))
 
-    fun addNewBooking(eventId: Int): MutableLiveData<Boolean> {
-        return MainRepository.addEventsBookingOnServer(eventId)
+    fun addNewBooking(eventId: Int) {
+        MainRepository.addEventsBookingOnServer(eventId)
     }
 
-    fun cancelBooking(eventId: Int): MutableLiveData<Boolean>{
-        return MainRepository.cancelEventsBookingOnServer(eventId)
+    fun cancelBooking(eventId: Int){
+        MainRepository.cancelEventsBookingOnServer(eventId)
+    }
+
+    fun updateAllEventsFromServer(){
+        MainRepository.getEventsAllFromServer()
     }
 
 
     init {
-        MainRepository.getEventsAllFromServer().observeForever{
+        MainRepository.getEventsAllFromServer()
+        MainRepository.getEventsBookingFromServer()
+
+        MainRepository.allEvents.observeForever{
             allEventData = convertAllEventsToUpdate(it!!).sortedBy { it.startEventTime }
         }
 
-        MainRepository.getEventsBookingFromServer().observeForever{
+        MainRepository.userEvents.observeForever{
             bookingEventData = convertAllEventsToUpdate(it!!)
             bookingEventData.sortBy { it.startEventTime }
         }

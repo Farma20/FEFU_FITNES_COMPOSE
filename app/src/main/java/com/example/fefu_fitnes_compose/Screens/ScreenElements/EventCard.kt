@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -132,22 +133,10 @@ fun EventCard(
                     TextButton(
                         onClick = {
                             if(selected.value){
-                                timeTableViewModel.addNewBooking(event.eventId!!).observeForever{
-                                    selected.value = !it
-                                    occupiedSpace.value = occupiedSpace.value+1
-                                    event.occupiedSpaces = occupiedSpace.value
-                                    event.bookingStatus = "booked"
-                                    addUINewBooking(timeTableViewModel, event)
-                                }
+                                timeTableViewModel.addNewBooking(event.eventId!!)
                             }
                             else
-                                timeTableViewModel.cancelBooking(event.eventId!!).observeForever{
-                                    selected.value = it
-                                    occupiedSpace.value = occupiedSpace.value-1
-                                    event.occupiedSpaces = occupiedSpace.value
-                                    event.bookingStatus = "cancelled"
-                                    cancelUINewBooking(timeTableViewModel, event)
-                                }
+                                timeTableViewModel.cancelBooking(event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
                             backgroundColor = if(selected.value) Yellow else Color.Gray,
@@ -175,19 +164,4 @@ fun EventCard(
             }
         }
     }
-}
-
-fun addUINewBooking(timeTableViewModel: NewTimeTableViewModel, event: UpdateEventDataModel){
-    timeTableViewModel.bookingEventData.add(event)
-    timeTableViewModel.bookingEventData.sortBy { it.startEventTime }
-}
-
-fun cancelUINewBooking(timeTableViewModel: NewTimeTableViewModel, event: UpdateEventDataModel){
-    for(bookingEvent in timeTableViewModel.bookingEventData){
-        if (bookingEvent.eventId == event.eventId){
-            timeTableViewModel.bookingEventData.remove(bookingEvent)
-            return
-        }
-    }
-
 }

@@ -26,13 +26,13 @@ class MainMenuViewModel:ViewModel() {
 //            _currentUser.value = it
 //        }
 
-        MainRepository.allEvents.observeForever{
-            _nearUserEvent.value = getUserEvents(it, MainRepository.currentUserEvents.value!!)
-        }
-
-        MainRepository.currentUserEvents.observeForever{
-            _nearUserEvent.value = getUserEvents(MainRepository.allEvents.value!!, it)
-        }
+//        MainRepository.allEvents.observeForever{
+//            _nearUserEvent.value = getUserEvents(it, MainRepository.currentUserEvents.value!!)
+//        }
+//
+//        MainRepository.currentUserEvents.observeForever{
+//            _nearUserEvent.value = getUserEvents(MainRepository.allEvents.value!!, it)
+//        }
 
         MainRepository.currentNews.observeForever{
             _currentNews.value = it

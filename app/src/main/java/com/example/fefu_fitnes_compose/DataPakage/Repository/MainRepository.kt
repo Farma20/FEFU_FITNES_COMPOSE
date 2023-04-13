@@ -26,134 +26,71 @@ object MainRepository: ViewModel() {
     private val _currentNews = MutableLiveData<List<NewsDataModel>>()
     val currentNews:LiveData<List<NewsDataModel>> = _currentNews
 
-    private val _currentUserEvents = MutableLiveData<MutableList<BookingDataModel>>()
-    val currentUserEvents: LiveData<MutableList<BookingDataModel>> = _currentUserEvents
-
-    private val _allEvents = MutableLiveData<List<UpdateEventDataModel>>()
-    val allEvents: LiveData<List<UpdateEventDataModel>> = _allEvents
-
     val registrationUserData = MutableLiveData<RegistrationFromStateModel>()
-
-
 
 
     //связь с API
     private val gson = Gson()
 
-//    fun getUserDataFromServer(): LiveData<UserDataModel> {
-//        val result = MutableLiveData<UserDataModel>()
-//        viewModelScope.launch {
-//            try {
-//                val listResult = FefuFitRetrofit.retrofitService.getUserData()
-//
-//                result.postValue(gson.fromJson(listResult, UserDataModel::class.java))
-//            }catch (e:Exception){
-//                println(e)
-//                result.postValue(UserDataModel("Юра", "Гослинг", "№583057349", "0 занятий"))
-//            }
-//        }
-//
-//        return result
-//    }
-//
-//
-//    fun getAllEventFromServer():LiveData<Array<EventDataModel>>{
-//
-//        val result = MutableLiveData<Array<EventDataModel>>()
-//        viewModelScope.launch {
-//            try {
-//                val listResult = FefuFitRetrofit.retrofitService.getAllEvents()
-//                result.postValue(gson.fromJson(listResult, Array<EventDataModel>::class.java))
-//            }catch (e:Exception){
-//                println("MainRepository нет соединения с сервером!!!!")
-//            }
-//        }
-//        return result
-//    }
-//
-//
-//    fun getUserEventsFromSever():MutableLiveData<MutableList<BookingDataModel>>{
-//        val result = MutableLiveData<MutableList<BookingDataModel>>()
-//        viewModelScope.launch {
-//            try {
-//                result.postValue(FefuFitRetrofit.retrofitService.getUserEvents())
-//            }catch (e:Exception){
-//                println(e)
-//            }
-//        }
-//        return result
-//    }
-//
-    fun pushNewBookingOnServer(eventId: Int){
-        viewModelScope.launch {
-            try {
-                FefuFitRetrofit.retrofitService.newBooking(NewBookingDataModel(eventId))
-            }catch (e:Exception){
-                println(e)
-            }
-        }
+    val allEvents = MutableLiveData<List<EventAllDataModel>>().apply {
+        this.value = listOf()
     }
 
     //Новый сервер
-    fun getEventsAllFromServer(token: String = RegisterRepository.userToken): MutableLiveData<List<EventAllDataModel>>{
-        val result = MutableLiveData<List<EventAllDataModel>>()
+    fun getEventsAllFromServer(token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try {
-                result.postValue(FefuFitRetrofit.retrofitService.getEventsAll(mapOf("token" to token)))
+                allEvents.postValue(FefuFitRetrofit.retrofitService.getEventsAll(mapOf("token" to token)))
             }catch (e:Exception){
                 println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             }
         }
-        return result
     }
 
-    fun getEventsBookingFromServer(token: String = RegisterRepository.userToken): MutableLiveData<List<EventAllDataModel>>{
-        val result = MutableLiveData<List<EventAllDataModel>>()
+    val userEvents = MutableLiveData<List<EventAllDataModel>>().apply {
+        this.value = listOf()
+    }
+
+    fun getEventsBookingFromServer(token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try {
-                result.postValue(FefuFitRetrofit.retrofitService.getEventsBooking(mapOf("token" to token)))
+                userEvents.postValue(FefuFitRetrofit.retrofitService.getEventsBooking(mapOf("token" to token)))
             }catch (e:Exception){
                 println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             }
         }
-        return result
     }
 
 
-    fun addEventsBookingOnServer(eventId: Int ,token: String = RegisterRepository.userToken):MutableLiveData<Boolean>{
-        val answer = MutableLiveData<Boolean>()
+    fun addEventsBookingOnServer(eventId: Int ,token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try {
                 val result = FefuFitRetrofit.retrofitService.addEventsBooking(PushNewBookingDataModel(eventId, token))
-                answer.value = result["msg"] == "booking add success"
+                if(result["msg"] == "booking add success"){
+                    getEventsAllFromServer()
+                    getEventsBookingFromServer()
+                }
             }catch (e:Exception){
                 println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             }
         }
-        return answer
     }
 
-    fun cancelEventsBookingOnServer(eventId: Int, token: String = RegisterRepository.userToken):MutableLiveData<Boolean>{
-        val answer = MutableLiveData<Boolean>()
+    fun cancelEventsBookingOnServer(eventId: Int, token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try {
                 val result = FefuFitRetrofit.retrofitService.cancelEventsBooking(PushNewBookingDataModel(eventId, token))
-                answer.value = result["msg"] == "booking cancel success"
+                if(result["msg"] == "booking cancel success"){
+                    getEventsAllFromServer()
+                    getEventsBookingFromServer()
+                }
             }catch (e:Exception){
                 println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             }
         }
-        return answer
     }
 
-
-
-
-
-
     init {
-        _currentUserEvents.value = mutableListOf()
-
         _currentUser.value = UserDataModel("Райан", "Гослинг", "№583057349", "0 занятий")
         _currentNews.value = listOf(
             NewsDataModel("Чемпионат АССК по настольному теннису"),
@@ -166,18 +103,4 @@ object MainRepository: ViewModel() {
 
         registrationUserData.value = RegistrationFromStateModel()
     }
-
-
-
-    fun deleteUserEvent(bookingId: Int){
-        for(id in _currentUserEvents.value!!.indices){
-            if(_currentUserEvents.value!![id].eventId == bookingId){
-                _currentUserEvents.value!!.removeAt(id)
-                val newCurrentUserEvents = _currentUserEvents.value!!
-                _currentUserEvents.value = newCurrentUserEvents
-                break
-            }
-        }
-    }
-
 }
