@@ -6,9 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.Room
 import com.example.fefu_fitnes.UI.RegisterPackage.Models.UserEnterModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.UserRegisterModel
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
+import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Dao.FastEnterDao
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import kotlinx.coroutines.launch

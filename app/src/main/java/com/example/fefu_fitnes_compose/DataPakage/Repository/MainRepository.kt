@@ -1,11 +1,9 @@
 package com.example.fefu_fitnes.dadadada.Repository
 
 import android.app.Application
-import android.arch.persistence.room.Room
 import android.content.Context
 import androidx.lifecycle.*
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
-import com.example.fefu_fitnes_compose.DataPakage.DataBase.FefuFitDataBase
 import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
@@ -16,12 +14,11 @@ import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookin
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewServer.EventAllDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.internal.NoOpContinuation.context
 import kotlinx.coroutines.launch
-import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
 
-object MainRepository: AndroidViewModel() {
+
+object MainRepository: ViewModel() {
 
 
 

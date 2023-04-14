@@ -26,10 +26,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.Initialization.Navigation.Screen
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Controllers.RegistrationFormEvent
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.UI.RegistrationUI
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.ViewModel.RegistrationViewModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.TopBars.MainTopBar
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Controllers.InitializationFormEvent
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.ViewModel.InitializationViewModel
+import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
 
@@ -175,7 +179,35 @@ private fun InitializationInput(){
                 color = MaterialTheme.colors.error
             )
         }
-        Spacer(modifier = Modifier.height(45.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
+
+        Column(){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 5.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Checkbox(
+                    colors = CheckboxDefaults.colors(
+                        uncheckedColor = BlueLight,
+                        checkedColor = Yellow
+                    ),
+                    checked = state.terms,
+                    onCheckedChange = {
+                        initializationViewModel.onEvent(InitializationFormEvent.TermsChanged(it))
+                    },
+                )
+                Text(
+                    "Запоминть меня",
+                    fontWeight = FontWeight.Light
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             modifier = Modifier

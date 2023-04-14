@@ -5,20 +5,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fefu_fitnes.UI.RegisterPackage.Models.UserEnterModel
-import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
+import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Models.User
+import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
 import com.example.fefu_fitnes_compose.Domain.use_case.ValidateEmail
 import com.example.fefu_fitnes_compose.Domain.use_case.ValidatePassword
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Controllers.InitializationFormEvent
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.InitializationFormStateModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class InitializationViewModel(
+//    private val dao: FastEnterDao,
     private val validateEmail: ValidateEmail = ValidateEmail(),
     private val validatePassword: ValidatePassword = ValidatePassword()
 ): ViewModel() {
@@ -35,6 +35,9 @@ class InitializationViewModel(
             }
             is InitializationFormEvent.PasswordChanged->{
                 state = state.copy(password = event.password)
+            }
+            is InitializationFormEvent.TermsChanged->{
+                state = state.copy(terms = event.terms)
             }
             is InitializationFormEvent.Submit->{
                 submitData()
@@ -53,10 +56,6 @@ class InitializationViewModel(
             passwordError = passwordResult.errorMessage
         )
 
-        val correctUser =
-            MainRepository.registrationUserData.value!!.email == state.email &&
-            MainRepository.registrationUserData.value!!.password == state.password
-
         if(hasErrors){
             return
         }
@@ -68,8 +67,20 @@ class InitializationViewModel(
                 password = state.password
             )
              )
-            if (RegisterRepository.userInit)
+            println("_________!!!!!!____________${DataBaseRepository.get().getAllUserData().value}___________!!!!!!!!!__________")
+            println("_________!!!!!!____________${RegisterRepository.userInit}___________!!!!!!!!!__________")
+            println("_________!!!!!!____________${state.terms}___________!!!!!!!!!__________")
+
+            if (RegisterRepository.userInit){
                 validationEventChannel.send(ValidationEvent.Success)
+                if (state.terms){
+                    if (DataBaseRepository.get().getAllUserData().value == null){
+                        DataBaseRepository.get().addUserData(User(userToken = RegisterRepository.userToken))
+                    }
+                    println("_________!!!!!!____________${DataBaseRepository.get().getAllUserData().value}___________!!!!!!!!!__________")
+                }
+            }
+
         }
     }
 
