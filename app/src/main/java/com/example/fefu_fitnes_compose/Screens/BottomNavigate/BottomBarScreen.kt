@@ -19,6 +19,12 @@ sealed class BottomBarScreen(
         icon = R.drawable.bottom_navigate_tables
     )
 
+    object QrScanner: BottomBarScreen(
+        rout = "qrScannerScreen",
+        title = "QR сканер",
+        icon = R.drawable.qr_scanner
+    )
+
     object Services: BottomBarScreen(
         rout = "servicesScreen",
         title = "Абонименты",

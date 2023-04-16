@@ -14,7 +14,7 @@ import com.example.fefu_fitnes_compose.Screens.BottomNavigate.MainScreen
 import com.example.fefu_fitnes_compose.Screens.Initialization.InitializationNavigationMain
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.UI.RegistrationUI
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.InitializationUI
-import com.example.fefu_fitnes_compose.Screens.SplashScreen.SplashScreenUI
+import com.example.fefu_fitnes_compose.Screens.Initialization.SplashScreen.SplashScreenUI
 
 class MainActivity : ComponentActivity() {
 

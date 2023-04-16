@@ -150,6 +150,8 @@ fun ExitDialog(openDialog: MutableState<Boolean>){
                           DataBaseRepository.get().getAllUserData().observeForever(){
                               DataBaseRepository.get().deleteUserData(it[0])
                               RegisterRepository.userToken = ""
+                              RegisterRepository.qrToken = ""
+                              RegisterRepository.userType = ""
                               RegisterRepository.userInit = false
                           }
                         },

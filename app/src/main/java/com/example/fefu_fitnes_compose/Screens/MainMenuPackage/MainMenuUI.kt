@@ -24,6 +24,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -35,6 +37,7 @@ import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
+import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.QrCode.GenerateQRCode
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.ViewModel.MainMenuViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.EmptyCard
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.EventCard
@@ -104,12 +107,13 @@ private fun UppBar(mainMenuViewModel: MainMenuViewModel) {
                 ),
         ) {
             Image(
-                painter = painterResource(id = R.drawable.qr_code),
+                bitmap = GenerateQRCode(RegisterRepository.qrToken).asImageBitmap(),
                 contentDescription = "qrCode",
                 modifier = Modifier
                     .width(140.dp)
                     .height(140.dp)
                     .padding(16.dp)
+                    .clip(RoundedCornerShape(10.dp))
             )
 
             Column(

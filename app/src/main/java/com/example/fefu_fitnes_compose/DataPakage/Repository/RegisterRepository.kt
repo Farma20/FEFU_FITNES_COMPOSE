@@ -21,7 +21,9 @@ object RegisterRepository: ViewModel() {
 
     var userInit by mutableStateOf(false)
 
-    var userToken by mutableStateOf("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNjkxNjQ5NDAxfQ.dh21Mqx-ydJGh3Q2_d4ib7CcCwpPtxDmFBUV6zhlsSM")
+    var userToken by mutableStateOf("")
+    var qrToken by mutableStateOf("")
+    var userType by mutableStateOf("")
 
     private val registerUserList = MutableLiveData<MutableList<UserRegisterModel>>()
 
@@ -46,10 +48,18 @@ object RegisterRepository: ViewModel() {
                     userInit = true
                     val data = result["data"] as Map<String, String>
                     userToken = data["token"]!!
+                    qrToken = data["qr_token"]!!
+                    userType = data["type"]!!
                     DataBaseRepository.get().getAllUserData().observeForever{
                         if (it.isEmpty()){
                             println("_______________${it}___________________")
-                            DataBaseRepository.get().addUserData(User(userToken = userToken))
+                            DataBaseRepository.get().addUserData(
+                                User(
+                                    userToken = userToken,
+                                    qrToken = qrToken,
+                                    userType = userType
+                                )
+                            )
                         }else{
                             println("_______Не записан________${it}___________________")
 

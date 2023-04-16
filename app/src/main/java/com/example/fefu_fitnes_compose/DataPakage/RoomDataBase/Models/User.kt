@@ -8,4 +8,6 @@ data class User(
     @PrimaryKey(autoGenerate = true)
     val id:Int = 0,
     val userToken: String,
+    val qrToken:String,
+    val userType:String
 )

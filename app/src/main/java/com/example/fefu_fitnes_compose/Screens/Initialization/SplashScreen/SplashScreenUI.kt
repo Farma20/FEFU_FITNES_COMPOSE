@@ -1,4 +1,4 @@
-package com.example.fefu_fitnes_compose.Screens.SplashScreen
+package com.example.fefu_fitnes_compose.Screens.Initialization.SplashScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,6 +37,8 @@ fun SplashScreenUI(navController: NavController) {
                 }
             }else{
                 RegisterRepository.userToken = it[0].userToken
+                RegisterRepository.qrToken = it[0].qrToken
+                RegisterRepository.userType = it[0].userType
                 RegisterRepository.userInit = true
             }
         }

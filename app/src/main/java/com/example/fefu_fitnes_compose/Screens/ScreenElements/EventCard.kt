@@ -11,7 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.NewTimeTableViewModel
+import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow

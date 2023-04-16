@@ -18,6 +18,11 @@ fun BottomNavGraph(navController: NavHostController){
         composable(route = BottomBarScreen.TimeTable.rout){
             TimeTableUI()
         }
+
+        composable(route = BottomBarScreen.QrScanner.rout){
+            TimeTableUI()
+        }
+
         composable(route = BottomBarScreen.Services.rout){
             ServicesUI()
         }
