@@ -463,7 +463,7 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: R
             }
 
             val myMonth = if(month.toString().length == 1){
-                "0${month}"
+                "0${month+1}"
             }else{
                 month.toString()
             }
