@@ -179,35 +179,7 @@ private fun InitializationInput(){
                 color = MaterialTheme.colors.error
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        Column(){
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 5.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Checkbox(
-                    colors = CheckboxDefaults.colors(
-                        uncheckedColor = BlueLight,
-                        checkedColor = Yellow
-                    ),
-                    checked = state.terms,
-                    onCheckedChange = {
-                        initializationViewModel.onEvent(InitializationFormEvent.TermsChanged(it))
-                    },
-                )
-                Text(
-                    "Запоминть меня",
-                    fontWeight = FontWeight.Light
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(50.dp))
 
         Button(
             modifier = Modifier

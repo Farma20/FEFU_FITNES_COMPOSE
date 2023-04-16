@@ -11,6 +11,8 @@ import com.example.fefu_fitnes.UI.RegisterPackage.Models.UserEnterModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.UserRegisterModel
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Dao.FastEnterDao
+import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Models.User
+import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import kotlinx.coroutines.launch
@@ -44,7 +46,15 @@ object RegisterRepository: ViewModel() {
                     userInit = true
                     val data = result["data"] as Map<String, String>
                     userToken = data["token"]!!
+                    DataBaseRepository.get().getAllUserData().observeForever{
+                        if (it.isEmpty()){
+                            println("_______________${it}___________________")
+                            DataBaseRepository.get().addUserData(User(userToken = userToken))
+                        }else{
+                            println("_______Не записан________${it}___________________")
 
+                        }
+                    }
                 }
 
             }catch (e:Exception){

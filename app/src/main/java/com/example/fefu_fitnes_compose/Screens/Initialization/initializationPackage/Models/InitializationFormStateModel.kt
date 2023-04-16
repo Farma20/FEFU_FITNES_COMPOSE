@@ -5,5 +5,4 @@ data class InitializationFormStateModel(
     var emailError: String? = null,
     var password:String = "",
     var passwordError:String? = null,
-    val terms: Boolean = false
 )

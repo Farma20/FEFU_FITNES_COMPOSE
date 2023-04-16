@@ -35,6 +35,12 @@ class DataBaseRepository private constructor(context: Context):ViewModel() {
        return result
     }
 
+    fun deleteUserData(user:User){
+        viewModelScope.launch {
+            dao.deleteUser(user)
+        }
+    }
+
     companion object{
         private var INSTANCE:DataBaseRepository? = null
 

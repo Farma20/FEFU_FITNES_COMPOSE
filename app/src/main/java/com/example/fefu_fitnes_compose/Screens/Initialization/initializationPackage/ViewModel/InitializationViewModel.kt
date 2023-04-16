@@ -36,9 +36,6 @@ class InitializationViewModel(
             is InitializationFormEvent.PasswordChanged->{
                 state = state.copy(password = event.password)
             }
-            is InitializationFormEvent.TermsChanged->{
-                state = state.copy(terms = event.terms)
-            }
             is InitializationFormEvent.Submit->{
                 submitData()
             }
@@ -65,22 +62,8 @@ class InitializationViewModel(
                  EnterDataModel(
                 email = state.email,
                 password = state.password
+                )
             )
-             )
-            println("_________!!!!!!____________${DataBaseRepository.get().getAllUserData().value}___________!!!!!!!!!__________")
-            println("_________!!!!!!____________${RegisterRepository.userInit}___________!!!!!!!!!__________")
-            println("_________!!!!!!____________${state.terms}___________!!!!!!!!!__________")
-
-            if (RegisterRepository.userInit){
-                validationEventChannel.send(ValidationEvent.Success)
-                if (state.terms){
-                    if (DataBaseRepository.get().getAllUserData().value == null){
-                        DataBaseRepository.get().addUserData(User(userToken = RegisterRepository.userToken))
-                    }
-                    println("_________!!!!!!____________${DataBaseRepository.get().getAllUserData().value}___________!!!!!!!!!__________")
-                }
-            }
-
         }
     }
 

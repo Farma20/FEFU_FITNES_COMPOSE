@@ -16,6 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
+import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Models.User
+import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.Initialization.Navigation.Screen
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
@@ -27,9 +30,17 @@ fun SplashScreenUI(navController: NavController) {
 
     LaunchedEffect(key1 = true){
         delay(2500)
-        navController.navigate(Screen.InitializationScreen.route){
-            popUpTo(0)
+        DataBaseRepository.get().getAllUserData().observeForever{
+            if (it.isEmpty() || it[0].userToken == ""){
+                navController.navigate(Screen.InitializationScreen.route){
+                    popUpTo(0)
+                }
+            }else{
+                RegisterRepository.userToken = it[0].userToken
+                RegisterRepository.userInit = true
+            }
         }
+
     }
 
     Column(

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
+import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.EventCard
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
@@ -124,6 +125,7 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
     var currentDayBookingEvent by remember { mutableStateOf(selectEvents(timeTableViewModel.bookingEventData, currentData.value))}
     currentDayEvents = selectEvents(timeTableViewModel.allEventData, currentData.value)
     currentDayBookingEvent = selectEvents(timeTableViewModel.bookingEventData, currentData.value)
+
 
     Column(
     ) {
