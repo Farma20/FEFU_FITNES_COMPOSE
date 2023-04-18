@@ -43,7 +43,8 @@ class QrCodeAnalyzer(
                 }.decode(binaryBmp)
                 onQrCodeScanned(result.text)
             } catch(e: Exception) {
-                e.printStackTrace()
+                onQrCodeScanned("")
+//                e.printStackTrace()
             } finally {
                 image.close()
             }

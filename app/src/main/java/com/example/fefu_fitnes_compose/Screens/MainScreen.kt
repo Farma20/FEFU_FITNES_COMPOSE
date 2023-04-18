@@ -44,7 +44,7 @@ fun MainScreen() {
 
 
 @Composable
-fun BottomBar(navController: NavHostController){
+fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         BottomBarScreen.Main,
         BottomBarScreen.TimeTable,
@@ -61,11 +61,18 @@ fun BottomBar(navController: NavHostController){
     BottomNavigation(
         backgroundColor = Color.White
     ) {
-        screens.forEach{screen ->
-            if (RegisterRepository.userType == "admin" && screen.rout == "qrScannerScreen"){
+        screens.forEach { screen ->
+            if (
+                !(RegisterRepository.userType == "admin" || RegisterRepository.userType == "coach") &&
+                screen.rout == "qrScannerScreen"
+            ) {
 
-            }else{
-                AddItem(screen = screen, currentDestination = currentDestination, navController = navController)
+            } else {
+                AddItem(
+                    screen = screen,
+                    currentDestination = currentDestination,
+                    navController = navController
+                )
             }
 
         }

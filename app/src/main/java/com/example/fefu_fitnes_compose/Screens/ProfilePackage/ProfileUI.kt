@@ -139,7 +139,7 @@ fun ExitDialog(openDialog: MutableState<Boolean>){
                         onClick = {openDialog.value = false},
                         modifier = Modifier.width(120.dp),
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor =  BlueDark ,
+                            backgroundColor =  Yellow ,
                             contentColor = Color.White
                         )
                     ) {
@@ -157,7 +157,7 @@ fun ExitDialog(openDialog: MutableState<Boolean>){
                         },
                         modifier = Modifier.width(120.dp),
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor =  BlueDark ,
+                            backgroundColor =  Yellow ,
                             contentColor = Color.White
                         )
                     ) {
