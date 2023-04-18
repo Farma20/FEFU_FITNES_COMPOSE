@@ -25,6 +25,9 @@ object RegisterRepository: ViewModel() {
     var qrToken by mutableStateOf("")
     var userType by mutableStateOf("")
 
+    var registrationStatus by mutableStateOf("")
+    var initializationStatus by mutableStateOf("")
+
     private val registerUserList = MutableLiveData<MutableList<UserRegisterModel>>()
 
 
@@ -32,9 +35,29 @@ object RegisterRepository: ViewModel() {
     fun registrationData(registerData: RegistrationDataModel){
         viewModelScope.launch {
             try {
-                FefuFitRetrofit.retrofitService.registerData(registerData)
+                val result = FefuFitRetrofit.retrofitService.registerData(registerData)
+                when (result["status"]) {
+                    "success" -> {
+                        registrationStatus = "Поздравляем, регистрация прошла успешно"
+                        pushLogin(EnterDataModel(registerData.email, registerData.password))
+                    }
+                    else -> {
+                        when (result["msg"]) {
+                            "not an email" -> registrationStatus =
+                                "Произошла ошибка при регистрации, несуществующая почта"
+                            "wrong birthdate" -> registrationStatus =
+                                "Произошла ошибка при регистрации, некорректная дата рождения"
+                            "user already exists" -> registrationStatus =
+                                "Произошла ошибка при регистрации, пользователь с данной почтой уже существует"
+                            else -> registrationStatus =
+                                "Произошла ошибка при регистрации, непредвиденная ошибка, проверьте правильность данных"
+                        }
+                    }
+                }
             }
             catch (e:Exception){
+                registrationStatus =
+                    "Произошла ошибка при регистрации, проверьте соединение с интернетом или свяжитесь с разработчиками"
                 println(e.message)
             }
         }
@@ -52,7 +75,6 @@ object RegisterRepository: ViewModel() {
                     userType = data["type"]!!
                     DataBaseRepository.get().getAllUserData().observeForever{
                         if (it.isEmpty()){
-                            println("_______________${it}___________________")
                             DataBaseRepository.get().addUserData(
                                 User(
                                     userToken = userToken,
@@ -60,14 +82,15 @@ object RegisterRepository: ViewModel() {
                                     userType = userType
                                 )
                             )
-                        }else{
-                            println("_______Не записан________${it}___________________")
-
                         }
                     }
                 }
+                else{
+                    initializationStatus = "Ошибка входа. Проверьте корректность введенных данных или зарегистрируйтесь"
+                }
 
             }catch (e:Exception){
+                initializationStatus = "Ошибка входа. Проверьте соединение с интернетом или свяжитесь с разработчиками"
                 println(e.message)
             }
         }

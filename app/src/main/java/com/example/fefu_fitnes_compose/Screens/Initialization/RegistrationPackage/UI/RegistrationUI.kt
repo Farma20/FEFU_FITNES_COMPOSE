@@ -28,8 +28,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
+import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Controllers.RegistrationFormEvent
+import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.ViewModel.RegistrationViewModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.TopBars.RegistrationTopBar
@@ -63,11 +66,7 @@ fun RegistrationUI() {
                 registrationViewModel.validationEvents.collect{ event ->
                     when(event){
                         is RegistrationViewModel.ValidationEvent.Success->{
-                            Toast.makeText(
-                                context,
-                                "Регистрация произедена успешно",
-                                Toast.LENGTH_LONG
-                            ).show()
+
                         }
                     }
                 }
@@ -98,6 +97,14 @@ fun RegistrationUI() {
             Spacer(modifier = Modifier.height(40.dp))
             RegistrationSubmitButton(registrationViewModel)
             Spacer(modifier = Modifier.height(60.dp))
+            if (RegisterRepository.registrationStatus.isNotEmpty()){
+                Toast.makeText(
+                    context,
+                    RegisterRepository.registrationStatus,
+                    Toast.LENGTH_LONG
+                ).show()
+                RegisterRepository.registrationStatus = ""
+            }
         }
     }
 }
@@ -450,7 +457,7 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: R
     val currentDate = LocalDate.now()
 
     val year:Int = currentDate.year
-    val month: Int = currentDate.month.value
+    val month: Int = currentDate.month.value-1
     val day:Int = currentDate.dayOfMonth
 
     val datePickerDialog = DatePickerDialog(

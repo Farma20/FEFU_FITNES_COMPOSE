@@ -5,8 +5,10 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.Initialization.Navigation.Screen
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Controllers.RegistrationFormEvent
@@ -40,14 +43,25 @@ import com.example.fefu_fitnes_compose.ui.theme.Yellow
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun InitializationUI(navController: NavController) {
+    val context = LocalContext.current
     Scaffold(topBar = { MainTopBar(text = "") },){
         Column(
-            modifier = Modifier.padding(top = 60.dp)
+            modifier = Modifier
+                .padding(top = 60.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Label()
             InitializationInput()
             Spacer(modifier = Modifier.height(60.dp))
             RegistrationURL(navController)
+            if (RegisterRepository.initializationStatus.isNotEmpty()){
+                Toast.makeText(
+                    context,
+                    RegisterRepository.initializationStatus,
+                    Toast.LENGTH_LONG
+                ).show()
+                RegisterRepository.initializationStatus = ""
+            }
         }
     }
 }

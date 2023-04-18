@@ -15,7 +15,7 @@ interface FefuFitAPI {
 
     //Регистрация и инициализация
     @POST("/api/auth/signup")
-    suspend fun registerData(@Body registerData: RegistrationDataModel)
+    suspend fun registerData(@Body registerData: RegistrationDataModel):Map<String, String>
 
     @POST("/api/auth/login")
     suspend fun pushLogin(@Body userEnterData: EnterDataModel):Map<String,Any>
