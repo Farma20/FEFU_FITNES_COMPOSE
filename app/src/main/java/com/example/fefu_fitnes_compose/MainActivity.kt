@@ -16,6 +16,7 @@ import com.example.fefu_fitnes_compose.Screens.Initialization.InitializationNavi
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.UI.RegistrationUI
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.InitializationUI
 import com.example.fefu_fitnes_compose.Screens.Initialization.SplashScreen.SplashScreenUI
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.QrCard
 
 class MainActivity : ComponentActivity() {
 
@@ -30,7 +31,6 @@ class MainActivity : ComponentActivity() {
                 InitializationNavigationMain()
             else
                 MainScreen()
-
         }
     }
 }

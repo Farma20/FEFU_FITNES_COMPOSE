@@ -3,7 +3,7 @@ package com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models
 import java.time.LocalDate
 
 data class UpdateEventDataModel (
-    var eventId: Int? = 0,
+    var eventId: Int? = null,
     var bookingStatus: String? ="",
     var eventName: String? = "",
     var date: LocalDate? = LocalDate.now(),

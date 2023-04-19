@@ -13,6 +13,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,38 +26,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
+import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.QrCard
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
- fun QrScannerUI() {
+ fun QrScannerUI(qrViewModel: QrViewModel = viewModel()) {
     val sheetState = rememberBottomSheetState(
         initialValue = BottomSheetValue.Collapsed
     )
-    var code = remember {
+    val code = remember {
         mutableStateOf("")
     }
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = sheetState
     )
-    val scope = rememberCoroutineScope()
+    
+    LaunchedEffect(key1 = code.value.isNotEmpty()){
+        if(code.value.isNotEmpty()){
+            sheetState.expand()
+            MainRepository.pushQrCodeInServer(qrToken = code.value)
+        }
+    }
 
     BottomSheetScaffold(
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         scaffoldState = scaffoldState,
         sheetContent = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Bottom sheet",
-                    fontSize = 60.sp
-                )
-            }
+            QrCard()
         },
-        sheetBackgroundColor = Color.Green,
         sheetPeekHeight = 0.dp
     ) {
         Box(
@@ -65,6 +66,7 @@ import kotlinx.coroutines.launch
             contentAlignment = Alignment.Center
         ) {
             QrScanner(code)
+            Spacer(modifier = Modifier.padding(top=10.dp))
         }
     }
 }

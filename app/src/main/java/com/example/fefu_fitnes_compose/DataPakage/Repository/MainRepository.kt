@@ -5,6 +5,8 @@ import android.content.Context
 import androidx.lifecycle.*
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
 import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
+import com.example.fefu_fitnes_compose.DataPakage.Models.ScanQrData
+import com.example.fefu_fitnes_compose.DataPakage.Models.ScanUserData
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.NewsDataModel
@@ -97,6 +99,48 @@ object MainRepository: ViewModel() {
                 }
             }catch (e:Exception){
                 println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            }
+        }
+    }
+
+
+    // Qr cod апи
+    val qrUserData = MutableLiveData<UserDataModel>()
+    val qrUserNearBookingData = MutableLiveData<EventAllDataModel>()
+
+    fun pushQrCodeInServer(qrToken:String, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try{
+                val result = FefuFitRetrofit.retrofitService.scanQrCode(ScanQrData(token, qrToken))
+                println(result)
+                getQrUserDataFromServer(result["user_id"]!!, token)
+                getQrNearBookingDataFromServer(result["user_id"]!!, token)
+
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
+    private fun getQrUserDataFromServer(userId:Int, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try{
+                qrUserData.postValue( FefuFitRetrofit.retrofitService.getQrUserData(ScanUserData(userId, token)))
+                println(qrUserData.value)
+
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
+    private fun getQrNearBookingDataFromServer(userId:Int, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try{
+                qrUserNearBookingData.postValue(FefuFitRetrofit.retrofitService.getQrNearBookingData(ScanUserData(userId, token)))
+                println(qrUserNearBookingData.value)
+            }catch (e:Exception){
+                println(e)
             }
         }
     }
