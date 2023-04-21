@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -65,11 +66,11 @@ fun EventCard(
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(top = 8.dp, bottom = 8.dp),
+                        .padding(top = 8.dp, bottom = 8.dp, start=8.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
@@ -110,20 +111,22 @@ fun EventCard(
                 }
 
                 Column(
-                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, end = 8.dp),
+                    horizontalAlignment = Alignment.Start
                 ) {
 
                     Text(
+                        modifier = Modifier.padding(start = 4.dp),
                         text = "${event.startEventTime} - ${event.endEventTime}",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Medium
                     )
 
                     Row(
-                        modifier = Modifier.padding(top = 1.dp),
+                        modifier = Modifier.padding(top = 1.dp, start = 4.dp),
                     ) {
                         Text(
-                            text = "Свободных мест ",
+                            text = "Мест занято ",
                             fontSize = 10.sp,
                         )
                         Text(
@@ -148,7 +151,7 @@ fun EventCard(
                             contentColor = Color.White
                         ),
                         modifier = Modifier
-                            .padding(top = 17.dp)
+                            .padding(top = 24.dp)
                             .width(100.dp)
                             .height(30.dp),
                         shape = RoundedCornerShape(10.dp),

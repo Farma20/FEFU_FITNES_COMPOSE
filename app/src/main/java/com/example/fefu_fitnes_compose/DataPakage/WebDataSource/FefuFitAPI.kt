@@ -1,5 +1,6 @@
 package com.example.fefu_fitnes.adadadad.WebDataSource
 
+import com.example.fefu_fitnes_compose.DataPakage.Models.ConfirmUserData
 import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanQrData
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanUserData
@@ -49,4 +50,12 @@ interface FefuFitAPI {
     @POST("api/qr/get_booking")
     suspend fun getQrNearBookingData(@Body scanUserData:ScanUserData):EventAllDataModel
 
+    @POST("api/qr/confirm_booking")
+    suspend fun pushQrConfirmBookingData(@Body confirmData:ConfirmUserData):Map<String, String>
+
+    @POST("api/qr/unconfirm_booking")
+    suspend fun pushQrUnConfirmBookingData(@Body confirmData:ConfirmUserData):Map<String, String>
+
+    @POST("api/qr/get_next_bookings")
+    suspend fun getQrNextBookingData(@Body scanUserData:ScanUserData):List<EventAllDataModel>
 }

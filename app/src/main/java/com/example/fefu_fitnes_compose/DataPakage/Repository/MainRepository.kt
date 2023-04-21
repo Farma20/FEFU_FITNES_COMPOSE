@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
+import com.example.fefu_fitnes_compose.DataPakage.Models.ConfirmUserData
 import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanQrData
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanUserData
@@ -55,7 +56,7 @@ object MainRepository: ViewModel() {
             try {
                 allEvents.postValue(FefuFitRetrofit.retrofitService.getEventsAll(mapOf("token" to token)))
             }catch (e:Exception){
-                println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                println(e)
             }
         }
     }
@@ -69,7 +70,7 @@ object MainRepository: ViewModel() {
             try {
                 userEvents.postValue(FefuFitRetrofit.retrofitService.getEventsBooking(mapOf("token" to token)))
             }catch (e:Exception){
-                println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                println(e)
             }
         }
     }
@@ -84,7 +85,7 @@ object MainRepository: ViewModel() {
                     getEventsBookingFromServer()
                 }
             }catch (e:Exception){
-                println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                println(e)
             }
         }
     }
@@ -98,7 +99,7 @@ object MainRepository: ViewModel() {
                     getEventsBookingFromServer()
                 }
             }catch (e:Exception){
-                println("!!!!!!!!!!!!!!!!!!!!!!${e}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                println("$e")
             }
         }
     }
@@ -107,14 +108,18 @@ object MainRepository: ViewModel() {
     // Qr cod апи
     val qrUserData = MutableLiveData<UserDataModel>()
     val qrUserNearBookingData = MutableLiveData<EventAllDataModel>()
+    val qrNextBookingData = MutableLiveData<List<EventAllDataModel>>()
+    private val qrUserId = MutableLiveData<Int>()
+
 
     fun pushQrCodeInServer(qrToken:String, token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try{
                 val result = FefuFitRetrofit.retrofitService.scanQrCode(ScanQrData(token, qrToken))
-                println(result)
+                qrUserId.postValue(result["user_id"])
                 getQrUserDataFromServer(result["user_id"]!!, token)
                 getQrNearBookingDataFromServer(result["user_id"]!!, token)
+                getNextBookingOnServer(result["user_id"]!!, token)
 
             }catch (e:Exception){
                 println(e)
@@ -122,7 +127,7 @@ object MainRepository: ViewModel() {
         }
     }
 
-    private fun getQrUserDataFromServer(userId:Int, token: String = RegisterRepository.userToken){
+    private fun getQrUserDataFromServer(userId:Int = qrUserId.value!!, token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try{
                 qrUserData.postValue( FefuFitRetrofit.retrofitService.getQrUserData(ScanUserData(userId, token)))
@@ -134,11 +139,43 @@ object MainRepository: ViewModel() {
         }
     }
 
-    private fun getQrNearBookingDataFromServer(userId:Int, token: String = RegisterRepository.userToken){
+    private fun getQrNearBookingDataFromServer(userId:Int = qrUserId.value!!, token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try{
                 qrUserNearBookingData.postValue(FefuFitRetrofit.retrofitService.getQrNearBookingData(ScanUserData(userId, token)))
-                println(qrUserNearBookingData.value)
+            }catch (e:Exception){
+                qrUserNearBookingData.postValue(null)
+                println("$e")
+            }
+        }
+    }
+
+    fun confirmEventOnServer(userId: Int = qrUserId.value!!, eventId: Int, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                FefuFitRetrofit.retrofitService.pushQrConfirmBookingData(ConfirmUserData(userId, eventId, token))
+                qrUserNearBookingData.postValue(FefuFitRetrofit.retrofitService.getQrNearBookingData(ScanUserData(userId, token)))
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
+    fun unConfirmEventOnServer(userId: Int =  qrUserId.value!!, eventId: Int, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                FefuFitRetrofit.retrofitService.pushQrUnConfirmBookingData(ConfirmUserData(userId, eventId, token))
+                qrUserNearBookingData.postValue(FefuFitRetrofit.retrofitService.getQrNearBookingData(ScanUserData(userId, token)))
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
+    private fun getNextBookingOnServer(userId: Int =  qrUserId.value!!, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                qrNextBookingData.postValue(FefuFitRetrofit.retrofitService.getQrNextBookingData(ScanUserData(userId,  token)))
             }catch (e:Exception){
                 println(e)
             }

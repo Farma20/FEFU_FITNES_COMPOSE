@@ -1,12 +1,19 @@
 package com.example.fefu_fitnes_compose.Screens.ScreenElements
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -98,5 +105,33 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
          }
         else
             QrNearEventCard(event = qrViewModel.qrUserNearEventData)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        var buttonClicked by remember { mutableStateOf(false) }
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            onClick = { buttonClicked = !buttonClicked }
+        ) {
+            Text(text = "Показать все занятия")
+        }
+        AnimatedVisibility(
+            visible = buttonClicked,
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+            ){
+                if (qrViewModel.qrNextBooking.isEmpty() || qrViewModel.qrNextBooking[0].eventId == null)
+                    items(1){
+                        EmptyCard()
+                    }
+                else
+                    items(qrViewModel.qrNextBooking.count()){
+                        EventCard(event = qrViewModel.qrNextBooking[it])
+                    }
+            }
+        }
     }
 }

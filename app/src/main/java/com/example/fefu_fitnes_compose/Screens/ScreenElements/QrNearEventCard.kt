@@ -113,15 +113,18 @@ fun QrNearEventCard(event: UpdateEventDataModel, qrViewModel: QrViewModel = view
 
                     TextButton(
                         onClick = {
-//                            mainMenuViewModel.cancelBooking(event.eventId!!)
+                            if (event.bookingStatus == "done")
+                                MainRepository.unConfirmEventOnServer(eventId = event.eventId!!)
+                            else
+                                MainRepository.confirmEventOnServer(eventId = event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = Color.Gray,
+                            backgroundColor = if (event.bookingStatus == "done") Color.Gray else Yellow,
                             contentColor = Color.White
                         ),
                         modifier = Modifier
                             .padding(top = 11.dp)
-                            .width(100.dp)
+                            .width(120.dp)
                             .height(30.dp),
                         shape = RoundedCornerShape(10.dp),
                         contentPadding = PaddingValues(
@@ -132,7 +135,7 @@ fun QrNearEventCard(event: UpdateEventDataModel, qrViewModel: QrViewModel = view
                         )
                     ) {
                         Text(
-                            text = "Отменить",
+                            text = if (event.bookingStatus == "done") "Отменить" else "Подтвердить",
                             fontSize = 14.sp
                         )
                     }
