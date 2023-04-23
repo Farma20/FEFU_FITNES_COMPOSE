@@ -40,15 +40,16 @@ import java.time.LocalDate
 @Preview(showBackground = true)
 @Composable
 fun TimeTableUI(){
-    Column() {
+   Surface() {
+       Column() {
+           val currentData = remember {
+               mutableStateOf(LocalDate.now())
+           }
 
-        val currentData = remember {
-            mutableStateOf(LocalDate.now())
-        }
-
-        UpBar(currentData)
-        TabLayout(currentData)
-    }
+           UpBar(currentData)
+           TabLayout(currentData)
+       }
+   }
 }
 
 @Composable

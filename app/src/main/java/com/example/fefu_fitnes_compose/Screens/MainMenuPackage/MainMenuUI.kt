@@ -51,30 +51,32 @@ import java.time.LocalDate
 @Preview(showBackground = true)
 @Composable
 fun MainMenuUI(mainMenuViewModel: MainMenuViewModel = viewModel()) {
-    Column(Modifier.verticalScroll(rememberScrollState())) {
-        UppBar(mainMenuViewModel)
-        Column {
-            NewsList(mainMenuViewModel)
-            Text(
-                modifier = Modifier
-                    .padding(top = 20.dp, start = 8.dp, bottom = 8.dp),
-                text = "Ближайшая запись",
-                fontSize = 20.sp,
-            )
+    Surface() {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            UppBar(mainMenuViewModel)
+            Column {
+                NewsList(mainMenuViewModel)
+                Text(
+                    modifier = Modifier
+                        .padding(top = 20.dp, start = 8.dp, bottom = 8.dp),
+                    text = "Ближайшая запись",
+                    fontSize = 20.sp,
+                )
 
-            if(mainMenuViewModel.bookingEventData.isEmpty())
-                EmptyCard()
-            else{
-                NearEventCard(event = mainMenuViewModel.bookingEventData[0])
+                if(mainMenuViewModel.bookingEventData.isEmpty())
+                    EmptyCard()
+                else{
+                    NearEventCard(event = mainMenuViewModel.bookingEventData[0])
+                }
+
+
+                Text(
+                    modifier = Modifier.padding(top=20.dp, start = 8.dp, bottom = 8.dp),
+                    text = "Активность",
+                    fontSize = 20.sp,
+                )
+                UserActive()
             }
-
-
-            Text(
-                modifier = Modifier.padding(top=20.dp, start = 8.dp, bottom = 8.dp),
-                text = "Активность",
-                fontSize = 20.sp,
-            )
-            UserActive()
         }
     }
 }
