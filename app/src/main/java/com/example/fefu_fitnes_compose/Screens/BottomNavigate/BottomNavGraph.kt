@@ -1,33 +1,114 @@
 package com.example.fefu_fitnes_compose.Screens.BottomNavigate
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.MainMenuUI
 import com.example.fefu_fitnes_compose.Screens.ProfilePackage.ProfileUI
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.UI.QrScannerUI
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.ServicesUI
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI.TimeTableUI
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.navigation
+import com.google.accompanist.navigation.animation.composable
 
+
+
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun BottomNavGraph(navController: NavHostController){
-    NavHost(navController = navController, startDestination = BottomBarScreen.Main.rout){
-        composable(route = BottomBarScreen.Main.rout){
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = BottomBarScreen.Main.rout
+    ){
+        composable(
+            route = BottomBarScreen.Main.rout,
+            enterTransition = {
+                EnterTransition.None
+            },
+            exitTransition = {
+                ExitTransition.None
+            },
+            popEnterTransition = {
+                EnterTransition.None
+            },
+            popExitTransition = {
+                ExitTransition.None
+            }
+        ){
             MainMenuUI()
         }
-        composable(route = BottomBarScreen.TimeTable.rout){
+        composable(
+            route = BottomBarScreen.TimeTable.rout,
+            enterTransition = {
+                EnterTransition.None
+            },
+            exitTransition = {
+                ExitTransition.None
+            },
+            popEnterTransition = {
+                EnterTransition.None
+            },
+            popExitTransition = {
+                ExitTransition.None
+            }
+        ){
             TimeTableUI()
         }
 
-        composable(route = BottomBarScreen.QrScanner.rout){
+        composable(
+            route = BottomBarScreen.QrScanner.rout,
+            enterTransition = {
+                EnterTransition.None
+            },
+            exitTransition = {
+                ExitTransition.None
+            },
+            popEnterTransition = {
+                EnterTransition.None
+            },
+            popExitTransition = {
+                ExitTransition.None
+            }
+        ){
             QrScannerUI()
         }
 
-        composable(route = BottomBarScreen.Services.rout){
+        composable(
+            route = BottomBarScreen.Services.rout,
+            enterTransition = {
+                EnterTransition.None
+            },
+            exitTransition = {
+                ExitTransition.None
+            },
+            popEnterTransition = {
+                EnterTransition.None
+            },
+            popExitTransition = {
+                ExitTransition.None
+            }
+        ){
             ServicesUI()
         }
-        composable(route = BottomBarScreen.Profile.rout){
+        composable(
+            route = BottomBarScreen.Profile.rout,
+            enterTransition = {
+                EnterTransition.None
+            },
+            exitTransition = {
+                ExitTransition.None
+            },
+            popEnterTransition = {
+                EnterTransition.None
+            },
+            popExitTransition = {
+                ExitTransition.None
+            }
+        ){
             ProfileUI()
         }
     }
