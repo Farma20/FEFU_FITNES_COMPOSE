@@ -33,7 +33,24 @@ import java.time.LocalDate
 
 @Composable
 fun ProfileUI(){
-    UpBar()
+    Surface {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            UpBar()
+            Spacer(modifier = Modifier.height(120.dp))
+            Image(
+                painterResource(id = R.drawable._04_robot4_01_01_4x),
+                contentDescription = null
+            )
+            Text(
+                text = "Данный раздел еще в разработке",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Light
+            )
+        }
+    }
 }
 
 
@@ -113,7 +130,9 @@ fun ExitDialog(openDialog: MutableState<Boolean>){
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Image(
-                        modifier = Modifier.width(50.dp).padding(end = 4.dp),
+                        modifier = Modifier
+                            .width(50.dp)
+                            .padding(end = 4.dp),
                         painter = painterResource(id = R.drawable.fefu_label),
                         contentDescription = null)
                     Image(
