@@ -3,6 +3,7 @@ package com.example.fefu_fitnes_compose.Screens.BottomNavigate
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -74,7 +75,9 @@ fun BottomNavGraph(navController: NavHostController){
                 ExitTransition.None
             }
         ){
-            QrScannerUI()
+            Surface {
+                QrScannerUI()
+            }
         }
 
         composable(

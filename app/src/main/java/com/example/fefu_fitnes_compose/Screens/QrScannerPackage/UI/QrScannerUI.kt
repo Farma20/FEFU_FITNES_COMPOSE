@@ -52,21 +52,19 @@ import kotlinx.coroutines.launch
         }
     }
 
-    BottomSheetScaffold(
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        scaffoldState = scaffoldState,
-        sheetContent = {
-            QrCard()
-        },
-        sheetPeekHeight = 0.dp
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
+    Surface() {
+        BottomSheetScaffold(
+            modifier = Modifier.fillMaxSize(),
+            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+            scaffoldState = scaffoldState,
+            sheetContent = {
+                Surface() {
+                    QrCard()
+                }
+            },
+            sheetPeekHeight = 0.dp
         ) {
             QrScanner(code)
-            Spacer(modifier = Modifier.padding(top=10.dp))
         }
     }
 }
@@ -101,6 +99,7 @@ fun QrScanner(code:MutableState<String>){
     ) {
         if (hasCamPermission) {
             AndroidView(
+                modifier = Modifier.fillMaxSize(),
                 factory = { context ->
                     val previewView = PreviewView(context)
                     val preview = Preview.Builder().build()
@@ -135,7 +134,6 @@ fun QrScanner(code:MutableState<String>){
                     }
                     previewView
                 },
-                modifier = Modifier.weight(1f)
             )
 
         }
