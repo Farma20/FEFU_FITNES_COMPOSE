@@ -27,6 +27,9 @@ interface FefuFitAPI {
     @POST("api/user/user/view_self")
     suspend fun getUserData(@Body token:Map<String, String>):UserDataModel
 
+    @POST("api/booking/get_next")
+    suspend fun getUserNextBooking(@Body token:Map<String, String>):List<EventAllDataModel>
+
     //Данные тренировок
     @POST("/api/timetable/event/user/view_all")
     suspend fun getEventsAll(@Body token:Map<String, String>):List<EventAllDataModel>

@@ -23,8 +23,6 @@ import kotlinx.coroutines.launch
 
 object MainRepository: ViewModel() {
 
-
-
     private val _currentNews = MutableLiveData<List<NewsDataModel>>()
     val currentNews:LiveData<List<NewsDataModel>> = _currentNews
 
@@ -75,6 +73,17 @@ object MainRepository: ViewModel() {
         }
     }
 
+    val userNextBooking = MutableLiveData<List<EventAllDataModel>>()
+    fun getUserNextBookingFromServer(token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                userNextBooking.postValue(FefuFitRetrofit.retrofitService.getUserNextBooking(mapOf("token" to token)))
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
 
     fun addEventsBookingOnServer(eventId: Int ,token: String = RegisterRepository.userToken){
         viewModelScope.launch {
@@ -97,6 +106,7 @@ object MainRepository: ViewModel() {
                 if(result["msg"] == "booking cancel success"){
                     getEventsAllFromServer()
                     getEventsBookingFromServer()
+                    getUserNextBookingFromServer()
                 }
             }catch (e:Exception){
                 println("$e")

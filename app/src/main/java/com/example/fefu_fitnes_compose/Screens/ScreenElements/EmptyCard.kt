@@ -18,8 +18,8 @@ import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 fun EmptyCard() {
     Card(
         modifier = Modifier
-            .padding(8.dp)
-            .height(110.dp)
+            .padding(start = 8.dp, end = 8.dp, top = 8.dp)
+            .height(107.dp)
             .shadow(elevation = 3.dp)
     ) {
         Column(
@@ -28,7 +28,7 @@ fun EmptyCard() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Вы не еще никуда не записаны",
+                text = "У вас нет ближайших записей",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium
             )

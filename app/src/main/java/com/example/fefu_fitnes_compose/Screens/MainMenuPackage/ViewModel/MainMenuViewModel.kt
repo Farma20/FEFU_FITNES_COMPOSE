@@ -29,15 +29,15 @@ class MainMenuViewModel:ViewModel() {
 
     init {
         MainRepository.getUserDataFromServer()
-        MainRepository.getEventsBookingFromServer()
-
-        MainRepository.userEvents.observeForever{
-            bookingEventData = convertAllEventsToUpdate(it!!)
-            bookingEventData.sortBy { it.startEventTime }
-        }
+        MainRepository.getUserNextBookingFromServer()
 
         MainRepository.currentUser.observeForever{
             userData = it
+            MainRepository.getUserNextBookingFromServer()
+        }
+
+        MainRepository.userNextBooking.observeForever{
+            bookingEventData = convertAllEventsToUpdate(it!!)
         }
 
         MainRepository.currentNews.observeForever{

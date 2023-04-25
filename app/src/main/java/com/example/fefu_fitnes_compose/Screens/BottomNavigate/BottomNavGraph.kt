@@ -7,6 +7,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.MainMenuNav
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.MainMenuUI
 import com.example.fefu_fitnes_compose.Screens.ProfilePackage.ProfileUI
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.UI.QrScannerUI
@@ -40,7 +41,7 @@ fun BottomNavGraph(navController: NavHostController){
                 ExitTransition.None
             }
         ){
-            MainMenuUI()
+            MainMenuNav()
         }
         composable(
             route = BottomBarScreen.TimeTable.rout,
