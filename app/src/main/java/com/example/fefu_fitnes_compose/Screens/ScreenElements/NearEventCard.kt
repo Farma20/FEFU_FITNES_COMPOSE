@@ -55,7 +55,8 @@ fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewMo
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(top = 8.dp, bottom = 8.dp),
+                        .padding(top = 8.dp, bottom = 8.dp, start = 8.dp)
+                        .weight(2f),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
@@ -95,7 +96,7 @@ fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewMo
                     }
                 }
                 Column(
-                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp).weight(1f)
                 ) {
                     Text(
                         text = "Сегодня",

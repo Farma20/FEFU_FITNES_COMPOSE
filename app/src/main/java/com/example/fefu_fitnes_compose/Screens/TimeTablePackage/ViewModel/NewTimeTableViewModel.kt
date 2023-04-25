@@ -42,12 +42,6 @@ class NewTimeTableViewModel: ViewModel() {
 }
 
 
-
-
-
-
-
-
 //Преобразование входящих данных
 private fun convertAllEventsToUpdate(events: List<EventAllDataModel>):MutableList<UpdateEventDataModel>{
     val updateEventDataModels = mutableListOf<UpdateEventDataModel>()

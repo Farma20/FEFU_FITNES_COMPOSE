@@ -52,7 +52,7 @@ fun MainMenuUI(navController: NavController,mainMenuViewModel: MainMenuViewModel
                     fontSize = 20.sp,
                 )
 
-                if(mainMenuViewModel.bookingEventData.isEmpty())
+                if(mainMenuViewModel.bookingEventData.isEmpty() || mainMenuViewModel.bookingEventData[0].eventId == null)
                     EmptyCard()
                 else{
                     NearEventCard(event = mainMenuViewModel.bookingEventData[0])
