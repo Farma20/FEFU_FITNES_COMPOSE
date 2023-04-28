@@ -42,7 +42,10 @@ fun AllBookingUI(mainMenuViewModel: MainMenuViewModel = viewModel()) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(text = "У вас пока нет записей.")
+                    Text(
+                        text = "У вас пока нет записей",
+                        fontWeight = FontWeight.Bold,
+                    )
                 }
             }else{
                 LazyColumn(){

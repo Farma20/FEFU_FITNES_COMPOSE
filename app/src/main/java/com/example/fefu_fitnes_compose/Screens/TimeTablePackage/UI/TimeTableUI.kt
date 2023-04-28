@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -172,13 +173,42 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
                 modifier = Modifier.fillMaxSize(),
             ){
                 if(index == 0){
-                    items(currentDayEvents.size){id->
-                        EventCard(currentDayEvents[id])
+                    if (currentDayEvents.isNotEmpty()){
+                        items(currentDayEvents.size){id->
+                            EventCard(currentDayEvents[id])
+                        }
+                    }else{
+                        item {
+                            Column(
+                                modifier = Modifier.fillMaxWidth().padding(top = 220.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = "Сегодня нет занятий",
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            }
+                        }
                     }
                 }
                 if (index == 1){
-                    items(currentDayBookingEvent.size){id->
-                        EventCard(currentDayBookingEvent[id])
+                    if (currentDayBookingEvent.isNotEmpty()){
+                        items(currentDayBookingEvent.size){id->
+                            EventCard(currentDayBookingEvent[id])
+                        }
+                    }else{
+                        item {
+                            Column(
+                                modifier = Modifier.fillMaxWidth().padding(top = 220.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Text(
+                                    text = "На сегодня вы никуда не записаны",
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            }
+                        }
                     }
                 }
             }
