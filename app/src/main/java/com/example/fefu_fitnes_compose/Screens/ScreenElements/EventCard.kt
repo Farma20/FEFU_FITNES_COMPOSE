@@ -28,6 +28,7 @@ import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
+import java.time.LocalDate
 
 @Composable
 fun EventCard(
@@ -140,14 +141,15 @@ fun EventCard(
 
                     TextButton(
                         onClick = {
-                            if(selected.value){
+                            if(selected.value && occupiedSpace.value != event.totalSpaces && event.date!! >= LocalDate.now()){
                                 timeTableViewModel.addNewBooking(event.eventId!!)
                             }
                             else
                                 timeTableViewModel.cancelBooking(event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = if(selected.value && occupiedSpace.value != event.totalSpaces) Yellow else Color.Gray,
+                            backgroundColor = if (selected.value && occupiedSpace.value != event.totalSpaces && event.date!! >= LocalDate.now())
+                                Yellow else Color.Gray,
                             contentColor = Color.White
                         ),
                         modifier = Modifier
@@ -163,7 +165,7 @@ fun EventCard(
                         )
                     ) {
                         Text(
-                            text = if(occupiedSpace.value == event.totalSpaces) "Нет записи" else{
+                            text = if(occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now()) "Нет записи" else{
                                 if(selected.value) "Записаться" else "Отменить"
                              },
                             fontSize = 14.sp

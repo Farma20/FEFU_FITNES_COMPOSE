@@ -28,6 +28,22 @@ import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEve
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
+import java.time.LocalDate
+
+private val translateMonth = mapOf<Int, String>(
+    1 to "Января",
+    2 to "Февраля",
+    3 to "Марта",
+    4 to "Апреля",
+    5 to "Мая",
+    6 to "Июня",
+    7 to "Июля",
+    8 to "Августа",
+    9 to "Сентября",
+    10 to "Октября",
+    11 to "Ноября",
+    12 to "Декабря",
+)
 
 @Composable
 fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewModel = viewModel()) {
@@ -99,7 +115,12 @@ fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewMo
                     modifier = Modifier.padding(top = 8.dp, bottom = 8.dp).weight(1f)
                 ) {
                     Text(
-                        text = "Сегодня",
+                        text = if(event.date!! == LocalDate.now())
+                            "Сегодня"
+                        else
+                            if (event.date!! == LocalDate.now().plusDays(1))
+                                "Завтра"
+                            else "${event.date!!.dayOfMonth} ${translateMonth[event.date!!.month.value]}",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Medium
                     )

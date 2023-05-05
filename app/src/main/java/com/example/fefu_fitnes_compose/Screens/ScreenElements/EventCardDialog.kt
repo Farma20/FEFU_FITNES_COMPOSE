@@ -167,7 +167,7 @@ fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataMod
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp),
-                    text = if(event.eventDescription == null) "Нет" else event.eventDescription!!,
+                    text = if(event.eventDescription == null) "Описания нет" else event.eventDescription!!,
                     fontSize = 13.sp,
                 )
 

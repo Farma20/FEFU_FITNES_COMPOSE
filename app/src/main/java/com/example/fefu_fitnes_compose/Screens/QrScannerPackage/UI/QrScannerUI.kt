@@ -42,7 +42,6 @@ import com.example.fefu_fitnes_compose.Screens.ScreenElements.QrCard
     
     LaunchedEffect(key1 = code.value.isNotEmpty()){
         if(code.value.isNotEmpty()){
-            sheetState.expand()
             MainRepository.pushQrCodeInServer(qrToken = code.value)
         }
     }
