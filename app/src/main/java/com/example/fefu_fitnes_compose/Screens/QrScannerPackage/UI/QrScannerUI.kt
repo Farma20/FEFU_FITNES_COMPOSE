@@ -27,6 +27,8 @@ import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.QrCard
 
+
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
  fun QrScannerUI(qrViewModel: QrViewModel = viewModel()) {
@@ -43,6 +45,7 @@ import com.example.fefu_fitnes_compose.Screens.ScreenElements.QrCard
     LaunchedEffect(key1 = code.value.isNotEmpty()){
         if(code.value.isNotEmpty()){
             MainRepository.pushQrCodeInServer(qrToken = code.value)
+            sheetState.expand()
         }
     }
 

@@ -28,7 +28,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.ViewModel.MainMenuViewModel
-import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
@@ -50,10 +49,10 @@ private val translateMonth = mapOf<Int, String>(
     11 to "Ноября",
     12 to "Декабря",
 )
-@Composable
-fun QrNearEventCard(event: UpdateEventDataModel, qrViewModel: QrViewModel = viewModel()) {
-    val openDialog = remember { mutableStateOf(false) }
 
+@Composable
+fun QrEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewModel = viewModel()) {
+    val openDialog = remember { mutableStateOf(false) }
     var loadingAnimationOn by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = event){
@@ -63,7 +62,7 @@ fun QrNearEventCard(event: UpdateEventDataModel, qrViewModel: QrViewModel = view
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+            .padding(start = 8.dp, end = 8.dp, top = 8.dp)
             .shadow(
                 elevation = 3.dp
             )
@@ -77,13 +76,19 @@ fun QrNearEventCard(event: UpdateEventDataModel, qrViewModel: QrViewModel = view
         }
 
         Row() {
+            Box(
+                modifier = Modifier
+                    .width(10.dp)
+                    .height(110.dp)
+                    .background(BlueLight)
+            )
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(top = 8.dp, bottom = 8.dp),
+                        .padding(top = 8.dp, bottom = 8.dp, start = 8.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
@@ -123,7 +128,7 @@ fun QrNearEventCard(event: UpdateEventDataModel, qrViewModel: QrViewModel = view
                     }
                 }
                 Column(
-                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
                 ) {
                     Text(
                         text = if(event.date!! == LocalDate.now())
@@ -141,46 +146,6 @@ fun QrNearEventCard(event: UpdateEventDataModel, qrViewModel: QrViewModel = view
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Medium
                     )
-
-
-                    Button(
-                        onClick = {
-                            loadingAnimationOn = true
-                            if (event.bookingStatus == "done")
-                                MainRepository.unConfirmEventOnServer(eventId = event.eventId!!)
-                            else
-                                MainRepository.confirmEventOnServer(eventId = event.eventId!!)
-                        },
-                        colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = if (event.bookingStatus == "done") Color.Gray else Yellow,
-                            contentColor = Color.White
-                        ),
-                        modifier = Modifier
-                            .padding(top = 18.dp)
-                            .width(120.dp)
-                            .height(30.dp),
-                        shape = RoundedCornerShape(10.dp),
-                        contentPadding = PaddingValues(
-                            start = 4.dp,
-                            top = 0.dp,
-                            end = 4.dp,
-                            bottom = 0.dp
-                        )
-                    ) {
-                        if (!loadingAnimationOn){
-                            Text(
-                                text = if (event.bookingStatus == "done") "Отменить" else "Подтвердить",
-                                fontSize = 14.sp
-                            )
-                        }else{
-                            LoadingAnimation(
-                                circleSize = 6.dp,
-                                circleColor = Color.White,
-                                spaceBetween = 4.dp,
-                                travelDistance = 6.dp
-                            )
-                        }
-                    }
 
                 }
             }

@@ -129,7 +129,7 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                     }
                 else
                     items(qrViewModel.qrNextBooking.count()){
-                        EventCard(event = qrViewModel.qrNextBooking[it])
+                        QrEventCard(event = qrViewModel.qrNextBooking[it])
                     }
             }
         }
