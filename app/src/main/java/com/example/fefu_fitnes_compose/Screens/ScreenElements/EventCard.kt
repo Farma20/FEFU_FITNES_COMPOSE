@@ -18,10 +18,12 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel.NewTimeTableViewModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
@@ -29,6 +31,7 @@ import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
 import java.time.LocalDate
+
 
 @Composable
 fun EventCard(
@@ -38,8 +41,14 @@ fun EventCard(
     val openDialog = remember { mutableStateOf(false) }
     val selected = remember { mutableStateOf(false) }
     val occupiedSpace = remember { mutableStateOf(0) }
+    var loadingAnimationOn by remember { mutableStateOf(false) }
     occupiedSpace.value = event.occupiedSpaces!!
     selected.value = event.bookingStatus!! != "booked"
+
+    LaunchedEffect(key1 = event){
+        loadingAnimationOn = false
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -138,9 +147,9 @@ fun EventCard(
                     }
 
 
-
-                    TextButton(
+                    Button(
                         onClick = {
+                            loadingAnimationOn = true
                             if(selected.value && occupiedSpace.value != event.totalSpaces && event.date!! >= LocalDate.now()){
                                 timeTableViewModel.addNewBooking(event.eventId!!)
                             }
@@ -164,12 +173,22 @@ fun EventCard(
                             bottom = 0.dp
                         )
                     ) {
-                        Text(
-                            text = if(occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now()) "Нет записи" else{
-                                if(selected.value) "Записаться" else "Отменить"
-                             },
-                            fontSize = 14.sp
-                        )
+                        if (!loadingAnimationOn){
+                            Text(
+                                text = if(occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now()) "Нет записи" else{
+                                    if(selected.value) "Записаться" else "Отменить"
+                                },
+                                fontSize = 14.sp
+                            )
+                        }else{
+                            LoadingAnimation(
+                                circleSize = 6.dp,
+                                circleColor = Color.White,
+                                spaceBetween = 4.dp,
+                                travelDistance = 6.dp
+                            )
+                        }
+
                     }
 
                 }

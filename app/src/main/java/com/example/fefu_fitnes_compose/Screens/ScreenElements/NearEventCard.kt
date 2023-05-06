@@ -5,13 +5,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -24,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.ViewModel.MainMenuViewModel
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.BlueURL
@@ -48,6 +53,12 @@ private val translateMonth = mapOf<Int, String>(
 @Composable
 fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewModel = viewModel()) {
     val openDialog = remember { mutableStateOf(false) }
+    var loadingAnimationOn by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = event){
+        loadingAnimationOn = false
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -67,12 +78,11 @@ fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewMo
         Row() {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(top = 8.dp, bottom = 8.dp, start = 8.dp)
-                        .weight(2f),
+                        .padding(top = 8.dp, bottom = 8.dp, start = 8.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
@@ -112,7 +122,7 @@ fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewMo
                     }
                 }
                 Column(
-                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp).weight(1f)
+                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
                 ) {
                     Text(
                         text = if(event.date!! == LocalDate.now())
@@ -132,8 +142,9 @@ fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewMo
                     )
 
 
-                    TextButton(
+                    Button(
                         onClick = {
+                            loadingAnimationOn = true
                             mainMenuViewModel.cancelBooking(event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
@@ -141,7 +152,7 @@ fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewMo
                             contentColor = Color.White
                         ),
                         modifier = Modifier
-                            .padding(top = 11.dp)
+                            .padding(top = 18.dp)
                             .width(100.dp)
                             .height(30.dp),
                         shape = RoundedCornerShape(10.dp),
@@ -152,10 +163,19 @@ fun NearEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewMo
                             bottom = 0.dp
                         )
                     ) {
-                        Text(
-                            text = "Отменить",
-                            fontSize = 14.sp
-                        )
+                        if (!loadingAnimationOn){
+                            Text(
+                                text = "Отменить",
+                                fontSize = 14.sp
+                            )
+                        }else{
+                            LoadingAnimation(
+                                circleSize = 6.dp,
+                                circleColor = Color.White,
+                                spaceBetween = 4.dp,
+                                travelDistance = 6.dp
+                            )
+                        }
                     }
 
                 }

@@ -16,7 +16,9 @@ import com.example.fefu_fitnes_compose.Screens.Initialization.InitializationNavi
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.UI.RegistrationUI
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.InitializationUI
 import com.example.fefu_fitnes_compose.Screens.Initialization.SplashScreen.SplashScreenUI
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.QrCard
+import com.example.fefu_fitnes_compose.ui.theme.FEFU_FITNES_COMPOSETheme
 
 class MainActivity : ComponentActivity() {
 
