@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Size
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -16,36 +17,51 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.QrCard
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
  fun QrScannerUI(qrViewModel: QrViewModel = viewModel()) {
+    val scanQrError = MainRepository.scanQrError.observeAsState().value
     val sheetState = rememberBottomSheetState(
         initialValue = BottomSheetValue.Collapsed
     )
+    var showErrorToast by remember {
+        mutableStateOf(false)
+    }
     val code = remember {
         mutableStateOf("")
     }
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = sheetState
     )
-    
-    LaunchedEffect(key1 = code.value.isNotEmpty()){
+
+
+    LaunchedEffect(key1 = code.value.isNotEmpty(), scanQrError){
         if(code.value.isNotEmpty()){
-            MainRepository.pushQrCodeInServer(qrToken = code.value)
-            sheetState.expand()
+            val answer = MainRepository.pushQrCodeInServer(qrToken = code.value)
+        }
+
+        if (scanQrError != null){
+            if (!scanQrError){
+                sheetState.expand()
+            }
+
+            MainRepository.scanQrError.value = null
         }
     }
 

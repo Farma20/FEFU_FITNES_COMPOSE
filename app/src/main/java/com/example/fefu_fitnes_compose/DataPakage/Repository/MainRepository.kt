@@ -2,6 +2,7 @@ package com.example.fefu_fitnes.dadadada.Repository
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
 import com.example.fefu_fitnes_compose.DataPakage.Models.ConfirmUserData
@@ -121,7 +122,7 @@ object MainRepository: ViewModel() {
     val qrNextBookingData = MutableLiveData<List<EventAllDataModel>>()
     private val qrUserId = MutableLiveData<Int>()
 
-
+    val scanQrError = MutableLiveData<Boolean>().apply { this.value = null }
     fun pushQrCodeInServer(qrToken:String, token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try{
@@ -130,9 +131,10 @@ object MainRepository: ViewModel() {
                 getQrUserDataFromServer(result["user_id"]!!, token)
                 getQrNearBookingDataFromServer(result["user_id"]!!, token)
                 getNextBookingOnServer(result["user_id"]!!, token)
-
+                scanQrError.postValue(false)
             }catch (e:Exception){
-                println(e)
+                scanQrError.postValue(true)
+                Log.d("MainRepositoryPushQr", e.toString())
             }
         }
     }
