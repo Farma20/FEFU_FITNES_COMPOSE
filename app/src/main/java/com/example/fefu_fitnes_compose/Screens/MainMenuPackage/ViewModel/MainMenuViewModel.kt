@@ -33,7 +33,6 @@ class MainMenuViewModel:ViewModel() {
 
         MainRepository.currentUser.observeForever{
             userData = it
-            MainRepository.getUserNextBookingFromServer()
         }
 
         MainRepository.userNextBooking.observeForever{
@@ -47,19 +46,6 @@ class MainMenuViewModel:ViewModel() {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

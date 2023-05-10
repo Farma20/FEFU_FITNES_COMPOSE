@@ -148,6 +148,7 @@ fun EventCard(
 
 
                     Button(
+                        enabled = !(event.bookingStatus == "done" || (occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now())),
                         onClick = {
                             loadingAnimationOn = true
                             if(selected.value && occupiedSpace.value != event.totalSpaces && event.date!! >= LocalDate.now()){
@@ -157,12 +158,14 @@ fun EventCard(
                                 timeTableViewModel.cancelBooking(event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = if (selected.value && occupiedSpace.value != event.totalSpaces && event.date!! >= LocalDate.now())
-                                Yellow else Color.Gray,
-                            contentColor = Color.White
+                            backgroundColor = if (selected.value && occupiedSpace.value != event.totalSpaces && event.date!! >= LocalDate.now() && event.bookingStatus != "done") Yellow
+                            else if (event.bookingStatus == "booked") Color.Gray
+                            else Color.White,
+                            contentColor = Color.White,
+                            disabledContentColor = if (event.bookingStatus == "done") BlueLight else Color.Gray
                         ),
                         modifier = Modifier
-                            .padding(top = 24.dp)
+                            .padding(top = 28.dp)
                             .width(100.dp)
                             .height(30.dp),
                         shape = RoundedCornerShape(10.dp),
@@ -175,8 +178,12 @@ fun EventCard(
                     ) {
                         if (!loadingAnimationOn){
                             Text(
-                                text = if(occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now()) "Нет записи" else{
-                                    if(selected.value) "Записаться" else "Отменить"
+                                text = if(occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now()) "Нет записи"
+                                else
+                                {
+                                    if(event.bookingStatus == "done") "Посещено"
+                                    else if(selected.value) "Записаться"
+                                    else "Отменить"
                                 },
                                 fontSize = 14.sp
                             )
