@@ -125,7 +125,7 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
             ){
                 if (qrViewModel.qrNextBooking.isEmpty() || qrViewModel.qrNextBooking[0].eventId == null)
                     items(1){
-                        EmptyCard()
+                        QrEmptyCard()
                     }
                 else
                     items(qrViewModel.qrNextBooking.count()){

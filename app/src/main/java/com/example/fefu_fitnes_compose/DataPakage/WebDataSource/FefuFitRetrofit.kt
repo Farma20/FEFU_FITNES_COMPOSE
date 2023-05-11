@@ -9,7 +9,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-private const val BASE_URL = "http://188.127.225.179:600/"
+private const val BASE_URL = "https://fefufit.dvfu.ru"
 
 //создание перехватчика для логирования данных запросов
 var interceptor = HttpLoggingInterceptor().apply {
