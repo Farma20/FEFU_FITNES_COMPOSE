@@ -40,8 +40,8 @@ class QrViewModel:ViewModel() {
 //Преобразование входящих данных
 private fun convertAllEventsToUpdate(event: EventAllDataModel): UpdateEventDataModel {
 
-    val startDateTime: List<String> = event.beginTime!!.split("\\s".toRegex())
-    val endDateTime: List<String> = event.endTime!!.split("\\s".toRegex())
+    val startDateTime: List<String> = event.beginTime!!.split("T".toRegex())
+    val endDateTime: List<String> = event.endTime!!.split("T".toRegex())
     val dateList = startDateTime[0].split("-")
     val date = LocalDate.of(dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt())
 
@@ -52,7 +52,7 @@ private fun convertAllEventsToUpdate(event: EventAllDataModel): UpdateEventDataM
         date,
         startDateTime[1].substring(0, startDateTime[1].length - 3),
         endDateTime[1].substring(0, endDateTime[1].length - 3),
-        event.areaName,
+        event.buildingName,
         event.coachName,
         event.coachPhoneNumber,
         event.coachEmail,
