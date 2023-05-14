@@ -159,7 +159,7 @@ fun EventCard(
                         },
                         colors = ButtonDefaults.textButtonColors(
                             backgroundColor = if (selected.value && occupiedSpace.value != event.totalSpaces && event.date!! >= LocalDate.now() && event.bookingStatus != "done") Yellow
-                            else if (event.bookingStatus == "booked") Color.Gray
+                            else if (event.bookingStatus == "booked" && event.date!! >= LocalDate.now()) Color.Gray
                             else Color.White,
                             contentColor = Color.White,
                             disabledContentColor = if (event.bookingStatus == "done") BlueLight else Color.Gray
@@ -178,7 +178,7 @@ fun EventCard(
                     ) {
                         if (!loadingAnimationOn){
                             Text(
-                                text = if(occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now()) "Нет записи"
+                                text = if((occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now()) && event.bookingStatus != "done") "Нет записи"
                                 else
                                 {
                                     if(event.bookingStatus == "done") "Посещено"

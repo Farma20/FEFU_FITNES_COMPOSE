@@ -24,7 +24,7 @@ interface FefuFitAPI {
     suspend fun pushLogin(@Body userEnterData: EnterDataModel):Map<String,Any>
 
     //Данные главной страницы
-    @POST("/apiapi/user/user/view_self")
+    @POST("/api/api/user/user/view_self")
     suspend fun getUserData(@Body token:Map<String, String>):UserDataModel
 
     @POST("/api/api/booking/get_next")
