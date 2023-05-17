@@ -16,6 +16,9 @@ import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBa
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
+import retrofit2.HttpException
 
 object RegisterRepository: ViewModel() {
 
@@ -41,24 +44,27 @@ object RegisterRepository: ViewModel() {
                         registrationStatus = "Поздравляем, регистрация прошла успешно"
                         pushLogin(EnterDataModel(registerData.email, registerData.password))
                     }
-                    else -> {
-                        when (result["msg"]) {
-                            "not an email" -> registrationStatus =
-                                "Произошла ошибка при регистрации, несуществующая почта"
-                            "wrong birthdate" -> registrationStatus =
-                                "Произошла ошибка при регистрации, некорректная дата рождения"
-                            "user already exists" -> registrationStatus =
-                                "Произошла ошибка при регистрации, пользователь с данной почтой уже существует"
-                            else -> registrationStatus =
-                                "Произошла ошибка при регистрации, непредвиденная ошибка, проверьте правильность данных"
-                        }
-                    }
                 }
             }
-            catch (e:Exception){
-                registrationStatus =
-                    "Произошла ошибка при регистрации, проверьте соединение с интернетом или свяжитесь с разработчиками"
-                println(e.message)
+            catch (cause:Throwable){
+                when (cause) {
+                    is HttpException -> {
+                        val result = JSONObject(cause.response()?.errorBody()?.string().toString()).toMap()
+                        println(result)
+
+                        if (cause.code() == 400){
+                            registrationStatus = when (result["msg"]) {
+                                "not an email" -> "Произошла ошибка при регистрации, несуществующая почта"
+                                "wrong birthdate" -> "Произошла ошибка при регистрации, некорректная дата рождения"
+                                "user already exists" -> "Произошла ошибка при регистрации, пользователь с данной почтой уже существует"
+                                else -> "Произошла ошибка при регистрации, проверьте правильность введенных данных"
+                            }
+                        }
+
+                    }
+                    else-> registrationStatus = "Произошла непредвиденная ошибка. Проверьте соединение с интернетом или свяжитесь с разработчиками"
+                }
+
             }
         }
     }
@@ -85,19 +91,35 @@ object RegisterRepository: ViewModel() {
                         }
                     }
                 }
-                else{
-                    initializationStatus = "Ошибка входа. Проверьте корректность введенных данных или зарегистрируйтесь"
-                }
 
-            }catch (e:Exception){
-                initializationStatus = "Ошибка входа. Проверьте соединение с интернетом или свяжитесь с разработчиками"
-                println(e.message)
+            }catch (cause:Throwable){
+                when (cause) {
+                    is HttpException -> {
+                        if (cause.code() == 400)
+                            initializationStatus = "Ошибка входа. Проверьте корректность введенных данных или зарегистрируйтесь"
+                    }
+                    else -> initializationStatus = "Ошибка входа. Проверьте соединение с интернетом или свяжитесь с разработчиками"
+                }
             }
         }
     }
 
     init {
         registerUserList.value = mutableListOf(UserRegisterModel())
+    }
+
+    fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
+        when (val value = this[it])
+        {
+            is JSONArray ->
+            {
+                val map = (0 until value.length()).associate { Pair(it.toString(), value[it]) }
+                JSONObject(map).toMap().values.toList()
+            }
+            is JSONObject -> value.toMap()
+            JSONObject.NULL -> null
+            else            -> value
+        }
     }
 
 }
