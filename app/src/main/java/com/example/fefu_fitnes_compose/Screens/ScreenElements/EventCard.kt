@@ -146,9 +146,9 @@ fun EventCard(
                         )
                     }
 
-
+//                    !(event.bookingStatus == "done" || (occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now()))
                     Button(
-                        enabled = !(event.bookingStatus == "done" || (occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now())),
+                        enabled = !(event.eventStatus == "inactive" || (event.eventStatus == "full" && event.bookingStatus == "not booked") || event.bookingStatus == "done"),
                         onClick = {
                             loadingAnimationOn = true
                             if(selected.value && occupiedSpace.value != event.totalSpaces && event.date!! >= LocalDate.now()){
@@ -158,9 +158,14 @@ fun EventCard(
                                 timeTableViewModel.cancelBooking(event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = if (selected.value && occupiedSpace.value != event.totalSpaces && event.date!! >= LocalDate.now() && event.bookingStatus != "done") Yellow
-                            else if (event.bookingStatus == "booked" && event.date!! >= LocalDate.now()) Color.Gray
-                            else Color.White,
+                            backgroundColor =
+                            if(event.eventStatus == "inactive" || (event.eventStatus == "full" && event.bookingStatus == "not booked") || event.bookingStatus == "done")
+                                Color.White
+                            else if (selected.value)
+                                Yellow
+                            else
+                                Color.Gray
+                            ,
                             contentColor = Color.White,
                             disabledContentColor = if (event.bookingStatus == "done") BlueLight else Color.Gray
                         ),
@@ -178,7 +183,7 @@ fun EventCard(
                     ) {
                         if (!loadingAnimationOn){
                             Text(
-                                text = if((occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now()) && event.bookingStatus != "done") "Нет записи"
+                                text = if((event.eventStatus == "inactive" || (event.eventStatus == "full" && event.bookingStatus == "not booked"))&& event.bookingStatus != "done") "Нет записи"
                                 else
                                 {
                                     if(event.bookingStatus == "done") "Посещено"

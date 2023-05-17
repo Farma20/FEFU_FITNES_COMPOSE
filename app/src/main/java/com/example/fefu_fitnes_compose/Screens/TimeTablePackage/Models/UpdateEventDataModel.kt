@@ -15,5 +15,6 @@ data class UpdateEventDataModel (
     var couchEmail: String? = "",
     var totalSpaces: Int? = 0,
     var occupiedSpaces: Int? = 0,
-    var eventDescription: String? = ""
+    var eventDescription: String? = "",
+    var eventStatus: String? = ""
 )

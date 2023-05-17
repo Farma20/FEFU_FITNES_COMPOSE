@@ -65,7 +65,8 @@ private fun convertAllEventsToUpdate(events: List<EventAllDataModel>):MutableLis
             event.coachEmail,
             event.totalSpaces,
             event.occupiedSpaces,
-            event.eventDescription
+            event.eventDescription,
+            event.event_status
         )
         updateEventDataModels.add(uEventDataModel)
     }

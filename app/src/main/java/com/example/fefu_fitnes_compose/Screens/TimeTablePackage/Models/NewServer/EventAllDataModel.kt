@@ -32,5 +32,6 @@ data class EventAllDataModel(
     @SerializedName("building_name")
     var buildingName: String? = null,
     @SerializedName("booking_status")
-    var bookingStatus: String? = null
+    var bookingStatus: String? = null,
+    var event_status: String? = null,
 )
