@@ -78,7 +78,7 @@ private fun convertAllListEventsToUpdate(events: List<EventAllDataModel>):Mutabl
             date,
             startDateTime[1].substring(0, startDateTime[1].length - 3),
             endDateTime[1].substring(0, endDateTime[1].length - 3),
-            event.areaName,
+            event.buildingName,
             event.coachName,
             event.coachPhoneNumber,
             event.coachEmail,
