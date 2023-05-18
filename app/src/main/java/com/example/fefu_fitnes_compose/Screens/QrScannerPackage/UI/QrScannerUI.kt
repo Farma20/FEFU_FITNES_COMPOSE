@@ -53,14 +53,13 @@ import kotlinx.coroutines.launch
 
     LaunchedEffect(key1 = code.value.isNotEmpty(), scanQrError){
         if(code.value.isNotEmpty()){
-            val answer = MainRepository.pushQrCodeInServer(qrToken = code.value)
+            MainRepository.pushQrCodeInServer(qrToken = code.value)
         }
 
         if (scanQrError != null){
             if (!scanQrError){
                 sheetState.expand()
             }
-
             MainRepository.scanQrError.value = null
         }
     }
@@ -90,6 +89,20 @@ fun QrScanner(code:MutableState<String>){
     val cameraProviderFuture = remember {
         ProcessCameraProvider.getInstance(context)
     }
+
+    val barcodeAnalyser = QrCodeMlAnalyser { barcodes, qrVisible ->
+        if (qrVisible){
+            barcodes.forEach { barcode ->
+                barcode.rawValue?.let { barcodeValue ->
+                    code.value = barcodeValue
+//                    cameraProviderFuture.get().unbindAll()
+                }
+            }
+        }else{
+            code.value = ""
+        }
+    }
+
     var hasCamPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(
@@ -131,9 +144,7 @@ fun QrScanner(code:MutableState<String>){
                         .build()
                     imageAnalysis.setAnalyzer(
                         ContextCompat.getMainExecutor(context),
-                        QrCodeAnalyzer { result ->
-                            code.value = result
-                        }
+                        barcodeAnalyser
                     )
                     try {
                         cameraProviderFuture.get().bindToLifecycle(
