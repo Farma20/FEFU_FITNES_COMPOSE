@@ -26,6 +26,7 @@ import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Navigation.Screen
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.QrCode.GenerateQRCode
+import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.QrCode.QrCodeDialog
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.ViewModel.MainMenuViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.EmptyCard
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.NearEventCard
@@ -87,6 +88,12 @@ fun MainMenuUI(navController: NavController,mainMenuViewModel: MainMenuViewModel
 
 @Composable
 private fun UppBar(mainMenuViewModel: MainMenuViewModel) {
+
+    val openDialog = remember { mutableStateOf(false) }
+    
+    if (openDialog.value)
+        QrCodeDialog(openDialog = openDialog)
+    
     Surface(
         modifier = Modifier
             .shadow(elevation = 4.dp)
@@ -96,8 +103,7 @@ private fun UppBar(mainMenuViewModel: MainMenuViewModel) {
                     bottomEnd = 10.dp,
                 )
             )
-
-
+            .clickable { openDialog.value = !openDialog.value }
     ) {
         Row(
             modifier = Modifier
