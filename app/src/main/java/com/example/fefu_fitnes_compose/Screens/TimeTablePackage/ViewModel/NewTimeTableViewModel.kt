@@ -1,6 +1,7 @@
 package com.example.fefu_fitnes_compose.Screens.TimeTablePackage.ViewModel
 
 import android.annotation.SuppressLint
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,8 +15,8 @@ import java.time.LocalDate
 @SuppressLint("MutableCollectionMutableState")
 class NewTimeTableViewModel: ViewModel() {
 
-    var allEventData by mutableStateOf(listOf(UpdateEventDataModel()))
-    var bookingEventData by mutableStateOf(mutableListOf(UpdateEventDataModel()))
+    var allEventData: MutableState<List<UpdateEventDataModel>?> = mutableStateOf(null)
+    var bookingEventData: MutableState<List<UpdateEventDataModel>?> = mutableStateOf(null)
 
     fun addNewBooking(eventId: Int) {
         MainRepository.addEventsBookingOnServer(eventId)
@@ -31,12 +32,17 @@ class NewTimeTableViewModel: ViewModel() {
         MainRepository.getEventsBookingFromServer()
 
         MainRepository.allEvents.observeForever{
-            allEventData = convertAllEventsToUpdate(it!!).sortedBy { it.startEventTime }
+            if (it != null)
+                allEventData.value = convertAllEventsToUpdate(it)
+            else
+                allEventData.value = null
         }
 
         MainRepository.userEvents.observeForever{
-            bookingEventData = convertAllEventsToUpdate(it!!)
-            bookingEventData.sortBy { it.startEventTime }
+            if (it != null)
+                bookingEventData.value = convertAllEventsToUpdate(it)
+            else
+                bookingEventData.value = null
         }
     }
 }

@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.EventCard
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
@@ -123,10 +124,10 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
     val tabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
 
-    var currentDayEvents by remember { mutableStateOf(selectEvents(timeTableViewModel.allEventData, currentData.value)) }
-    var currentDayBookingEvent by remember { mutableStateOf(selectEvents(timeTableViewModel.bookingEventData, currentData.value))}
-    currentDayEvents = selectEvents(timeTableViewModel.allEventData, currentData.value)
-    currentDayBookingEvent = selectEvents(timeTableViewModel.bookingEventData, currentData.value)
+    var currentDayEvents by remember { mutableStateOf(selectEvents(timeTableViewModel.allEventData.value, currentData.value)) }
+    var currentDayBookingEvent by remember { mutableStateOf(selectEvents(timeTableViewModel.bookingEventData.value, currentData.value))}
+    currentDayEvents = selectEvents(timeTableViewModel.allEventData.value, currentData.value)
+    currentDayBookingEvent = selectEvents(timeTableViewModel.bookingEventData.value, currentData.value)
 
 
     Column(
@@ -173,14 +174,34 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
                 modifier = Modifier.fillMaxSize(),
             ){
                 if(index == 0){
-                    if (currentDayEvents.isNotEmpty()){
-                        items(currentDayEvents.size){id->
-                            EventCard(currentDayEvents[id])
+                    if (currentDayEvents == null) {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 220.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                LoadingAnimation(
+                                    circleSize = 8.dp,
+                                    circleColor = BlueLight,
+                                    spaceBetween = 4.dp,
+                                    travelDistance = 6.dp
+                                )
+                            }
+                        }
+                    }
+                    else if (currentDayEvents!!.isNotEmpty()){
+                        items(currentDayEvents!!.size){id->
+                            EventCard(currentDayEvents!![id])
                         }
                     }else{
                         item {
                             Column(
-                                modifier = Modifier.fillMaxWidth().padding(top = 220.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 220.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Center
                             ) {
@@ -193,14 +214,34 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
                     }
                 }
                 if (index == 1){
-                    if (currentDayBookingEvent.isNotEmpty()){
-                        items(currentDayBookingEvent.size){id->
-                            EventCard(currentDayBookingEvent[id])
+                    if (currentDayBookingEvent == null) {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 220.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                LoadingAnimation(
+                                    circleSize = 8.dp,
+                                    circleColor = BlueLight,
+                                    spaceBetween = 4.dp,
+                                    travelDistance = 6.dp
+                                )
+                            }
+                        }
+                    }
+                    else if (currentDayBookingEvent!!.isNotEmpty()){
+                        items(currentDayBookingEvent!!.size){id->
+                            EventCard(currentDayBookingEvent!![id])
                         }
                     }else{
                         item {
                             Column(
-                                modifier = Modifier.fillMaxWidth().padding(top = 220.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 220.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
                                 Text(
@@ -216,7 +257,10 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
     }
 }
 
-fun selectEvents(allEvents: List<UpdateEventDataModel>, day:LocalDate):List<UpdateEventDataModel>{
+fun selectEvents(allEvents: List<UpdateEventDataModel>?, day:LocalDate):List<UpdateEventDataModel>?{
+    if (allEvents == null)
+        return null
+
     val dayEventList = mutableListOf<UpdateEventDataModel>()
     for(item in allEvents){
         if (item.date == day)

@@ -46,10 +46,7 @@ object MainRepository: ViewModel() {
     }
 
 
-    val allEvents = MutableLiveData<List<EventAllDataModel>>().apply {
-        this.value = listOf()
-    }
-
+    val allEvents = MutableLiveData<List<EventAllDataModel>>()
     fun getEventsAllFromServer(token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try {
@@ -60,9 +57,7 @@ object MainRepository: ViewModel() {
         }
     }
 
-    val userEvents = MutableLiveData<List<EventAllDataModel>>().apply {
-        this.value = listOf()
-    }
+    val userEvents = MutableLiveData<List<EventAllDataModel>>()
 
     fun getEventsBookingFromServer(token: String = RegisterRepository.userToken){
         viewModelScope.launch {
