@@ -1,7 +1,7 @@
-package com.example.fefu_fitnes_compose.Domain.use_case
+package com.example.fefu_fitnes_compose.Domain.use_case.dataValidation
 
 class ValidatePhone {
-    fun execute(phone:String): ValidationResult{
+    fun execute(phone:String): ValidationResult {
         if(phone.isEmpty()){
             return ValidationResult(false, "Введите номер телефона")
         }

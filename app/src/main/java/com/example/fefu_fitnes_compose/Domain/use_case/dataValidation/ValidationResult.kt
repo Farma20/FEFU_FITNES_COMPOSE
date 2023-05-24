@@ -1,4 +1,4 @@
-package com.example.fefu_fitnes_compose.Domain.use_case
+package com.example.fefu_fitnes_compose.Domain.use_case.dataValidation
 
 data class ValidationResult(
     var successful:Boolean,

@@ -146,13 +146,13 @@ fun QrNearEventCard(event: UpdateEventDataModel, qrViewModel: QrViewModel = view
                     Button(
                         onClick = {
                             loadingAnimationOn = true
-                            if (event.bookingStatus == "done")
+                            if (event.status == "done")
                                 MainRepository.unConfirmEventOnServer(eventId = event.eventId!!)
                             else
                                 MainRepository.confirmEventOnServer(eventId = event.eventId!!)
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            backgroundColor = if (event.bookingStatus == "done") Color.Gray else Yellow,
+                            backgroundColor = if (event.status == "done") Color.Gray else Yellow,
                             contentColor = Color.White
                         ),
                         modifier = Modifier
@@ -169,7 +169,7 @@ fun QrNearEventCard(event: UpdateEventDataModel, qrViewModel: QrViewModel = view
                     ) {
                         if (!loadingAnimationOn){
                             Text(
-                                text = if (event.bookingStatus == "done") "Отменить" else "Подтвердить",
+                                text = if (event.status == "done") "Отменить" else "Подтвердить",
                                 fontSize = 14.sp
                             )
                         }else{

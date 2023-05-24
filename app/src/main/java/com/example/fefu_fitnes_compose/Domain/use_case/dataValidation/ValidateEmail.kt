@@ -1,12 +1,10 @@
-package com.example.fefu_fitnes_compose.Domain.use_case
+package com.example.fefu_fitnes_compose.Domain.use_case.dataValidation
 
-import android.content.Context
 import android.util.Patterns
-import com.example.fefu_fitnes_compose.R
 
 class ValidateEmail {
 
-    fun execute(email:String):ValidationResult{
+    fun execute(email:String): ValidationResult {
         if(email.isBlank()){
             return ValidationResult(
                 successful = false,

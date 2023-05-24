@@ -1,12 +1,8 @@
-package com.example.fefu_fitnes_compose.Domain.use_case
-
-import android.content.Context
-import android.util.Patterns
-import com.example.fefu_fitnes_compose.R
+package com.example.fefu_fitnes_compose.Domain.use_case.dataValidation
 
 class ValidatePassword {
 
-    fun execute(password:String):ValidationResult{
+    fun execute(password:String): ValidationResult {
         if(password == "123")
             return ValidationResult(successful = true)
 

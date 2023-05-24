@@ -31,7 +31,6 @@ data class EventAllDataModel(
     var areaPhoto: String? = null,
     @SerializedName("building_name")
     var buildingName: String? = null,
-    @SerializedName("booking_status")
-    var bookingStatus: String? = null,
-    var event_status: String? = null,
+    @SerializedName("status")
+    var status: String? = null,
 )

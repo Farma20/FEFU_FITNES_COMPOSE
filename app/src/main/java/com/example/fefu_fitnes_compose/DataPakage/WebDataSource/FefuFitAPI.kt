@@ -47,7 +47,7 @@ interface FefuFitAPI {
     @POST("/api/api/auth/scan_qr")
     suspend fun scanQrCode(@Body scanQrData:ScanQrData):Map<String, Int>
 
-    @POST("/api/api/user/admin/view_one")
+    @POST("/api/api/user/admin/view_one_short")
     suspend fun getQrUserData(@Body scanUserData:ScanUserData):UserDataModel
 
     @POST("/api/api/qr/get_booking")

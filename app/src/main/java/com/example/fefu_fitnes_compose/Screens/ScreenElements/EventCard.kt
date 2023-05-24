@@ -39,11 +39,7 @@ fun EventCard(
     timeTableViewModel: NewTimeTableViewModel = viewModel()
 ) {
     val openDialog = remember { mutableStateOf(false) }
-    val selected = remember { mutableStateOf(false) }
-    val occupiedSpace = remember { mutableStateOf(0) }
     var loadingAnimationOn by remember { mutableStateOf(false) }
-    occupiedSpace.value = event.occupiedSpaces!!
-    selected.value = event.bookingStatus!! != "booked"
 
     LaunchedEffect(key1 = event){
         loadingAnimationOn = false
@@ -140,18 +136,20 @@ fun EventCard(
                             fontSize = 10.sp,
                         )
                         Text(
-                            text = "${occupiedSpace.value}/${event.totalSpaces}",
+                            text = "${event.occupiedSpaces}/${event.totalSpaces}",
                             fontSize = 10.sp,
                             color = BlueURL
                         )
                     }
 
-//                    !(event.bookingStatus == "done" || (occupiedSpace.value == event.totalSpaces || event.date!! < LocalDate.now()))
+                    //variable storing button status
+                    val buttonActive = !(event.status == "inactive" || event.status == "done" || event.status == "full")
+
                     Button(
-                        enabled = !(event.eventStatus == "inactive" || (event.eventStatus == "full" && event.bookingStatus == "not booked") || event.bookingStatus == "done"),
+                        enabled = buttonActive,
                         onClick = {
                             loadingAnimationOn = true
-                            if(selected.value && occupiedSpace.value != event.totalSpaces && event.date!! >= LocalDate.now()){
+                            if(event.status == "not booked"){
                                 timeTableViewModel.addNewBooking(event.eventId!!)
                             }
                             else
@@ -159,15 +157,14 @@ fun EventCard(
                         },
                         colors = ButtonDefaults.textButtonColors(
                             backgroundColor =
-                            if(event.eventStatus == "inactive" || (event.eventStatus == "full" && event.bookingStatus == "not booked") || event.bookingStatus == "done")
+                            if(!buttonActive)
                                 Color.White
-                            else if (selected.value)
+                            else if (event.status == "not booked")
                                 Yellow
                             else
-                                Color.Gray
-                            ,
+                                Color.Gray,
                             contentColor = Color.White,
-                            disabledContentColor = if (event.bookingStatus == "done") BlueLight else Color.Gray
+                            disabledContentColor = if (event.status == "done") BlueLight else Color.Gray
                         ),
                         modifier = Modifier
                             .padding(top = 28.dp)
@@ -183,12 +180,13 @@ fun EventCard(
                     ) {
                         if (!loadingAnimationOn){
                             Text(
-                                text = if((event.eventStatus == "inactive" || (event.eventStatus == "full" && event.bookingStatus == "not booked"))&& event.bookingStatus != "done") "Нет записи"
-                                else
-                                {
-                                    if(event.bookingStatus == "done") "Посещено"
-                                    else if(selected.value) "Записаться"
-                                    else "Отменить"
+                                text = when(event.status) {
+                                    "done" -> "Посещено"
+                                    "not booked" -> "Записаться"
+                                    "full" -> "Нет мест"
+                                    "booked" -> "Отменить"
+                                    "inactive" -> "Нет записи"
+                                    else -> "Пипка"
                                 },
                                 fontSize = 14.sp
                             )

@@ -4,7 +4,6 @@ import java.time.LocalDate
 
 data class UpdateEventDataModel (
     var eventId: Int? = null,
-    var bookingStatus: String? ="",
     var eventName: String? = "",
     var date: LocalDate? = LocalDate.now(),
     var startEventTime:String? = "",
@@ -16,5 +15,5 @@ data class UpdateEventDataModel (
     var totalSpaces: Int? = 0,
     var occupiedSpaces: Int? = 0,
     var eventDescription: String? = "",
-    var eventStatus: String? = ""
+    var status: String? = ""
 )

@@ -6,10 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
-import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Models.User
-import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
-import com.example.fefu_fitnes_compose.Domain.use_case.ValidateEmail
-import com.example.fefu_fitnes_compose.Domain.use_case.ValidatePassword
+import com.example.fefu_fitnes_compose.Domain.use_case.dataValidation.ValidateEmail
+import com.example.fefu_fitnes_compose.Domain.use_case.dataValidation.ValidatePassword
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Controllers.InitializationFormEvent
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.InitializationFormStateModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
