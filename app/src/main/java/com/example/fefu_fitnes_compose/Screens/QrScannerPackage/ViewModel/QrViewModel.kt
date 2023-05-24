@@ -1,5 +1,6 @@
 package com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,26 +15,26 @@ import java.time.LocalDate
 
 class QrViewModel:ViewModel() {
 
-    var qrUserData by mutableStateOf(UserDataModel())
-    var qrUserNearEventData by mutableStateOf(UpdateEventDataModel())
-    var qrNextBooking by mutableStateOf(listOf(UpdateEventDataModel()))
+    var qrUserData: MutableState<UserDataModel?> = mutableStateOf(null)
+    var qrUserNearEventData: MutableState<UpdateEventDataModel?> = mutableStateOf(null)
+    var qrNextBooking: MutableState<List<UpdateEventDataModel>?> = mutableStateOf(null)
 
     init {
         MainRepository.qrUserData.observeForever{
-            qrUserData = it
+            qrUserData.value = it
         }
         MainRepository.qrUserNearBookingData.observeForever {
-            qrUserNearEventData = if (it != null)
+            qrUserNearEventData.value = if (it != null)
                 convertEventToUpdate(it)
             else
-                UpdateEventDataModel()
+                null
         }
 
         MainRepository.qrNextBookingData.observeForever{
-            qrNextBooking = if (it!=null)
+            qrNextBooking.value = if (it!=null)
                 convertAllEventsToUpdate(it)
             else
-                listOf()
+                null
         }
     }
 }

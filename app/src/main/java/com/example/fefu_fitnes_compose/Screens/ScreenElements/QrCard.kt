@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
@@ -44,93 +45,113 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                  .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
                  .background(Color.Gray))
          }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
+        if(qrViewModel.qrUserData.value == null){
+            Row(
                 modifier = Modifier
-                    .size(120.dp)
-                    .padding(horizontal = 16.dp),
-                painter = painterResource(id = R.drawable.baseline_account_circle_24),
-                contentDescription = "userImg"
-            )
-            Column() {
-                Row() {
-                    Text(
-                        text = "Фамилия: ",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = if(qrViewModel.qrUserData.secondName == null)"Нет" else qrViewModel.qrUserData.secondName!!,
-                        fontSize = 16.sp
-                    )
-                }
-                Row() {
-                    Text(
-                        text = "Имя: ",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = if(qrViewModel.qrUserData.firstName == null)"Нет" else qrViewModel.qrUserData.firstName!!,
-                        fontSize = 16.sp
-                    )
-                }
-                Row() {
-                    Text(
-                        text = "Отчество: ",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Нет",
-                        fontSize = 16.sp
-                    )
-                }
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.54f)
+                    .padding(top = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+
+                LoadingAnimation(
+                    circleSize = 8.dp,
+                    circleColor = BlueLight,
+                    spaceBetween = 4.dp,
+                    travelDistance = 6.dp
+                )
             }
         }
-        Text(
-            modifier = Modifier
-                .padding(top = 5.dp, start = 8.dp, bottom = 8.dp),
-            text = "Ближайшая запись",
-            fontSize = 20.sp,
-        )
-
-         if (qrViewModel.qrUserNearEventData.eventId == null){
-             QrEmptyCard()
-         }
-        else
-            QrNearEventCard(event = qrViewModel.qrUserNearEventData)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        var buttonClicked by remember { mutableStateOf(false) }
-
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-            onClick = { buttonClicked = !buttonClicked }
-        ) {
-            Text(text = "Показать все занятия")
-        }
-        AnimatedVisibility(
-            visible = buttonClicked,
-        ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-            ){
-                if (qrViewModel.qrNextBooking.isEmpty() || qrViewModel.qrNextBooking[0].eventId == null)
-                    items(1){
-                        QrEmptyCard()
+        else{
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(120.dp)
+                        .padding(horizontal = 16.dp),
+                    painter = painterResource(id = R.drawable.baseline_account_circle_24),
+                    contentDescription = "userImg"
+                )
+                Column() {
+                    Row() {
+                        Text(
+                            text = "Фамилия: ",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = if(qrViewModel.qrUserData.value!!.secondName == null)"Нет" else qrViewModel.qrUserData.value!!.secondName!!,
+                            fontSize = 16.sp
+                        )
                     }
-                else
-                    items(qrViewModel.qrNextBooking.count()){
-                        QrEventCard(event = qrViewModel.qrNextBooking[it])
+                    Row() {
+                        Text(
+                            text = "Имя: ",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = if(qrViewModel.qrUserData.value!!.firstName == null)"Нет" else qrViewModel.qrUserData.value!!.firstName!!,
+                            fontSize = 16.sp
+                        )
                     }
+                    Row() {
+                        Text(
+                            text = "Отчество: ",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "Нет",
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+            }
+            Text(
+                modifier = Modifier
+                    .padding(top = 5.dp, start = 8.dp, bottom = 8.dp),
+                text = "Ближайшая запись",
+                fontSize = 20.sp,
+            )
+
+            if (qrViewModel.qrUserNearEventData.value == null){
+                QrEmptyCard()
+            }
+            else
+                QrNearEventCard(event = qrViewModel.qrUserNearEventData.value!!)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            var buttonClicked by remember { mutableStateOf(false) }
+
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+                onClick = { buttonClicked = !buttonClicked }
+            ) {
+                Text(text = "Показать все занятия")
+            }
+            AnimatedVisibility(
+                visible = buttonClicked,
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                ){
+                    if (qrViewModel.qrNextBooking.value!!.isEmpty() || qrViewModel.qrNextBooking.value!![0].eventId == null)
+                        items(1){
+                            QrEmptyCard()
+                        }
+                    else
+                        items(qrViewModel.qrNextBooking.value!!.count()){
+                            QrEventCard(event = qrViewModel.qrNextBooking.value!![it])
+                        }
+                }
             }
         }
     }

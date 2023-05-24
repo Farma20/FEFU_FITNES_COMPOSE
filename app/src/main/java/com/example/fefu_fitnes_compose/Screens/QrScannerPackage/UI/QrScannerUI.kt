@@ -40,29 +40,36 @@ import kotlinx.coroutines.launch
     val sheetState = rememberBottomSheetState(
         initialValue = BottomSheetValue.Collapsed
     )
-    var showErrorToast by remember {
-        mutableStateOf(false)
-    }
     val code = remember {
         mutableStateOf("")
     }
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = sheetState
     )
+    val scanningPermission = remember {
+        mutableStateOf(true)
+    }
 
 
     LaunchedEffect(key1 = code.value.isNotEmpty(), scanQrError){
-        if(code.value.isNotEmpty()){
+        if(code.value.isNotEmpty() && scanningPermission.value){
+            scanningPermission.value = false
+            qrViewModel.qrUserData.value = null
             MainRepository.pushQrCodeInServer(qrToken = code.value)
         }
 
         if (scanQrError != null){
             if (!scanQrError){
                 sheetState.expand()
+            }else{
+                scanningPermission.value = true
             }
             MainRepository.scanQrError.value = null
         }
     }
+
+    if (sheetState.isCollapsed)
+        scanningPermission.value = true
 
     Surface() {
         BottomSheetScaffold(
@@ -95,7 +102,6 @@ fun QrScanner(code:MutableState<String>){
             barcodes.forEach { barcode ->
                 barcode.rawValue?.let { barcodeValue ->
                     code.value = barcodeValue
-//                    cameraProviderFuture.get().unbindAll()
                 }
             }
         }else{

@@ -31,6 +31,7 @@ class QrCodeMlAnalyser(
                     .addOnSuccessListener { barcodes ->
                         if (barcodes.isNotEmpty()) {
                             onBarcodeDetected(barcodes, true)
+                            Log.d("TAG", "analyze: Barcode Scanned")
                         } else {
                             onBarcodeDetected(barcodes, false)
                             Log.d("TAG", "analyze: No barcode Scanned")
