@@ -36,6 +36,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -123,6 +126,8 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
+    val isLoading by timeTableViewModel.isLoading.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
 
     var currentDayEvents by remember { mutableStateOf(selectEvents(timeTableViewModel.allEventData.value, currentData.value)) }
     var currentDayBookingEvent by remember { mutableStateOf(selectEvents(timeTableViewModel.bookingEventData.value, currentData.value))}
@@ -163,96 +168,107 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
             }
         }
 
-
-
         HorizontalPager(
             count = buttonList.size,
             state = pagerState,
             modifier = Modifier.weight(1f)
         ) {index ->
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-            ){
-                if(index == 0){
-                    if (currentDayEvents == null) {
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 220.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                LoadingAnimation(
-                                    circleSize = 8.dp,
-                                    circleColor = BlueLight,
-                                    spaceBetween = 4.dp,
-                                    travelDistance = 6.dp
-                                )
-                            }
-                        }
-                    }
-                    else if (currentDayEvents!!.isNotEmpty()){
-                        items(currentDayEvents!!.size){id->
-                            EventCard(currentDayEvents!![id])
-                        }
-                    }else{
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 220.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = "Сегодня нет занятий",
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            }
-                        }
-                    }
+            SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = timeTableViewModel::loadStaff,
+                indicator = {state, refreshTrigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = refreshTrigger,
+                        contentColor = BlueLight
+                    )
                 }
-                if (index == 1){
-                    if (currentDayBookingEvent == null) {
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 220.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                LoadingAnimation(
-                                    circleSize = 8.dp,
-                                    circleColor = BlueLight,
-                                    spaceBetween = 4.dp,
-                                    travelDistance = 6.dp
-                                )
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                ){
+                    if(index == 0){
+                        if (currentDayEvents == null) {
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 220.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    LoadingAnimation(
+                                        circleSize = 8.dp,
+                                        circleColor = BlueLight,
+                                        spaceBetween = 4.dp,
+                                        travelDistance = 6.dp
+                                    )
+                                }
+                            }
+                        }
+                        else if (currentDayEvents!!.isNotEmpty()){
+                            items(currentDayEvents!!.size){id->
+                                EventCard(currentDayEvents!![id])
+                            }
+                        }else{
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 220.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = "Сегодня нет занятий",
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
                             }
                         }
                     }
-                    else if (currentDayBookingEvent!!.isNotEmpty()){
-                        items(currentDayBookingEvent!!.size){id->
-                            EventCard(currentDayBookingEvent!![id])
+                    if (index == 1){
+                        if (currentDayBookingEvent == null) {
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 220.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    LoadingAnimation(
+                                        circleSize = 8.dp,
+                                        circleColor = BlueLight,
+                                        spaceBetween = 4.dp,
+                                        travelDistance = 6.dp
+                                    )
+                                }
+                            }
                         }
-                    }else{
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 220.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                Text(
-                                    text = "На сегодня вы никуда не записаны",
-                                    fontWeight = FontWeight.Bold,
-                                )
+                        else if (currentDayBookingEvent!!.isNotEmpty()){
+                            items(currentDayBookingEvent!!.size){id->
+                                EventCard(currentDayBookingEvent!![id])
+                            }
+                        }else{
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 220.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                ) {
+                                    Text(
+                                        text = "На сегодня вы никуда не записаны",
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
+
         }
     }
 }
