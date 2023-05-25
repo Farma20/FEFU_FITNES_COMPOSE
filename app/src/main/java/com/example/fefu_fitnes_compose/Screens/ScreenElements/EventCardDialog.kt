@@ -33,7 +33,8 @@ fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataMod
                 .fillMaxWidth()
                 .clip(
                     RoundedCornerShape(7.dp)
-                )
+                ),
+            elevation = 3.dp
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally

@@ -6,17 +6,22 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -64,52 +69,71 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
             }
         }
         else{
-            Row(
+            val openDialog = remember { mutableStateOf(false) }
+            if (openDialog.value)
+                SubmitUserDialog(openDialog = openDialog)
+
+            Text(
+                modifier = Modifier
+                    .padding(top = 16.dp, start = 8.dp, bottom = 8.dp),
+                text = "Пользователь",
+                fontSize = 20.sp,
+            )
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+                    .clickable{
+                        openDialog.value = !openDialog.value
+                    },
+                elevation = 3.dp
             ) {
-                Image(
+                Row(
                     modifier = Modifier
-                        .size(120.dp)
-                        .padding(horizontal = 16.dp),
-                    painter = painterResource(id = R.drawable.baseline_account_circle_24),
-                    contentDescription = "userImg"
-                )
-                Column() {
-                    Row() {
-                        Text(
-                            text = "Фамилия: ",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = if(qrViewModel.qrUserData.value!!.secondName == null)"Нет" else qrViewModel.qrUserData.value!!.secondName!!,
-                            fontSize = 16.sp
-                        )
-                    }
-                    Row() {
-                        Text(
-                            text = "Имя: ",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = if(qrViewModel.qrUserData.value!!.firstName == null)"Нет" else qrViewModel.qrUserData.value!!.firstName!!,
-                            fontSize = 16.sp
-                        )
-                    }
-                    Row() {
-                        Text(
-                            text = "Отчество: ",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "Нет",
-                            fontSize = 16.sp
-                        )
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .size(110.dp)
+                            .padding(horizontal = 12.dp),
+                        painter = painterResource(id = R.drawable.baseline_account_circle_24),
+                        contentDescription = "userImg"
+                    )
+                    Column() {
+                        Row() {
+                            Text(
+                                text = "Фамилия: ",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = if(qrViewModel.qrUserData.value!!.secondName == null)"Нет" else qrViewModel.qrUserData.value!!.secondName!!,
+                                fontSize = 16.sp
+                            )
+                        }
+                        Row() {
+                            Text(
+                                text = "Имя: ",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = if(qrViewModel.qrUserData.value!!.firstName == null)"Нет" else qrViewModel.qrUserData.value!!.firstName!!,
+                                fontSize = 16.sp
+                            )
+                        }
+                        Row() {
+                            Text(
+                                text = "Отчество: ",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "Нет",
+                                fontSize = 16.sp
+                            )
+                        }
                     }
                 }
             }
@@ -125,7 +149,6 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
             }
             else
                 QrNearEventCard(event = qrViewModel.qrUserNearEventData.value!!)
-            Spacer(modifier = Modifier.height(16.dp))
 
             var buttonClicked by remember { mutableStateOf(false) }
 
@@ -133,7 +156,11 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
-                onClick = { buttonClicked = !buttonClicked }
+                onClick = { buttonClicked = !buttonClicked },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = BlueLight,
+                    contentColor = Color.White
+                )
             ) {
                 Text(text = "Показать все занятия")
             }
@@ -151,6 +178,9 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                         items(qrViewModel.qrNextBooking.value!!.count()){
                             QrEventCard(event = qrViewModel.qrNextBooking.value!![it])
                         }
+                    item { 
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
                 }
             }
         }

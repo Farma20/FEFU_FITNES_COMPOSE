@@ -19,8 +19,8 @@ fun QrEmptyCard() {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .height(110.dp)
-            .shadow(elevation = 3.dp)
+            .height(110.dp),
+        elevation = 3.dp
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

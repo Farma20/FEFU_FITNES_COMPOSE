@@ -63,12 +63,10 @@ fun QrEventCard(event: UpdateEventDataModel, mainMenuViewModel: MainMenuViewMode
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, top = 8.dp)
-            .shadow(
-                elevation = 3.dp
-            )
             .clickable {
                 openDialog.value = !openDialog.value
-            }
+            },
+        elevation = 3.dp
     ) {
 
         if (openDialog.value) {

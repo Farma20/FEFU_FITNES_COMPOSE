@@ -19,8 +19,8 @@ fun EmptyCard() {
     Card(
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp, top = 8.dp)
-            .height(107.dp)
-            .shadow(elevation = 3.dp)
+            .height(107.dp),
+        elevation = 3.dp
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
