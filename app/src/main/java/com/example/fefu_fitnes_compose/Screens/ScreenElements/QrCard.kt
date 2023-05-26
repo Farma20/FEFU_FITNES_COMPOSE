@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
@@ -50,7 +51,7 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                  .clip(RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
                  .background(Color.Gray))
          }
-        if(qrViewModel.qrUserData.value == null){
+        if(qrViewModel.qrUserDataShort.value == null){
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,8 +71,11 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
         }
         else{
             val openDialog = remember { mutableStateOf(false) }
-            if (openDialog.value)
-                SubmitUserDialog(openDialog = openDialog)
+            if (openDialog.value){
+                if(qrViewModel.qrUserDataFool.value == null)
+                    MainRepository.getQrUserDataFoolFromServer()
+                SubmitUserDialog(openDialog, qrViewModel)
+            }
 
             Text(
                 modifier = Modifier
@@ -108,7 +112,7 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = if(qrViewModel.qrUserData.value!!.secondName == null)"Нет" else qrViewModel.qrUserData.value!!.secondName!!,
+                                text = qrViewModel.qrUserDataShort.value!!.secondName,
                                 fontSize = 16.sp
                             )
                         }
@@ -119,7 +123,7 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = if(qrViewModel.qrUserData.value!!.firstName == null)"Нет" else qrViewModel.qrUserData.value!!.firstName!!,
+                                text = qrViewModel.qrUserDataShort.value!!.firstName,
                                 fontSize = 16.sp
                             )
                         }
@@ -130,7 +134,11 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = "Нет",
+                                text = if(qrViewModel.qrUserDataShort.value!!.thirdName == null)
+                                            "нет"
+                                        else
+                                            qrViewModel.qrUserDataShort.value!!.thirdName!!
+                                ,
                                 fontSize = 16.sp
                             )
                         }

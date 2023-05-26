@@ -26,7 +26,7 @@ import com.example.fefu_fitnes_compose.ui.theme.BlueURL
 @Composable
 fun EventCardDialog(openDialog: MutableState<Boolean>, event: UpdateEventDataModel) {
     Dialog(
-        onDismissRequest = { openDialog.value = false }
+        onDismissRequest = {openDialog.value = false}
     ) {
         Card(
             modifier = Modifier

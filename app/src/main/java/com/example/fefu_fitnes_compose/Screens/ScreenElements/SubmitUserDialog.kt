@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -64,14 +65,17 @@ import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Controllers.RegistrationFormEvent
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.ViewModel.RegistrationViewModel
+import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun SubmitUserDialog(openDialog: MutableState<Boolean>) {
+fun SubmitUserDialog(openDialog: MutableState<Boolean>, qrViewModel: QrViewModel) {
     val registrationViewModel = viewModel<RegistrationViewModel>()
     val state = registrationViewModel.state
     val context = LocalContext.current
@@ -79,33 +83,50 @@ fun SubmitUserDialog(openDialog: MutableState<Boolean>) {
     Dialog(onDismissRequest = { openDialog.value = false }) {
         Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp)
+                .fillMaxSize()
+                .padding(vertical = 30.dp)
                 .clip(
                     RoundedCornerShape(7.dp)
                 ),
             elevation = 3.dp
         ) {
+            if (qrViewModel.qrUserDataFool.value == null){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.54f)
+                        .padding(top = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
 
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxWidth()
-                    .padding(top = 0.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+                    LoadingAnimation(
+                        circleSize = 8.dp,
+                        circleColor = BlueLight,
+                        spaceBetween = 4.dp,
+                        travelDistance = 6.dp
+                    )
+                }
+            }else{
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .fillMaxWidth()
+                        .padding(top = 0.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                LaunchedEffect(key1 = context){
-                    registrationViewModel.validationEvents.collect{ event ->
-                        when(event){
-                            is RegistrationViewModel.ValidationEvent.Success->{
+                    LaunchedEffect(key1 = context){
+                        registrationViewModel.validationEvents.collect{ event ->
+                            when(event){
+                                is RegistrationViewModel.ValidationEvent.Success->{
 
+                                }
                             }
                         }
                     }
-                }
 
-                val spacerPadding = 20.dp
+                    val spacerPadding = 20.dp
 
 //                Box(modifier = Modifier.fillMaxWidth()){
 //                    Text(
@@ -115,31 +136,34 @@ fun SubmitUserDialog(openDialog: MutableState<Boolean>) {
 //                        fontSize = 20.sp,
 //                    )
 //                }
-                Image(
-                    modifier = Modifier
-                        .size(140.dp)
-                        .padding(horizontal = 6.dp),
-                    painter = painterResource(id = R.drawable.baseline_account_circle_24),
-                    contentDescription = "userImg"
-                )
-                RegistrationSecondName(state, registrationViewModel)
-                Spacer(modifier = Modifier.height(spacerPadding))
-                RegistrationFirstName(state, registrationViewModel)
-                Spacer(modifier = Modifier.height(spacerPadding))
-                RegistrationMiddleName(state, registrationViewModel)
-                Spacer(modifier = Modifier.height(spacerPadding))
-                RegistrationPhone(state, registrationViewModel)
-                Spacer(modifier = Modifier.height(spacerPadding))
-                RegistrationEmail(state, registrationViewModel)
-                Spacer(modifier = Modifier.height(spacerPadding))
-                RegistrationGender(state, registrationViewModel)
-                Spacer(modifier = Modifier.height(spacerPadding))
-                RegistrationStatus(state, registrationViewModel)
-                Spacer(modifier = Modifier.height(spacerPadding))
-                RegistrationBirthday(state, registrationViewModel, context)
-                Spacer(modifier = Modifier.height(40.dp))
-                RegistrationSubmitButton(registrationViewModel)
-                Spacer(modifier = Modifier.height(16.dp))
+                    Image(
+                        modifier = Modifier
+                            .size(140.dp)
+                            .padding(horizontal = 6.dp),
+                        painter = painterResource(id = R.drawable.baseline_account_circle_24),
+                        contentDescription = "userImg"
+                    )
+                    RegistrationSecondName(state, qrViewModel)
+                    Spacer(modifier = Modifier.height(spacerPadding))
+                    RegistrationFirstName(state, qrViewModel)
+                    Spacer(modifier = Modifier.height(spacerPadding))
+                    RegistrationMiddleName(state, qrViewModel)
+                    Spacer(modifier = Modifier.height(spacerPadding))
+                    RegistrationPhone(state, qrViewModel)
+                    Spacer(modifier = Modifier.height(spacerPadding))
+                    RegistrationEmail(state, qrViewModel)
+                    Spacer(modifier = Modifier.height(spacerPadding))
+                    RegistrationTelegramID(state, qrViewModel)
+                    Spacer(modifier = Modifier.height(spacerPadding))
+                    RegistrationBirthday(state, qrViewModel, context)
+                    Spacer(modifier = Modifier.height(spacerPadding))
+                    RegistrationGender(state, qrViewModel)
+                    Spacer(modifier = Modifier.height(spacerPadding))
+                    RegistrationStatus(state, qrViewModel)
+                    Spacer(modifier = Modifier.height(40.dp))
+                    RegistrationSubmitButton(qrViewModel)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
         }
     }
@@ -147,13 +171,13 @@ fun SubmitUserDialog(openDialog: MutableState<Boolean>) {
 
 
 @Composable
-private fun RegistrationSecondName(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+private fun RegistrationSecondName(state: RegistrationFromStateModel, viewModel: QrViewModel){
     Column(){
         TextField(
             modifier = Modifier.fillMaxWidth(0.9f),
-            value = state.secondName,
+            value = viewModel.qrUserDataFool.value!!.secondName,
             onValueChange = {
-                viewModel.onEvent(RegistrationFormEvent.SecondNameChanged(it))
+//                viewModel.onEvent(RegistrationFormEvent.SecondNameChanged(it))
             },
             isError = false,
             keyboardOptions = KeyboardOptions(
@@ -176,13 +200,13 @@ private fun RegistrationSecondName(state: RegistrationFromStateModel, viewModel:
 }
 
 @Composable
-private fun RegistrationFirstName(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+private fun RegistrationFirstName(state: RegistrationFromStateModel, viewModel: QrViewModel){
     Column(){
         TextField(
             modifier = Modifier.fillMaxWidth(0.9f),
-            value = state.firstName,
+            value = viewModel.qrUserDataFool.value!!.firstName,
             onValueChange = {
-                viewModel.onEvent(RegistrationFormEvent.FirstNameChanged(it))
+//                viewModel.onEvent(RegistrationFormEvent.FirstNameChanged(it))
             },
             isError = false,
             keyboardOptions = KeyboardOptions(
@@ -205,13 +229,13 @@ private fun RegistrationFirstName(state: RegistrationFromStateModel, viewModel: 
 }
 
 @Composable
-private fun RegistrationMiddleName(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+private fun RegistrationMiddleName(state: RegistrationFromStateModel, viewModel: QrViewModel){
     Column(){
         TextField(
             modifier = Modifier.fillMaxWidth(0.9f),
-            value = state.middleName,
+            value = viewModel.qrUserDataFool.value!!.thirdName,
             onValueChange = {
-                viewModel.onEvent(RegistrationFormEvent.MiddleNameChanged(it))
+//                viewModel.onEvent(RegistrationFormEvent.MiddleNameChanged(it))
             },
             isError = false,
             keyboardOptions = KeyboardOptions(
@@ -236,13 +260,16 @@ private fun RegistrationMiddleName(state: RegistrationFromStateModel, viewModel:
 
 
 @Composable
-private fun RegistrationPhone(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+private fun RegistrationPhone(state: RegistrationFromStateModel, viewModel: QrViewModel){
     Column() {
         TextField(
             modifier = Modifier.fillMaxWidth(0.9f),
-            value = state.phone,
+            value = if(viewModel.qrUserDataFool.value!!.phoneNumber == null)
+                ""
+            else
+                viewModel.qrUserDataFool.value!!.phoneNumber!!,
             onValueChange = {
-                viewModel.onEvent(RegistrationFormEvent.PhoneChanged(it))
+//                viewModel.onEvent(RegistrationFormEvent.PhoneChanged(it))
             },
             isError = false,
             keyboardOptions = KeyboardOptions(
@@ -265,13 +292,13 @@ private fun RegistrationPhone(state: RegistrationFromStateModel, viewModel: Regi
 }
 
 @Composable
-private fun RegistrationEmail(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+private fun RegistrationEmail(state: RegistrationFromStateModel, viewModel: QrViewModel){
     Column() {
         TextField(
             modifier = Modifier.fillMaxWidth(0.9f),
-            value = state.email,
+            value = viewModel.qrUserDataFool.value!!.email,
             onValueChange = {
-                viewModel.onEvent(RegistrationFormEvent.EmailChanged(it))
+//                viewModel.onEvent(RegistrationFormEvent.EmailChanged(it))
             },
             isError = false,
             keyboardOptions = KeyboardOptions(
@@ -295,7 +322,39 @@ private fun RegistrationEmail(state: RegistrationFromStateModel, viewModel: Regi
 }
 
 @Composable
-private fun RegistrationGender(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+private fun RegistrationTelegramID(state: RegistrationFromStateModel, viewModel: QrViewModel){
+    Column(){
+        TextField(
+            modifier = Modifier.fillMaxWidth(0.9f),
+            value = if(viewModel.qrUserDataFool.value!!.telegramId == null)
+                ""
+            else
+                viewModel.qrUserDataFool.value!!.telegramId!!,
+            onValueChange = {
+//                viewModel.onEvent(RegistrationFormEvent.FirstNameChanged(it))
+            },
+            isError = false,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text
+            ),
+            label = {
+                Row() {
+                    Text(
+                        text = "Telegram",
+                    )
+                }
+            },
+            singleLine = true,
+            textStyle = TextStyle(fontSize = 16.sp),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+            ),
+        )
+    }
+}
+
+@Composable
+private fun RegistrationGender(state: RegistrationFromStateModel, viewModel: QrViewModel){
     Column(
         modifier = Modifier.fillMaxWidth(),
     ){
@@ -308,14 +367,17 @@ private fun RegistrationGender(state: RegistrationFromStateModel, viewModel: Reg
         Column(modifier = Modifier
             .padding(start = 6.dp)
             .selectableGroup()){
+
+            val gender = viewModel.qrUserDataFool.value!!.gender == "m"
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(
                     colors = RadioButtonDefaults.colors(
                         selectedColor = BlueLight
                     ),
-                    selected = state.gender,
+                    selected = gender,
                     onClick = {
-                        viewModel.onEvent(RegistrationFormEvent.GenderChanged(true))
+//                        viewModel.onEvent(RegistrationFormEvent.GenderChanged(true))
                     },
                 )
                 Text(
@@ -329,9 +391,9 @@ private fun RegistrationGender(state: RegistrationFromStateModel, viewModel: Reg
                     colors = RadioButtonDefaults.colors(
                         selectedColor = BlueLight
                     ),
-                    selected = !state.gender,
+                    selected = !gender,
                     onClick = {
-                        viewModel.onEvent(RegistrationFormEvent.GenderChanged(false))
+//                        viewModel.onEvent(RegistrationFormEvent.GenderChanged(false))
                     },
                 )
                 Text(
@@ -345,12 +407,11 @@ private fun RegistrationGender(state: RegistrationFromStateModel, viewModel: Reg
 }
 
 @Composable
-private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: RegistrationViewModel){
+private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: QrViewModel){
     Column(
         modifier = Modifier.fillMaxWidth(),
-//        verticalAlignment = Alignment.CenterVertically,
-//        horizontalArrangement = Arrangement.SpaceBetween
     ){
+        val status = viewModel.qrUserDataFool.value!!.status
         Text(
             modifier = Modifier.padding(start = 20.dp),
             text = "Статус",
@@ -368,9 +429,9 @@ private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: Reg
                     colors = RadioButtonDefaults.colors(
                         selectedColor = BlueLight
                     ),
-                    selected = state.status == "student",
+                    selected = status == "student",
                     onClick = {
-                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("student"))
+//                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("student"))
                     },
                 )
                 Text(
@@ -384,9 +445,9 @@ private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: Reg
                     colors = RadioButtonDefaults.colors(
                         selectedColor = BlueLight
                     ),
-                    selected = state.status == "guest",
+                    selected = status == "guest",
                     onClick = {
-                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("guest"))
+//                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("guest"))
                     },
                 )
                 Text(
@@ -400,9 +461,9 @@ private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: Reg
                     colors = RadioButtonDefaults.colors(
                         selectedColor = BlueLight
                     ),
-                    selected = state.status == "employee",
+                    selected = status == "employee",
                     onClick = {
-                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("employee"))
+//                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("employee"))
                     },
                 )
                 Text(
@@ -416,7 +477,7 @@ private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: Reg
 }
 
 @Composable
-private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: RegistrationViewModel, context: Context){
+private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: QrViewModel, context: Context){
     val currentDate = LocalDate.now()
 
     val year:Int = currentDate.year
@@ -438,7 +499,7 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: R
                 month.toString()
             }
 
-            viewModel.onEvent(RegistrationFormEvent.BirthdayChanged("$myDay.$myMonth.$year"))
+//            viewModel.onEvent(RegistrationFormEvent.BirthdayChanged("$myDay.$myMonth.$year"))
         },year, month, day
     )
 
@@ -469,8 +530,13 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: R
                         contentColor = BlueDark
                     )
                 ) {
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                    val date = viewModel.qrUserDataFool.value!!.birthdate.split(" ")[0]
+                    val birthday = LocalDate.parse(date, formatter)
+                    val birthdayMonth = if(birthday.month.value.toString().length == 1)
+                                    "0${birthday.month.value}" else "${birthday.month.value}"
                     Text(
-                        text = if(state.birthday.isEmpty()) "Дата" else state.birthday,
+                        text =  "${birthday.dayOfMonth}.${birthdayMonth}.${birthday.year}",
                         fontSize = 12.sp
                     )
                 }
@@ -482,13 +548,13 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: R
 
 
 @Composable
-private fun RegistrationSubmitButton(viewModel: RegistrationViewModel){
+private fun RegistrationSubmitButton(viewModel: QrViewModel){
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
         onClick = {
-            viewModel.onEvent(RegistrationFormEvent.Submit)
+//            viewModel.onEvent(RegistrationFormEvent.Submit)
         },
         colors = ButtonDefaults.textButtonColors(
             backgroundColor =  Yellow,

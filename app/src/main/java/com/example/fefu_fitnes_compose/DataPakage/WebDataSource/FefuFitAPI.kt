@@ -7,6 +7,8 @@ import com.example.fefu_fitnes_compose.DataPakage.Models.ScanUserData
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
+import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Models.QrUserDataFool
+import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Models.QrUserDataShort
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewServer.EventAllDataModel
@@ -48,7 +50,10 @@ interface FefuFitAPI {
     suspend fun scanQrCode(@Body scanQrData:ScanQrData):Map<String, Int>
 
     @POST("/api/api/user/admin/view_one_short")
-    suspend fun getQrUserData(@Body scanUserData:ScanUserData):UserDataModel
+    suspend fun getQrUserDataShort(@Body scanUserData:ScanUserData): QrUserDataShort
+
+    @POST("/api/api/user/admin/view_one_full")
+    suspend fun getQrUserDataFool(@Body scanUserData:ScanUserData): QrUserDataFool
 
     @POST("/api/api/qr/get_booking")
     suspend fun getQrNearBookingData(@Body scanUserData:ScanUserData):EventAllDataModel

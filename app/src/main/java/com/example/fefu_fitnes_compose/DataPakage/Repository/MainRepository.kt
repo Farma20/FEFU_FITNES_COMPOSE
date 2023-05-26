@@ -13,6 +13,8 @@ import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.NewsDataModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
+import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Models.QrUserDataFool
+import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Models.QrUserDataShort
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewServer.EventAllDataModel
@@ -112,7 +114,8 @@ object MainRepository: ViewModel() {
 
 
     // Qr cod апи
-    val qrUserData = MutableLiveData<UserDataModel>()
+    val qrUserDataShort = MutableLiveData<QrUserDataShort>()
+    val qrUserDataFool = MutableLiveData<QrUserDataFool>()
     val qrUserNearBookingData = MutableLiveData<EventAllDataModel>()
     val qrNextBookingData = MutableLiveData<List<EventAllDataModel>>()
     private val qrUserId = MutableLiveData<Int>()
@@ -123,7 +126,7 @@ object MainRepository: ViewModel() {
             try{
                 val result = FefuFitRetrofit.retrofitService.scanQrCode(ScanQrData(token, qrToken))
                 qrUserId.postValue(result["user_id"])
-                getQrUserDataFromServer(result["user_id"]!!, token)
+                getQrUserDataShortFromServer(result["user_id"]!!, token)
                 getQrNearBookingDataFromServer(result["user_id"]!!, token)
                 getNextBookingOnServer(result["user_id"]!!, token)
                 scanQrError.postValue(false)
@@ -134,12 +137,23 @@ object MainRepository: ViewModel() {
         }
     }
 
-    private fun getQrUserDataFromServer(userId:Int = qrUserId.value!!, token: String = RegisterRepository.userToken){
+    private fun getQrUserDataShortFromServer(userId:Int = qrUserId.value!!, token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try{
-                qrUserData.postValue( FefuFitRetrofit.retrofitService.getQrUserData(ScanUserData(userId, token)))
-                println(qrUserData.value)
+                qrUserDataShort.postValue( FefuFitRetrofit.retrofitService.getQrUserDataShort(ScanUserData(userId, token)))
+                println(qrUserDataShort.value)
 
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
+    fun getQrUserDataFoolFromServer(userId:Int = qrUserId.value!!, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try{
+                qrUserDataFool.postValue( FefuFitRetrofit.retrofitService.getQrUserDataFool(ScanUserData(userId, token)))
+                println(qrUserDataFool.value)
             }catch (e:Exception){
                 println(e)
             }

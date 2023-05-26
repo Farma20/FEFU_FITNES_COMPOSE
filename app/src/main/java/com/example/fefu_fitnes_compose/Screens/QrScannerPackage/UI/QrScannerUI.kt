@@ -54,7 +54,8 @@ import kotlinx.coroutines.launch
     LaunchedEffect(key1 = code.value.isNotEmpty(), scanQrError){
         if(code.value.isNotEmpty() && scanningPermission.value){
             scanningPermission.value = false
-            qrViewModel.qrUserData.value = null
+            qrViewModel.qrUserDataShort.value = null
+            qrViewModel.qrUserDataFool.value = null
             MainRepository.pushQrCodeInServer(qrToken = code.value)
         }
 
