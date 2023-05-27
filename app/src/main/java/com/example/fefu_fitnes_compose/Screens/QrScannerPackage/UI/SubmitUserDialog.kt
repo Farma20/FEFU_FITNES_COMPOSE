@@ -1,14 +1,11 @@
-package com.example.fefu_fitnes_compose.Screens.ScreenElements
+package com.example.fefu_fitnes_compose.Screens.QrScannerPackage.UI
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.widget.DatePicker
-import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,14 +23,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
@@ -41,10 +32,6 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,17 +41,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.R
-import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Controllers.RegistrationFormEvent
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.ViewModel.RegistrationViewModel
+import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Controllers.SubmitUserEvent
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
@@ -177,7 +162,7 @@ private fun RegistrationSecondName(state: RegistrationFromStateModel, viewModel:
             modifier = Modifier.fillMaxWidth(0.9f),
             value = viewModel.qrUserDataFool.value!!.secondName,
             onValueChange = {
-//                viewModel.onEvent(RegistrationFormEvent.SecondNameChanged(it))
+                viewModel.onEvent(SubmitUserEvent.SecondNameChanged(it))
             },
             isError = false,
             keyboardOptions = KeyboardOptions(
@@ -206,8 +191,7 @@ private fun RegistrationFirstName(state: RegistrationFromStateModel, viewModel: 
             modifier = Modifier.fillMaxWidth(0.9f),
             value = viewModel.qrUserDataFool.value!!.firstName,
             onValueChange = {
-//                viewModel.onEvent(RegistrationFormEvent.FirstNameChanged(it))
-            },
+                viewModel.onEvent(SubmitUserEvent.FirstNameChanged(it))            },
             isError = false,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text
@@ -235,8 +219,7 @@ private fun RegistrationMiddleName(state: RegistrationFromStateModel, viewModel:
             modifier = Modifier.fillMaxWidth(0.9f),
             value = viewModel.qrUserDataFool.value!!.thirdName,
             onValueChange = {
-//                viewModel.onEvent(RegistrationFormEvent.MiddleNameChanged(it))
-            },
+                viewModel.onEvent(SubmitUserEvent.MiddleNameChanged(it))            },
             isError = false,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text
@@ -269,8 +252,7 @@ private fun RegistrationPhone(state: RegistrationFromStateModel, viewModel: QrVi
             else
                 viewModel.qrUserDataFool.value!!.phoneNumber!!,
             onValueChange = {
-//                viewModel.onEvent(RegistrationFormEvent.PhoneChanged(it))
-            },
+                viewModel.onEvent(SubmitUserEvent.PhoneChanged(it)) },
             isError = false,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Phone
@@ -298,8 +280,7 @@ private fun RegistrationEmail(state: RegistrationFromStateModel, viewModel: QrVi
             modifier = Modifier.fillMaxWidth(0.9f),
             value = viewModel.qrUserDataFool.value!!.email,
             onValueChange = {
-//                viewModel.onEvent(RegistrationFormEvent.EmailChanged(it))
-            },
+                viewModel.onEvent(SubmitUserEvent.EmailChanged(it))            },
             isError = false,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email
@@ -331,8 +312,7 @@ private fun RegistrationTelegramID(state: RegistrationFromStateModel, viewModel:
             else
                 viewModel.qrUserDataFool.value!!.telegramId!!,
             onValueChange = {
-//                viewModel.onEvent(RegistrationFormEvent.FirstNameChanged(it))
-            },
+                viewModel.onEvent(SubmitUserEvent.TelegramId(it))            },
             isError = false,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text
@@ -377,7 +357,7 @@ private fun RegistrationGender(state: RegistrationFromStateModel, viewModel: QrV
                     ),
                     selected = gender,
                     onClick = {
-//                        viewModel.onEvent(RegistrationFormEvent.GenderChanged(true))
+                        viewModel.onEvent(SubmitUserEvent.GenderChanged("m"))
                     },
                 )
                 Text(
@@ -393,7 +373,7 @@ private fun RegistrationGender(state: RegistrationFromStateModel, viewModel: QrV
                     ),
                     selected = !gender,
                     onClick = {
-//                        viewModel.onEvent(RegistrationFormEvent.GenderChanged(false))
+                        viewModel.onEvent(SubmitUserEvent.GenderChanged("f"))
                     },
                 )
                 Text(
@@ -431,8 +411,8 @@ private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: QrV
                     ),
                     selected = status == "student",
                     onClick = {
-//                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("student"))
-                    },
+                        viewModel.onEvent(SubmitUserEvent.StatusChanged("student"))
+                      },
                 )
                 Text(
                     text = "Студент",
@@ -447,8 +427,7 @@ private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: QrV
                     ),
                     selected = status == "guest",
                     onClick = {
-//                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("guest"))
-                    },
+                        viewModel.onEvent(SubmitUserEvent.StatusChanged("guest"))                    },
                 )
                 Text(
                     text = "Гость",
@@ -463,8 +442,7 @@ private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: QrV
                     ),
                     selected = status == "employee",
                     onClick = {
-//                        viewModel.onEvent(RegistrationFormEvent.StatusChanged("employee"))
-                    },
+                        viewModel.onEvent(SubmitUserEvent.StatusChanged("employee"))                    },
                 )
                 Text(
                     text = "Сотрудник",
@@ -498,8 +476,7 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: Q
             }else{
                 month.toString()
             }
-
-//            viewModel.onEvent(RegistrationFormEvent.BirthdayChanged("$myDay.$myMonth.$year"))
+//            viewModel.onEvent(SubmitUserEvent.BirthdayChanged("$myDay.$myMonth.$year"))
         },year, month, day
     )
 
@@ -530,13 +507,8 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: Q
                         contentColor = BlueDark
                     )
                 ) {
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                    val date = viewModel.qrUserDataFool.value!!.birthdate.split(" ")[0]
-                    val birthday = LocalDate.parse(date, formatter)
-                    val birthdayMonth = if(birthday.month.value.toString().length == 1)
-                                    "0${birthday.month.value}" else "${birthday.month.value}"
                     Text(
-                        text =  "${birthday.dayOfMonth}.${birthdayMonth}.${birthday.year}",
+                        text =  viewModel.qrUserDataFool.value!!.birthdate,
                         fontSize = 12.sp
                     )
                 }
@@ -554,15 +526,21 @@ private fun RegistrationSubmitButton(viewModel: QrViewModel){
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
         onClick = {
-//            viewModel.onEvent(RegistrationFormEvent.Submit)
+            if(!viewModel.qrUserDataFool.value!!.verified){
+                viewModel.qrUserDataFool.value!!.verified = true
+                MainRepository.conformUserInServer(viewModel.qrUserDataFool.value!!)
+            }else{
+                viewModel.qrUserDataFool.value!!.verified = false
+                MainRepository.conformUserInServer(viewModel.qrUserDataFool.value!!)
+            }
         },
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor =  Yellow,
+            backgroundColor =  if (!viewModel.qrUserDataFool.value!!.verified)Yellow else Color.Red,
             contentColor = Color.White
         ),
     ) {
         Text(
-            text = "Подтвердить пользователя",
+            text = if (!viewModel.qrUserDataFool.value!!.verified)"Верифицировать пользователя" else "Отменить верификацию",
         )
     }
 }

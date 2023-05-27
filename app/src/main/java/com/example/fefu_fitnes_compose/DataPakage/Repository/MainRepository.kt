@@ -149,6 +149,24 @@ object MainRepository: ViewModel() {
         }
     }
 
+    fun conformUserInServer(userDataFool: QrUserDataFool, userId:Int = qrUserId.value!!, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                userDataFool.apply {
+                    this.token = token
+                    this.userId = userId
+                }
+                val result = FefuFitRetrofit.retrofitService.conformUser(userDataFool)
+                if (result["detail"] == "edit success"){
+                    getQrUserDataShortFromServer()
+                    getQrUserDataFoolFromServer()
+                }
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
     fun getQrUserDataFoolFromServer(userId:Int = qrUserId.value!!, token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try{

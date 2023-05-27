@@ -55,6 +55,9 @@ interface FefuFitAPI {
     @POST("/api/api/user/admin/view_one_full")
     suspend fun getQrUserDataFool(@Body scanUserData:ScanUserData): QrUserDataFool
 
+    @POST("/api/api/user/edit")
+    suspend fun conformUser(@Body userData: QrUserDataFool):Map<String, String>
+
     @POST("/api/api/qr/get_booking")
     suspend fun getQrNearBookingData(@Body scanUserData:ScanUserData):EventAllDataModel
 

@@ -4,8 +4,12 @@ package com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Models
 import com.google.gson.annotations.SerializedName
 
 data class QrUserDataFool(
+    @SerializedName("token")
+    var token: String? = null,
+    @SerializedName("user_id")
+    var userId:Int? = null,
     @SerializedName("birthdate")
-    val birthdate: String,
+    var birthdate: String,
     @SerializedName("email")
     val email: String,
     @SerializedName("first_name")
@@ -15,7 +19,7 @@ data class QrUserDataFool(
     @SerializedName("phone_number")
     val phoneNumber: String?,
     @SerializedName("photo")
-    val photo: Any,
+    val photo: String?,
     @SerializedName("second_name")
     val secondName: String,
     @SerializedName("status")
@@ -27,5 +31,5 @@ data class QrUserDataFool(
     @SerializedName("type")
     val type: String,
     @SerializedName("verified")
-    val verified: Boolean
+    var verified: Boolean
 )
