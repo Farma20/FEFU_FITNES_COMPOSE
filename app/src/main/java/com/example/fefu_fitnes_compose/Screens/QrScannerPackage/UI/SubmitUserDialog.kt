@@ -460,10 +460,15 @@ private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: QrV
 
 @Composable
 private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: QrViewModel, context: Context){
-    val currentDate = LocalDate.now()
 
-    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    val date = LocalDate.parse(viewModel.qrUserDataFool.value!!.birthdate, formatter)
+
+    val date = if (viewModel.qrUserDataFool.value!!.birthdate == null){
+         LocalDate.now()
+    }else{
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        LocalDate.parse(viewModel.qrUserDataFool.value!!.birthdate, formatter)
+    }
+
 
     val year:Int = date.year
     val month: Int = date.month.value-1
@@ -484,7 +489,7 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: Q
             }else{
                 month.toString()
             }
-            viewModel.onEvent(SubmitUserEvent.BirthdayChanged("$myDay.$myMonth.$year"))
+            viewModel.onEvent(SubmitUserEvent.BirthdayChanged("$year-$myMonth-$myDay"))
         },year, month, day
     )
 
@@ -515,10 +520,17 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: Q
                         contentColor = BlueDark
                     )
                 ) {
-                    Text(
-                        text =  viewModel.qrUserDataFool.value!!.birthdate,
-                        fontSize = 12.sp
-                    )
+                    if(viewModel.qrUserDataFool.value!!.birthdate == null){
+                        Text(
+                            text =  "Выбрать",
+                            fontSize = 12.sp
+                        )
+                    }else{
+                        Text(
+                            text =  viewModel.qrUserDataFool.value!!.birthdate!!,
+                            fontSize = 12.sp
+                        )
+                    }
 
                 }
             }

@@ -9,7 +9,7 @@ data class QrUserDataFool(
     @SerializedName("user_id")
     var userId:Int? = null,
     @SerializedName("birthdate")
-    var birthdate: String,
+    var birthdate: String?,
     @SerializedName("email")
     val email: String,
     @SerializedName("first_name")
