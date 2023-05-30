@@ -19,54 +19,54 @@ import retrofit2.http.POST
 interface FefuFitAPI {
 
     //Регистрация и инициализация
-    @POST("/api/api/auth/signup")
+    @POST("/api/auth/signup")
     suspend fun registerData(@Body registerData: RegistrationDataModel):Map<String, String>
 
-    @POST("/api/api/auth/login")
+    @POST("/api/auth/login")
     suspend fun pushLogin(@Body userEnterData: EnterDataModel):Map<String,Any>
 
     //Данные главной страницы
-    @POST("/api/api/user/user/view_self")
+    @POST("/api/user/user/view_self")
     suspend fun getUserData(@Body token:Map<String, String>):UserDataModel
 
-    @POST("/api/api/booking/get_next")
+    @POST("/api/booking/get_next")
     suspend fun getUserNextBooking(@Body token:Map<String, String>):List<EventAllDataModel>
 
     //Данные тренировок
-    @POST("/api/api/timetable/event/user/view_all")
+    @POST("/api/timetable/event/user/view_all")
     suspend fun getEventsAll(@Body token:Map<String, String>):List<EventAllDataModel>
 
-    @POST("/api/api/timetable/booking/user/view_all")
+    @POST("/api/timetable/booking/user/view_all")
     suspend fun getEventsBooking(@Body token:Map<String, String>):List<EventAllDataModel>
 
-    @POST("/api/api/timetable/booking/user/add")
+    @POST("/api/timetable/booking/user/add")
     suspend fun addEventsBooking(@Body addBookingData:PushNewBookingDataModel):Map<String, String>
 
-    @POST("/api/api/timetable/booking/user/cancel")
+    @POST("/api/timetable/booking/user/cancel")
     suspend fun cancelEventsBooking(@Body addBookingData:PushNewBookingDataModel):Map<String, String>
 
     //Qr code
-    @POST("/api/api/auth/scan_qr")
+    @POST("/api/auth/scan_qr")
     suspend fun scanQrCode(@Body scanQrData:ScanQrData):Map<String, Int>
 
-    @POST("/api/api/user/admin/view_one_short")
+    @POST("/api/user/admin/view_one_short")
     suspend fun getQrUserDataShort(@Body scanUserData:ScanUserData): QrUserDataShort
 
-    @POST("/api/api/user/admin/view_one_full")
+    @POST("/api/user/admin/view_one_full")
     suspend fun getQrUserDataFool(@Body scanUserData:ScanUserData): QrUserDataFool
 
-    @POST("/api/api/user/edit")
+    @POST("/api/user/edit")
     suspend fun conformUser(@Body userData: QrUserDataFool):Map<String, String>
 
-    @POST("/api/api/qr/get_booking")
+    @POST("/api/qr/get_booking")
     suspend fun getQrNearBookingData(@Body scanUserData:ScanUserData):EventAllDataModel
 
-    @POST("/api/api/qr/confirm_booking")
+    @POST("/api/qr/confirm_booking")
     suspend fun pushQrConfirmBookingData(@Body confirmData:ConfirmUserData):Map<String, String>
 
-    @POST("/api/api/qr/unconfirm_booking")
+    @POST("/api/qr/unconfirm_booking")
     suspend fun pushQrUnConfirmBookingData(@Body confirmData:ConfirmUserData):Map<String, String>
 
-    @POST("/api/api/qr/get_next_bookings")
+    @POST("/api/qr/get_next_bookings")
     suspend fun getQrNextBookingData(@Body scanUserData:ScanUserData):List<EventAllDataModel>
 }

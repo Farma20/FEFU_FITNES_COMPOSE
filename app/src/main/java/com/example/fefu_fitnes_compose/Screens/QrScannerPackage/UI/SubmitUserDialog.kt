@@ -32,6 +32,10 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -458,9 +462,13 @@ private fun RegistrationStatus(state: RegistrationFromStateModel, viewModel: QrV
 private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: QrViewModel, context: Context){
     val currentDate = LocalDate.now()
 
-    val year:Int = currentDate.year
-    val month: Int = currentDate.month.value-1
-    val day:Int = currentDate.dayOfMonth
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    val date = LocalDate.parse(viewModel.qrUserDataFool.value!!.birthdate, formatter)
+
+    val year:Int = date.year
+    val month: Int = date.month.value-1
+    val day:Int = date.dayOfMonth
+
 
     val datePickerDialog = DatePickerDialog(
         context,
@@ -476,7 +484,7 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: Q
             }else{
                 month.toString()
             }
-//            viewModel.onEvent(SubmitUserEvent.BirthdayChanged("$myDay.$myMonth.$year"))
+            viewModel.onEvent(SubmitUserEvent.BirthdayChanged("$myDay.$myMonth.$year"))
         },year, month, day
     )
 
@@ -511,6 +519,7 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: Q
                         text =  viewModel.qrUserDataFool.value!!.birthdate,
                         fontSize = 12.sp
                     )
+
                 }
             }
         }
@@ -521,11 +530,16 @@ private fun RegistrationBirthday(state: RegistrationFromStateModel, viewModel: Q
 
 @Composable
 private fun RegistrationSubmitButton(viewModel: QrViewModel){
+    var loadingAnimationOn by remember { mutableStateOf(false) }
+    LaunchedEffect(key1 = viewModel.qrUserDataFool.value!!){
+        loadingAnimationOn = false
+    }
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
         onClick = {
+            loadingAnimationOn = true
             if(!viewModel.qrUserDataFool.value!!.verified){
                 viewModel.qrUserDataFool.value!!.verified = true
                 MainRepository.conformUserInServer(viewModel.qrUserDataFool.value!!)
@@ -535,12 +549,21 @@ private fun RegistrationSubmitButton(viewModel: QrViewModel){
             }
         },
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor =  if (!viewModel.qrUserDataFool.value!!.verified)Yellow else Color.Red,
+            backgroundColor =  if (!viewModel.qrUserDataFool.value!!.verified)Yellow else Color.Gray,
             contentColor = Color.White
         ),
     ) {
-        Text(
-            text = if (!viewModel.qrUserDataFool.value!!.verified)"Верифицировать пользователя" else "Отменить верификацию",
-        )
+        if (!loadingAnimationOn){
+            Text(
+                text = if (!viewModel.qrUserDataFool.value!!.verified)"Верифицировать пользователя" else "Отменить верификацию",
+            )
+        }else{
+            LoadingAnimation(
+                circleSize = 6.dp,
+                circleColor = Color.White,
+                spaceBetween = 4.dp,
+                travelDistance = 6.dp
+            )
+        }
     }
 }

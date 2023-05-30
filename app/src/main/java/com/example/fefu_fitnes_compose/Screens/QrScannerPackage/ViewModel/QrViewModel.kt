@@ -33,17 +33,7 @@ class QrViewModel:ViewModel() {
         }
 
         MainRepository.qrUserDataFool.observeForever{
-            val data = it
-
-//            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-//            val date = data.birthdate.split(" ")[0]
-//            val birthday = LocalDate.parse(date, formatter)
-//            val birthdayMonth = if(birthday.month.value.toString().length == 1)
-//                "0${birthday.month.value}" else "${birthday.month.value}"
-//
-//            data.birthdate = "${birthday.dayOfMonth}.${birthdayMonth}.${birthday.year}"
-
-            qrUserDataFool.value = data
+            qrUserDataFool.value = it
         }
 
         MainRepository.qrUserNearBookingData.observeForever {
