@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Indication
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
@@ -37,6 +39,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -53,22 +56,33 @@ import com.example.fefu_fitnes_compose.ui.theme.standartTextColor
 
 
 @Composable
-fun ServicesClassSportCard(){
-    var isClicked by remember { mutableStateOf(false) }
-    var rotation by remember { mutableStateOf(90f) }
-    val animateRotation by animateFloatAsState(targetValue = rotation)
+fun ServicesClassSportCard(position:Int, scrollState: ScrollState, serviceName: String, serviceImage:Int, eventNameList:List<String>){
 
-    rotation = if (isClicked) -90f else 90f
+    var isClicked by remember { mutableStateOf(false) }
+    var rotation by remember { mutableStateOf(-90f) }
+    var cardHeight by remember { mutableStateOf(0) }
+    val animateRotation by animateFloatAsState(targetValue = rotation)
+    val interactionSource = remember { MutableInteractionSource() }
+
+    rotation = if (isClicked) 90f else -90f
 
     FEFU_FITNES_COMPOSETheme() {
         Card(
             modifier = Modifier
                 .padding(horizontal = 22.dp)
+                .padding(top = 14.dp)
                 .shadow(1.dp, RoundedCornerShape(24.dp), true)
+                .onGloballyPositioned {
+                    cardHeight = it.size.height
+                }
                 .clickable(
-//                    interactionSource = MutableInteractionSource(),
-//                    indication = rememberRipple(bounded = true),
-                    onClick = { isClicked = !isClicked },
+                    interactionSource = interactionSource,
+                    indication = rememberRipple(radius = 400.dp),
+                    onClick = {
+                        isClicked = !isClicked
+//                        val cardPosition = position * (cardHeight + 14)
+//                        val maxScroll = scrollState.maxValue - scrollState.
+                    },
                 ),
             colors = CardDefaults.cardColors(
                 containerColor = Color.White,
@@ -82,7 +96,7 @@ fun ServicesClassSportCard(){
                         .height(126.dp)
                         .clip(RoundedCornerShape(24.dp)),
                     contentScale = ContentScale.FillWidth,
-                    painter = painterResource(id = R.drawable.services_pool_img),
+                    painter = painterResource(id = serviceImage),
                     contentDescription = "pool_img"
                 )
                 Row(
@@ -94,7 +108,7 @@ fun ServicesClassSportCard(){
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = "Бассейн",
+                        text = serviceName,
                         fontSize = 16.sp,
                         color = accentTextColor,
                     )
@@ -108,13 +122,10 @@ fun ServicesClassSportCard(){
                 }
 
                 AnimatedVisibility(visible = isClicked) {
-                    LazyColumn(){
-                        items(5){
-                            buttonSportEvent()
-                        }
-                        item(){
-                            Spacer(modifier = Modifier.height(14.dp))
-                        }
+                    Column() {
+                        for (name in eventNameList)
+                            ButtonSportEvent(eventName = name)
+                        Spacer(modifier = Modifier.height(18.dp))
                     }
                 }
             }
@@ -123,7 +134,7 @@ fun ServicesClassSportCard(){
 }
 
 @Composable
-private fun buttonSportEvent(){
+private fun ButtonSportEvent(eventName: String){
     Button(
         modifier = Modifier
             .fillMaxWidth()
@@ -137,7 +148,7 @@ private fun buttonSportEvent(){
         )
     ) {
         Text(
-            text = "Свободное плавание",
+            text = eventName,
             fontSize = 14.sp,
             fontWeight = FontWeight.Normal
         )
