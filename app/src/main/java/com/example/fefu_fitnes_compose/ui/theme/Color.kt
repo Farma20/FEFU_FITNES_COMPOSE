@@ -13,3 +13,8 @@ val GreyDark = Color(0xFF383838)
 val BlueURL = Color(0xFF412EFE)
 val Blue = Color(0xFF6252FF)
 val Yellow = Color(0xFFFFC90D)
+
+//services colors
+val accentTextColor = Color(0xFF1F1F1F)
+val standartTextColor = Color(0xFF383838)
+val sportButtonColor = Color(0xFFEBF1F9)

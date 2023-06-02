@@ -6,15 +6,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.MainMenuNav
-import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.MainMenuUI
 import com.example.fefu_fitnes_compose.Screens.ProfilePackage.ProfileUI
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.UI.QrScannerUI
-import com.example.fefu_fitnes_compose.Screens.ServicesPackage.ServicesUI
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.ServicesUI
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI.TimeTableUI
 import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.composable
 
 

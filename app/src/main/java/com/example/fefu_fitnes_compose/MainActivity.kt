@@ -18,6 +18,7 @@ import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPack
 import com.example.fefu_fitnes_compose.Screens.Initialization.SplashScreen.SplashScreenUI
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.QrCard
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.ServicesUI
 import com.example.fefu_fitnes_compose.ui.theme.FEFU_FITNES_COMPOSETheme
 
 class MainActivity : ComponentActivity() {
@@ -27,14 +28,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         setContent {
-            val userInitialization = RegisterRepository.userInit
+//            val userInitialization = RegisterRepository.userInit
+//
+//            if(!userInitialization)
+//                InitializationNavigationMain()
+//            else
+//                MainScreen()
 
-            if(!userInitialization)
-                InitializationNavigationMain()
-            else
-                MainScreen()
-//            val openDialog = remember { mutableStateOf(false) }
-//            SubmitUserDialog(openDialog = openDialog)
+            ServicesUI()
         }
     }
 }
