@@ -1,29 +1,27 @@
 package com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.Elements.ServicesClassSportCard
+import com.example.fefu_fitnes_compose.ui.theme.BlueDark
+import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 
 private data class ServiceData(
     val servicesName: String,
@@ -33,7 +31,7 @@ private data class ServiceData(
 
 
 @Composable
-fun ServicesUI(){
+fun ServicesUI(navController: NavController){
 
     val services = listOf(
         ServiceData(
@@ -93,15 +91,14 @@ fun ServicesUI(){
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            UpBar()
             Column(
                 modifier = Modifier
                     .verticalScroll(scrollState)
             ) {
                 for ((position, service) in services.withIndex())
                     ServicesClassSportCard(
-                        position = position,
-                        scrollState =scrollState,
+                        navController = navController,
                         serviceName = service.servicesName,
                         serviceImage = service.servicesImage,
                         eventNameList = service.servicesEvent
@@ -112,36 +109,45 @@ fun ServicesUI(){
     }
 }
 
+@Composable
+private fun UpBar(){
+    Surface(
+        modifier = Modifier
+            .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
+            .shadow(AppBarDefaults.TopAppBarElevation)
+
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(BlueDark, BlueLight)
+                    )
+                )
+        ) {
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                androidx.compose.material.Text(
+                    text = "Абонементы",
+                    color = Color.White,
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
 
 
 
-//val scrollState = rememberScrollState()
-//
-//Column(
-//modifier = Modifier.verticalScroll(scrollState)
-//) {
-//    repeat(10) { index ->
-//        var cardHeight by remember { mutableStateOf(0) }
-//        Card(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(IntrinsicSize.Min)
-//                .padding(16.dp)
-//                .onGloballyPositioned {
-//                    cardHeight = it.size.height
-//                }
-//                .clickable {
-//                    val cardPosition = index * (cardHeight + 16.dp).value.toInt()
-//                    val maxScroll = scrollState.maxValue - scrollState.viewportHeight
-//                    val targetScroll = if (cardPosition > maxScroll) maxScroll else cardPosition
-//                    LaunchedEffect(Unit) {
-//                        scrollState.animateScrollTo(targetScroll)
-//                    }
-//                },
-//            elevation = 8.dp
-//        ) {
-//            Text(text = "Card $index")
-//            Text(text = "Some content")
-//        }
-//    }
-//}
+
+

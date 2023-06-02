@@ -45,7 +45,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.Navigation.Screens
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.FEFU_FITNES_COMPOSETheme
 import com.example.fefu_fitnes_compose.ui.theme.Shapes
@@ -56,7 +58,7 @@ import com.example.fefu_fitnes_compose.ui.theme.standartTextColor
 
 
 @Composable
-fun ServicesClassSportCard(position:Int, scrollState: ScrollState, serviceName: String, serviceImage:Int, eventNameList:List<String>){
+fun ServicesClassSportCard(navController:NavController, serviceName: String, serviceImage:Int, eventNameList:List<String>){
 
     var isClicked by remember { mutableStateOf(false) }
     var rotation by remember { mutableStateOf(-90f) }
@@ -80,8 +82,6 @@ fun ServicesClassSportCard(position:Int, scrollState: ScrollState, serviceName: 
                     indication = rememberRipple(radius = 400.dp),
                     onClick = {
                         isClicked = !isClicked
-//                        val cardPosition = position * (cardHeight + 14)
-//                        val maxScroll = scrollState.maxValue - scrollState.
                     },
                 ),
             colors = CardDefaults.cardColors(
@@ -124,7 +124,7 @@ fun ServicesClassSportCard(position:Int, scrollState: ScrollState, serviceName: 
                 AnimatedVisibility(visible = isClicked) {
                     Column() {
                         for (name in eventNameList)
-                            ButtonSportEvent(eventName = name)
+                            ButtonSportEvent(navController = navController, eventName = name)
                         Spacer(modifier = Modifier.height(18.dp))
                     }
                 }
@@ -134,14 +134,14 @@ fun ServicesClassSportCard(position:Int, scrollState: ScrollState, serviceName: 
 }
 
 @Composable
-private fun ButtonSportEvent(eventName: String){
+private fun ButtonSportEvent(navController:NavController, eventName: String){
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(55.dp)
             .padding(horizontal = 18.dp)
             .padding(top = 10.dp),
-        onClick = { /*TODO*/ },
+        onClick = { navController.navigate(Screens.ServiceScreen.route) },
         colors = ButtonDefaults.buttonColors(
             containerColor = sportButtonColor,
             contentColor = standartTextColor

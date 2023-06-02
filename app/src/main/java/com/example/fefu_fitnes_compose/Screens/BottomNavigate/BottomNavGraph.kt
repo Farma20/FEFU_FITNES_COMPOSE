@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.MainMenuNav
 import com.example.fefu_fitnes_compose.Screens.ProfilePackage.ProfileUI
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.UI.QrScannerUI
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.Navigation.ServicesNav
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.ServicesUI
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI.TimeTableUI
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -93,7 +94,7 @@ fun BottomNavGraph(navController: NavHostController){
                 ExitTransition.None
             }
         ){
-            ServicesUI()
+            ServicesNav()
         }
         composable(
             route = BottomBarScreen.Profile.rout,
