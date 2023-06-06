@@ -44,12 +44,10 @@ private data class ServiceData(
 @Composable
 fun ServicesUI(navController: NavController, servicesViewModel: ServicesViewModel){
 
-
-
-    val photo = listOf(R.drawable.services_pool_img, R.drawable.services_workout_img, R.drawable.services_group_img, R.drawable.services_fight_img, R.drawable.services_game_img,)
-
-    val scrollState = rememberScrollState()
     Surface() {
+        val photo = listOf(R.drawable.services_pool_img, R.drawable.services_workout_img, R.drawable.services_group_img, R.drawable.services_fight_img, R.drawable.services_game_img,)
+
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -24,7 +24,7 @@ fun ServicesNav(servicesViewModel: ServicesViewModel = viewModel()) {
     val navController = rememberAnimatedNavController()
     AnimatedNavHost(navController = navController, startDestination = Screens.ServicesScreen.route){
         composable(
-            route = Screens.ServicesScreen.route,
+            route =  Screens.ServicesScreen.route,
             exitTransition = {
                 slideOutHorizontally (
                     targetOffsetX = {-1080},
@@ -47,7 +47,7 @@ fun ServicesNav(servicesViewModel: ServicesViewModel = viewModel()) {
             ServicesUI(navController = navController, servicesViewModel)
         }
         composable(
-            route = Screens.ServiceScreen.route,
+            route =  Screens.ServiceScreen.route,
             enterTransition = {
                 slideInHorizontally (
                     initialOffsetX = {1080},

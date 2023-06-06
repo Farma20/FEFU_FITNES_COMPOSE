@@ -38,45 +38,47 @@ import com.example.fefu_fitnes_compose.ui.theme.standartTextColor
 
 @Composable
 fun ServiceUI(event: Service) {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        val color = listOf(serviceCardColorOne, serviceCardColorTwo, serviceCardColorThree)
 
-    val color = listOf(serviceCardColorOne, serviceCardColorTwo, serviceCardColorThree)
+        val spacerWidth = 25.dp
+        val scrollState = rememberScrollState()
 
-    val spacerWidth = 25.dp
-    val scrollState = rememberScrollState()
-    Column {
-        UpBar()
-        Column(
-            modifier = Modifier
-                .verticalScroll(scrollState)
-                .fillMaxSize()
-                .padding(horizontal = 22.dp)
-        ) {
-            Spacer(modifier = Modifier.height(spacerWidth))
-            Text(
-                text = event.serviceName,
-                fontSize = 20.sp,
-            )
-            Spacer(modifier = Modifier.height(spacerWidth))
-            Text(
-                text = if(event.serviceDescription != null)event.serviceDescription.toString()else "Описания нет",
-                fontSize = 16.sp,
-                color = standartTextColor,
-            )
-            Spacer(modifier = Modifier.height(spacerWidth))
-            Text(
-                text = "Абонементы:",
-                fontSize = 20.sp,
-            )
-            Spacer(modifier = Modifier.height(spacerWidth))
-
-            for (item in event.plans){
-                ServiceCard(
-                    item.planTypeName,
-                    "1 месяц",
-                    item.planTypeCost.toString(),
-                    color[0],
+        Column {
+            UpBar()
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
+                    .fillMaxSize()
+                    .padding(horizontal = 22.dp)
+            ) {
+                Spacer(modifier = Modifier.height(spacerWidth))
+                Text(
+                    text = event.serviceName,
+                    fontSize = 20.sp,
                 )
-                Spacer(modifier = Modifier.height(13.dp))
+                Spacer(modifier = Modifier.height(spacerWidth))
+                Text(
+                    text = if(event.serviceDescription != null)event.serviceDescription.toString()else "Описания нет",
+                    fontSize = 16.sp,
+                    color = standartTextColor,
+                )
+                Spacer(modifier = Modifier.height(spacerWidth))
+                Text(
+                    text = "Абонементы:",
+                    fontSize = 20.sp,
+                )
+                Spacer(modifier = Modifier.height(spacerWidth))
+
+                for (item in event.plans){
+                    ServiceCard(
+                        item.planTypeName,
+                        "1 месяц",
+                        item.planTypeCost.toString(),
+                        color[0],
+                    )
+                    Spacer(modifier = Modifier.height(13.dp))
+                }
             }
         }
     }
