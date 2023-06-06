@@ -6,18 +6,21 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.AllBookingUI
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.MainMenuUI
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Navigation.Screen
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.ServiceUI
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.ServicesUI
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.ViewModel.ServicesViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ServicesNav() {
+fun ServicesNav(servicesViewModel: ServicesViewModel = viewModel()) {
+
     val navController = rememberAnimatedNavController()
     AnimatedNavHost(navController = navController, startDestination = Screens.ServicesScreen.route){
         composable(
@@ -41,7 +44,7 @@ fun ServicesNav() {
                 )
             },
         ){
-            ServicesUI(navController = navController)
+            ServicesUI(navController = navController, servicesViewModel)
         }
         composable(
             route = Screens.ServiceScreen.route,
@@ -64,7 +67,7 @@ fun ServicesNav() {
                 )
             },
         ){
-            ServiceUI()
+            ServiceUI(servicesViewModel.selectedService.value!!)
         }
     }
 }

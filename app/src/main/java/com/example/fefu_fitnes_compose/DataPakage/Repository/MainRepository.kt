@@ -1,7 +1,5 @@
 package com.example.fefu_fitnes.dadadada.Repository
 
-import android.app.Application
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
@@ -9,17 +7,14 @@ import com.example.fefu_fitnes_compose.DataPakage.Models.ConfirmUserData
 import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanQrData
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanUserData
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.AllServiceModel
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.NewsDataModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Models.QrUserDataFool
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Models.QrUserDataShort
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewServer.EventAllDataModel
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
-import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 
@@ -221,6 +216,20 @@ object MainRepository: ViewModel() {
         }
     }
 
+    //Services function
+
+    val allServicesData = MutableLiveData<AllServiceModel>()
+    fun qetAllServicesDataFromServer(token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                allServicesData.postValue(FefuFitRetrofit.retrofitService.getAllServicesData(mapOf("token" to token)))
+            }
+            catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
 
     init {
         _currentNews.value = listOf(
@@ -231,6 +240,8 @@ object MainRepository: ViewModel() {
             NewsDataModel("III этап зимнего сезона Студенческой Гребной Лиги"),
             NewsDataModel("Чем заняться в свободное время на каникулах?")
         )
+
+        qetAllServicesDataFromServer()
 
         registrationUserData.value = RegistrationFromStateModel()
     }

@@ -20,8 +20,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.Elements.ServicesClassSportCard
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.ViewModel.ServicesViewModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.unit.Dp
+import coil.compose.rememberImagePainter
+
+
+
+
+
+
 
 private data class ServiceData(
     val servicesName: String,
@@ -31,59 +42,11 @@ private data class ServiceData(
 
 
 @Composable
-fun ServicesUI(navController: NavController){
+fun ServicesUI(navController: NavController, servicesViewModel: ServicesViewModel){
 
-    val services = listOf(
-        ServiceData(
-            "Бассейн",
-            R.drawable.services_pool_img,
-            listOf(
-                "Свободное плавание",
-                "Аквааэробика",
-                "Обучение плаванию взрослых",
-                "Обучение плаванию детей"
-            )
-        ),
-        ServiceData(
-            "Тренажерный зал",
-            R.drawable.services_workout_img,
-            listOf(
-                "Тренажерный зал",
-                "Кроссфит",
-            )
-        ),
-        ServiceData(
-            "Групповые занятия",
-            R.drawable.services_group_img,
-            listOf(
-                "Беговой клуб",
-                "Степ- аэробика",
-                "Силовая тренировка",
-                "Танец живота",
-                "Hot Iron",
-                "Пилатес",
-                "Fat burn",
-                "Детская секция по фехтованию",
-            )
-        ),
-        ServiceData(
-            "Единоборства",
-            R.drawable.services_fight_img,
-            listOf(
-                "Бокс",
-                "Каратэ",
-                "ММА",
-            )
-        ),
-        ServiceData(
-            "Игровые направления",
-            R.drawable.services_game_img,
-            listOf(
-                "Настольный теннис",
-                "Теннис",
-            )
-        ),
-    )
+
+
+    val photo = listOf(R.drawable.services_pool_img, R.drawable.services_workout_img, R.drawable.services_group_img, R.drawable.services_fight_img, R.drawable.services_game_img,)
 
     val scrollState = rememberScrollState()
     Surface() {
@@ -96,13 +59,17 @@ fun ServicesUI(navController: NavController){
                 modifier = Modifier
                     .verticalScroll(scrollState)
             ) {
-                for ((position, service) in services.withIndex())
-                    ServicesClassSportCard(
-                        navController = navController,
-                        serviceName = service.servicesName,
-                        serviceImage = service.servicesImage,
-                        eventNameList = service.servicesEvent
-                    )
+                if (servicesViewModel.allServicesData.value != null){
+                    for (service in servicesViewModel.allServicesData.value!!) {
+                        ServicesClassSportCard(
+                            navController = navController,
+                            serviceName = service.categoryName,
+                            serviceImage = service.categoryPhoto.toString(),
+                            eventNameList = service.services,
+                            servicesViewModel = servicesViewModel
+                        )
+                    }
+                }
                 Spacer(modifier = Modifier.height(14.dp))
             }
         }

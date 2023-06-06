@@ -4,16 +4,14 @@ import com.example.fefu_fitnes_compose.DataPakage.Models.ConfirmUserData
 import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanQrData
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanUserData
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.AllServiceModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Models.QrUserDataFool
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Models.QrUserDataShort
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewBookingDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewServer.EventAllDataModel
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface FefuFitAPI {
@@ -69,4 +67,10 @@ interface FefuFitAPI {
 
     @POST("/api/qr/get_next_bookings")
     suspend fun getQrNextBookingData(@Body scanUserData:ScanUserData):List<EventAllDataModel>
+
+
+    //sevices
+    @POST("/api/plan/view")
+    suspend fun getAllServicesData(@Body token: Map<String, String>):AllServiceModel
+
 }

@@ -3,8 +3,6 @@ package com.example.fefu_fitnes_compose.Screens.ServicesPackage.Elements
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Indication
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -15,15 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,38 +28,36 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.Service
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.Navigation.Screens
-import com.example.fefu_fitnes_compose.ui.theme.BlueLight
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.ViewModel.ServicesViewModel
 import com.example.fefu_fitnes_compose.ui.theme.FEFU_FITNES_COMPOSETheme
-import com.example.fefu_fitnes_compose.ui.theme.Shapes
-import com.example.fefu_fitnes_compose.ui.theme.Yellow
 import com.example.fefu_fitnes_compose.ui.theme.accentTextColor
 import com.example.fefu_fitnes_compose.ui.theme.sportButtonColor
 import com.example.fefu_fitnes_compose.ui.theme.standartTextColor
 
 
 @Composable
-fun ServicesClassSportCard(navController:NavController, serviceName: String, serviceImage:Int, eventNameList:List<String>){
+fun ServicesClassSportCard(navController:NavController, serviceName: String, serviceImage:String, eventNameList:List<Service?>?, servicesViewModel: ServicesViewModel){
 
     var isClicked by remember { mutableStateOf(false) }
     var rotation by remember { mutableStateOf(-90f) }
     var cardHeight by remember { mutableStateOf(0) }
     val animateRotation by animateFloatAsState(targetValue = rotation)
     val interactionSource = remember { MutableInteractionSource() }
+
 
     rotation = if (isClicked) 90f else -90f
 
@@ -90,13 +83,16 @@ fun ServicesClassSportCard(navController:NavController, serviceName: String, ser
         ) {
             Column(
             ) {
+                val painter = rememberImagePainter(
+                    data = serviceImage,
+                )
                 Image(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(126.dp)
                         .clip(RoundedCornerShape(24.dp)),
                     contentScale = ContentScale.FillWidth,
-                    painter = painterResource(id = serviceImage),
+                    painter = painter,
                     contentDescription = "pool_img"
                 )
                 Row(
@@ -123,8 +119,13 @@ fun ServicesClassSportCard(navController:NavController, serviceName: String, ser
 
                 AnimatedVisibility(visible = isClicked) {
                     Column() {
-                        for (name in eventNameList)
-                            ButtonSportEvent(navController = navController, eventName = name)
+                       if (eventNameList!=null){
+                           for (event in eventNameList){
+                               if (event!=null){
+                                   ButtonSportEvent(navController = navController, event= event, servicesViewModel )
+                               }
+                           }
+                       }
                         Spacer(modifier = Modifier.height(18.dp))
                     }
                 }
@@ -133,22 +134,26 @@ fun ServicesClassSportCard(navController:NavController, serviceName: String, ser
     }
 }
 
+
 @Composable
-private fun ButtonSportEvent(navController:NavController, eventName: String){
+private fun ButtonSportEvent(navController:NavController, event: Service, servicesViewModel: ServicesViewModel){
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(55.dp)
             .padding(horizontal = 18.dp)
             .padding(top = 10.dp),
-        onClick = { navController.navigate(Screens.ServiceScreen.route) },
+        onClick = {
+                servicesViewModel.selectedService.value = event
+                navController.navigate(Screens.ServiceScreen.route)
+            },
         colors = ButtonDefaults.buttonColors(
             containerColor = sportButtonColor,
             contentColor = standartTextColor
         )
     ) {
         Text(
-            text = eventName,
+            text = event.serviceName,
             fontSize = 14.sp,
             fontWeight = FontWeight.Normal
         )

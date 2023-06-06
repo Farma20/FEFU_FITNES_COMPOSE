@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.Service
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.Elements.ServiceCard
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
@@ -34,36 +35,11 @@ import com.example.fefu_fitnes_compose.ui.theme.serviceCardColorThree
 import com.example.fefu_fitnes_compose.ui.theme.serviceCardColorTwo
 import com.example.fefu_fitnes_compose.ui.theme.standartTextColor
 
-private data class ServiceInfo(
-    val infoName: String,
-    val infoDate: String,
-    val infoPay: String,
-    val infoColor: Color,
-)
 
 @Composable
-fun ServiceUI() {
+fun ServiceUI(event: Service) {
 
-    val service = listOf(
-        ServiceInfo(
-            "Разовое посещение",
-            "1 месяц",
-            "300",
-            serviceCardColorOne
-        ),
-        ServiceInfo(
-            "8 занятий",
-            "1 месяц",
-            "1200",
-            serviceCardColorTwo
-        ),
-        ServiceInfo(
-            "12 занятий",
-            "1 месяц",
-            "1600",
-            serviceCardColorThree
-        ),
-    )
+    val color = listOf(serviceCardColorOne, serviceCardColorTwo, serviceCardColorThree)
 
     val spacerWidth = 25.dp
     val scrollState = rememberScrollState()
@@ -77,12 +53,12 @@ fun ServiceUI() {
         ) {
             Spacer(modifier = Modifier.height(spacerWidth))
             Text(
-                text = "Свободное плвание",
+                text = event.serviceName,
                 fontSize = 20.sp,
             )
             Spacer(modifier = Modifier.height(spacerWidth))
             Text(
-                text = "Плавание – это самый безопасный вид спорта, к тому же после занятий в воде не возникает усталости. После выполнения упражнений в бассейне не бывает болей в суставах или растяжений мышц, хотя это частые травмы в других видах спорта. Правильное плавание в бассейне приносит огромную пользу организму, которую сложно переоценить. Вес тела, погруженного в воду, уменьшается, что позволяет чувствовать себя легко и по-настоящему расслабленно.",
+                text = if(event.serviceDescription != null)event.serviceDescription.toString()else "Описания нет",
                 fontSize = 16.sp,
                 color = standartTextColor,
             )
@@ -93,12 +69,12 @@ fun ServiceUI() {
             )
             Spacer(modifier = Modifier.height(spacerWidth))
 
-            for (item in service){
+            for (item in event.plans){
                 ServiceCard(
-                    item.infoName,
-                    item.infoDate,
-                    item.infoPay,
-                    item.infoColor,
+                    item.planTypeName,
+                    "1 месяц",
+                    item.planTypeCost.toString(),
+                    color[0],
                 )
                 Spacer(modifier = Modifier.height(13.dp))
             }
