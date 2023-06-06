@@ -27,11 +27,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
 import coil.compose.rememberImagePainter
-
-
-
-
-
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 
 
 private data class ServiceData(
@@ -45,8 +41,6 @@ private data class ServiceData(
 fun ServicesUI(navController: NavController, servicesViewModel: ServicesViewModel){
 
     Surface() {
-        val photo = listOf(R.drawable.services_pool_img, R.drawable.services_workout_img, R.drawable.services_group_img, R.drawable.services_fight_img, R.drawable.services_game_img,)
-
         val scrollState = rememberScrollState()
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -55,16 +49,30 @@ fun ServicesUI(navController: NavController, servicesViewModel: ServicesViewMode
             UpBar()
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .verticalScroll(scrollState)
             ) {
                 if (servicesViewModel.allServicesData.value != null){
                     for (service in servicesViewModel.allServicesData.value!!) {
+                        println(service.categoryPhoto.toString())
                         ServicesClassSportCard(
                             navController = navController,
                             serviceName = service.categoryName,
                             serviceImage = service.categoryPhoto.toString(),
                             eventNameList = service.services,
                             servicesViewModel = servicesViewModel
+                        )
+                    }
+                }else{
+                    Box(
+                        modifier = Modifier.fillMaxSize().padding(top = 300.dp),
+                        contentAlignment = Alignment.Center
+                    ){
+                        LoadingAnimation(
+                            circleSize = 8.dp,
+                            circleColor = BlueLight,
+                            spaceBetween = 4.dp,
+                            travelDistance = 6.dp
                         )
                     }
                 }

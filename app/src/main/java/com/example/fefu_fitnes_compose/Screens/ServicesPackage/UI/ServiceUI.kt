@@ -70,12 +70,12 @@ fun ServiceUI(event: Service) {
                 )
                 Spacer(modifier = Modifier.height(spacerWidth))
 
-                for (item in event.plans){
+                for ((id,item) in event.plans.withIndex()){
                     ServiceCard(
                         item.planTypeName,
                         "1 месяц",
                         item.planTypeCost.toString(),
-                        color[0],
+                        color[id],
                     )
                     Spacer(modifier = Modifier.height(13.dp))
                 }

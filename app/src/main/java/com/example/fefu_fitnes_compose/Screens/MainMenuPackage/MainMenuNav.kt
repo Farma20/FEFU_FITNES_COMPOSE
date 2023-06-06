@@ -8,7 +8,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Navigation.Screen
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.Navigation.Screens
-import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.ServiceUI
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.ServicesUI
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable

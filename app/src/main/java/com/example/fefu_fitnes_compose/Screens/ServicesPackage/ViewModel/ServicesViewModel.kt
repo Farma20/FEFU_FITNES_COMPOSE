@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
+import coil.compose.ImagePainter
+import coil.compose.rememberImagePainter
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.AllServiceModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.Service
@@ -17,9 +19,9 @@ class ServicesViewModel: ViewModel() {
     init {
         MainRepository.qetAllServicesDataFromServer()
 
-        MainRepository.allServicesData.observeForever{
+        MainRepository.allServicesData.observeForever {
             allServicesData.value = it
-            println("дата ${MainRepository.allServicesData.value}")
         }
     }
 }
+

@@ -246,3 +246,4 @@ object MainRepository: ViewModel() {
         registrationUserData.value = RegistrationFromStateModel()
     }
 }
+
