@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fefu_fitnes_compose.R
-import com.example.fefu_fitnes_compose.Screens.ServicesPackage.Elements.ServicesClassSportCard
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.Elements.ServicesClassSportCard
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.ViewModel.ServicesViewModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
@@ -58,7 +58,7 @@ fun ServicesUI(navController: NavController, servicesViewModel: ServicesViewMode
                         ServicesClassSportCard(
                             navController = navController,
                             serviceName = service.categoryName,
-                            serviceImage = service.categoryPhoto.toString(),
+                            serviceImage = service.categoryPhoto,
                             eventNameList = service.services,
                             servicesViewModel = servicesViewModel
                         )

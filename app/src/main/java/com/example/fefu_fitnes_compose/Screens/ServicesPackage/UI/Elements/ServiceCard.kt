@@ -1,4 +1,4 @@
-package com.example.fefu_fitnes_compose.Screens.ServicesPackage.Elements
+package com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.Elements
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

@@ -7,7 +7,7 @@ data class Service(
     @SerializedName("plans")
     val plans: List<Plan>,
     @SerializedName("service_description")
-    val serviceDescription: Any,
+    val serviceDescription: String?,
     @SerializedName("service_id")
     val serviceId: Int,
     @SerializedName("service_name")

@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.Service
-import com.example.fefu_fitnes_compose.Screens.ServicesPackage.Elements.ServiceCard
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.Elements.ServiceCard
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.serviceCardColorOne
@@ -75,7 +75,7 @@ fun ServiceUI(event: Service) {
                         item.planTypeName,
                         "1 месяц",
                         item.planTypeCost.toString(),
-                        color[id],
+                        color[id%3],
                     )
                     Spacer(modifier = Modifier.height(13.dp))
                 }

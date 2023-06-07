@@ -1,4 +1,4 @@
-package com.example.fefu_fitnes_compose.Screens.ServicesPackage.Elements
+package com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.Elements
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -59,14 +59,13 @@ import com.example.fefu_fitnes_compose.ui.theme.standartTextColor
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun ServicesClassSportCard(navController:NavController, serviceName: String, serviceImage:String, eventNameList:List<Service?>?, servicesViewModel: ServicesViewModel){
+fun ServicesClassSportCard(navController:NavController, serviceName: String, serviceImage:String?, eventNameList:List<Service?>?, servicesViewModel: ServicesViewModel){
 
     var isClicked by remember { mutableStateOf(false) }
     var rotation by remember { mutableStateOf(-90f) }
     var cardHeight by remember { mutableStateOf(0) }
     val animateRotation by animateFloatAsState(targetValue = rotation)
     val interactionSource = remember { MutableInteractionSource() }
-
 
     rotation = if (isClicked) 90f else -90f
 
@@ -96,17 +95,31 @@ fun ServicesClassSportCard(navController:NavController, serviceName: String, ser
                     data = serviceImage,
                 )
                 Box(){
-                    Image(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(126.dp)
-                            .clip(RoundedCornerShape(24.dp)),
-                        contentScale = ContentScale.FillWidth,
-                        painter = painter,
-                        contentDescription = "pool_img"
-                    )
+                    if (serviceImage != null){
+                        Image(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(126.dp)
+                                .clip(RoundedCornerShape(24.dp)),
+                            contentScale = ContentScale.FillWidth,
+                            painter = painter,
+                            contentDescription = "pool_img"
+                        )
+                    }else{
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(126.dp)
+                                .clip(RoundedCornerShape(24.dp)),
+                            contentAlignment = Alignment.Center
+                        ){
+                            Image(
+                                painter = painterResource(id = R.drawable.baseline_image_not_supported_24),
+                                contentDescription = "null photo")
+                        }
+                    }
 
-                    if (painter.state is ImagePainter.State.Success){
+                    if (painter.state is ImagePainter.State.Success || serviceImage == null){
                         println("download")
                     }else{
                         Surface(

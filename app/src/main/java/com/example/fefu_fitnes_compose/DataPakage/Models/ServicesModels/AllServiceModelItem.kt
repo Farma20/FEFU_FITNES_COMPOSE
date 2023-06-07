@@ -9,7 +9,7 @@ data class AllServiceModelItem(
     @SerializedName("category_name")
     val categoryName: String,
     @SerializedName("category_photo")
-    val categoryPhoto: Any,
+    val categoryPhoto: String?,
     @SerializedName("services")
     val services: List<Service>
 )
