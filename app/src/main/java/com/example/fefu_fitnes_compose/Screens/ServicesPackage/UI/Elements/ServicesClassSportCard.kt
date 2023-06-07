@@ -193,7 +193,7 @@ private fun ButtonSportEvent(navController:NavController, event: Service, servic
             .padding(horizontal = 18.dp)
             .padding(top = 10.dp),
         onClick = {
-                servicesViewModel.selectedService.value = event
+                servicesViewModel.selectedId.value = event.serviceId
                 navController.navigate(Screens.ServiceScreen.route)
             },
         colors = ButtonDefaults.buttonColors(

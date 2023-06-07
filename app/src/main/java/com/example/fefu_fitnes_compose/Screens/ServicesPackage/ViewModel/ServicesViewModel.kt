@@ -14,7 +14,7 @@ import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.Service
 class ServicesViewModel: ViewModel() {
 
     var allServicesData: MutableState<AllServiceModel?> = mutableStateOf(null)
-    var selectedService: MutableState<Service?> = mutableStateOf(null)
+    var selectedId: MutableState<Int?> = mutableStateOf(null)
 
     init {
         MainRepository.qetAllServicesDataFromServer()

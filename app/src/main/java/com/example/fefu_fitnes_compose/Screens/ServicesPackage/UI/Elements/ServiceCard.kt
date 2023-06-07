@@ -19,6 +19,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,17 +31,34 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.Plan
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.Service
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
+import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.serviceCardColorOne
 import com.example.fefu_fitnes_compose.ui.theme.serviceCardTextColor
+import kotlinx.coroutines.delay
 
 @Composable
 fun ServiceCard(
-    infoName: String,
+    serv: Plan,
     infoDate: String,
-    infoPay: String,
+    id: Int,
     infoColor: Color,
 ) {
+
+    var status by remember { mutableStateOf(serv.planStatus) }
+    var click by remember{ mutableStateOf(false) }
+
+    LaunchedEffect(key1 = click){
+        if (click){
+            delay(2000)
+            click = false
+        }
+    }
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = infoColor
@@ -49,7 +71,7 @@ fun ServiceCard(
                 .padding(horizontal = 20.dp)
         ) {
             Text(
-                text = infoName,
+                text = serv.planTypeName,
                 color = serviceCardTextColor,
                 fontSize = 20.sp
             )
@@ -71,7 +93,7 @@ fun ServiceCard(
                         verticalAlignment = Alignment.Bottom
                     ) {
                         Text(
-                            text = "Цена: $infoPay",
+                            text = "Цена: ${serv.planTypeCost}",
                             color = serviceCardTextColor,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Light
@@ -90,16 +112,36 @@ fun ServiceCard(
                 ) {
                     Button(
                         modifier = Modifier.size(78.dp, 26.dp),
-                        onClick = {},
+                        onClick = {
+                            if (status == "inactive"){
+                                MainRepository.serviceOrderOnServer(serv.planTypeId)
+                                status = "preactive"
+                            }
+                            else{
+                                MainRepository.serviceUnOrderOnServer(serv.planTypeId)
+                                status = "inactive"
+                            }
+
+                            click = true
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = serviceCardTextColor,
                         )
                     ) {}
-                    Text(
-                        text = "Купить",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Light
-                    )
+                    if (!click){
+                        Text(
+                            text = if (status == "inactive")"Купить" else "Отмена",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Light
+                        )
+                    }else{
+                        LoadingAnimation(
+                            circleSize = 6.dp,
+                            circleColor = BlueLight,
+                            spaceBetween = 4.dp,
+                            travelDistance = 6.dp
+                        )
+                    }
                 }
             }
         }

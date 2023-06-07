@@ -8,6 +8,7 @@ import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanQrData
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanUserData
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.AllServiceModel
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.OrderServiceModel
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.NewsDataModel
@@ -223,6 +224,31 @@ object MainRepository: ViewModel() {
         viewModelScope.launch {
             try {
                 allServicesData.postValue(FefuFitRetrofit.retrofitService.getAllServicesData(mapOf("token" to token)))
+            }
+            catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
+    fun serviceOrderOnServer(serviceId: Int, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                FefuFitRetrofit.retrofitService.orderService(OrderServiceModel(serviceId, token))
+                qetAllServicesDataFromServer()
+            }
+            catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
+
+    fun serviceUnOrderOnServer(serviceId: Int, token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                FefuFitRetrofit.retrofitService.unOrderService(OrderServiceModel(serviceId, token))
+                qetAllServicesDataFromServer()
             }
             catch (e:Exception){
                 println(e)

@@ -5,6 +5,7 @@ import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanQrData
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanUserData
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.AllServiceModel
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.OrderServiceModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
@@ -72,5 +73,11 @@ interface FefuFitAPI {
     //sevices
     @POST("/api/plan/view")
     suspend fun getAllServicesData(@Body token: Map<String, String>):AllServiceModel
+
+    @POST("/api/plan/order")
+    suspend fun orderService(@Body serviceData: OrderServiceModel)
+
+    @POST("/api/plan/unorder")
+    suspend fun unOrderService(@Body serviceData: OrderServiceModel)
 
 }

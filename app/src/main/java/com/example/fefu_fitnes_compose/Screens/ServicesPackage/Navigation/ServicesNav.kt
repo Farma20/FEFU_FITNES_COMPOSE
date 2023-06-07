@@ -13,6 +13,7 @@ import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Navigation.Screen
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.ServicesUI
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.ServiceUI
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.ViewModel.ServicesViewModel
+import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI.selectEvents
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -67,7 +68,7 @@ fun ServicesNav(servicesViewModel: ServicesViewModel = viewModel()) {
                 )
             },
         ){
-            ServiceUI(servicesViewModel.selectedService.value!!)
+            ServiceUI(servicesViewModel)
         }
     }
 }
