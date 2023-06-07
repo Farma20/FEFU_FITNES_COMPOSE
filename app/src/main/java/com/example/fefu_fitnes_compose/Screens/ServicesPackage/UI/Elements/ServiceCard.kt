@@ -51,11 +51,18 @@ fun ServiceCard(
 
     var status by remember { mutableStateOf(serv.planStatus) }
     var click by remember{ mutableStateOf(false) }
+    val openDialog = remember { mutableStateOf(false) }
+
+    if (openDialog.value){
+        SuccessDialog(openDialog = openDialog)
+    }
 
     LaunchedEffect(key1 = click){
         if (click){
             delay(2000)
             click = false
+            if (status != "inactive")
+                openDialog.value = true
         }
     }
 
@@ -113,13 +120,12 @@ fun ServiceCard(
                     Button(
                         modifier = Modifier.size(78.dp, 26.dp),
                         onClick = {
-                            if (status == "inactive"){
+                            status = if (status == "inactive"){
                                 MainRepository.serviceOrderOnServer(serv.planTypeId)
-                                status = "preactive"
-                            }
-                            else{
+                                "preactive"
+                            } else{
                                 MainRepository.serviceUnOrderOnServer(serv.planTypeId)
-                                status = "inactive"
+                                "inactive"
                             }
 
                             click = true
