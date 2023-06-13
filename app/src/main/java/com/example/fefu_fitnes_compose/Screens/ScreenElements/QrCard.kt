@@ -37,6 +37,7 @@ import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingA
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
+import com.example.fefu_fitnes_compose.ui.theme.Yellow
 
 @Preview(showBackground = true)
 @Composable
@@ -88,7 +89,7 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
-                    .clickable{
+                    .clickable {
                         openDialog.value = !openDialog.value
                     },
                 elevation = 3.dp
@@ -146,51 +147,91 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                     }
                 }
             }
-            Text(
-                modifier = Modifier
-                    .padding(top = 5.dp, start = 8.dp, bottom = 8.dp),
-                text = "Ближайшая запись",
-                fontSize = 20.sp,
-            )
 
-            if (qrViewModel.qrUserNearEventData.value == null){
-                QrEmptyCard()
-            }
-            else
-                QrNearEventCard(event = qrViewModel.qrUserNearEventData.value!!)
 
-            var buttonClicked by remember { mutableStateOf(false) }
+            var isClicked by remember { mutableStateOf(true) }
+           Row() {
+               Button(
+                   modifier = Modifier
+                       .weight(1f)
+                       .padding(top = 5.dp, start = 8.dp, bottom = 0.dp),
+                   onClick = {isClicked = true},
+                   colors = ButtonDefaults.buttonColors(
+                       backgroundColor = if (isClicked) Yellow else Color.White,
+                       contentColor = if (isClicked) Color.White else Color.Black
+                   )
+               ) {
+                   Text(
+                       text = "Занятия",
+                       fontSize = 14.sp,
+                   )
+               }
+               Button(
+                   modifier = Modifier
+                       .weight(1f)
+                       .padding(top = 5.dp, start = 8.dp, bottom = 0.dp, end = 8.dp),
+                   onClick = {isClicked = false},
+                   colors = ButtonDefaults.buttonColors(
+                       backgroundColor = if (!isClicked) Yellow else Color.White,
+                       contentColor = if (!isClicked) Color.White else Color.Black
+                   )
+               ) {
+                   Text(
+                       text = "Абонементы",
+                       fontSize = 14.sp,
+                   )
+               }
+           }
 
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                onClick = { buttonClicked = !buttonClicked },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = BlueLight,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(text = "Показать все занятия")
-            }
             AnimatedVisibility(
-                visible = buttonClicked,
+                visible = isClicked,
             ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                ){
-                    if (qrViewModel.qrNextBooking.value!!.isEmpty() || qrViewModel.qrNextBooking.value!![0].eventId == null)
-                        items(1){
-                            QrEmptyCard()
-                        }
+                Column() {
+                    if (qrViewModel.qrUserNearEventData.value == null){
+                        QrEmptyCard()
+                    }
                     else
-                        items(qrViewModel.qrNextBooking.value!!.count()){
-                            QrEventCard(event = qrViewModel.qrNextBooking.value!![it])
+                        QrNearEventCard(event = qrViewModel.qrUserNearEventData.value!!)
+
+                    var buttonClicked by remember { mutableStateOf(false) }
+
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp),
+                        onClick = { buttonClicked = !buttonClicked },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = BlueLight,
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Text(text = "Показать все занятия")
+                    }
+                    AnimatedVisibility(
+                        visible = buttonClicked,
+                    ) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth(),
+                        ){
+                            if (qrViewModel.qrNextBooking.value!!.isEmpty() || qrViewModel.qrNextBooking.value!![0].eventId == null)
+                                items(1){
+                                    QrEmptyCard()
+                                }
+                            else
+                                items(qrViewModel.qrNextBooking.value!!.count()){
+                                    QrEventCard(event = qrViewModel.qrNextBooking.value!![it])
+                                }
+                            item {
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
                         }
-                    item { 
-                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
+            }
+            AnimatedVisibility(
+                visible = !isClicked,
+            ) {
+                EmptyCard()
             }
         }
     }

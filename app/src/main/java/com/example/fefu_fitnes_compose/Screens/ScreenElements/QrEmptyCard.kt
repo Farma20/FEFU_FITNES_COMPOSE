@@ -28,7 +28,7 @@ fun QrEmptyCard() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Ближайших записей нет",
+                text = "Ближайших занятий нет",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium
             )
