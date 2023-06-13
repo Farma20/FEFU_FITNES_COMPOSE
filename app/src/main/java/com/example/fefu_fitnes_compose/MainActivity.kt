@@ -23,12 +23,12 @@ class MainActivity : ComponentActivity() {
             val userInitialization = RegisterRepository.userInit
 
 
-//                if(!userInitialization)
-//                    InitializationNavigationMain()
-//                else
-//                    MainScreen()
+                if(!userInitialization)
+                    InitializationNavigationMain()
+                else
+                    MainScreen()
 
-                QrCard()
+//                QrCard()
 //            ServiceUI()
         }
     }

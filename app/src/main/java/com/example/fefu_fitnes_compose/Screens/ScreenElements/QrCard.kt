@@ -246,7 +246,7 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     if (false){
-                        EmptyServicesCard()
+                        EmptyServicesQrCard()
                     }else{
                         HorizontalPager(
                             modifier = Modifier.height(150.dp),

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.Plan
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Navigation.Screen
@@ -29,13 +30,20 @@ import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.QrCode.GenerateQR
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.QrCode.QrCodeDialog
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.ViewModel.MainMenuViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.EmptyCard
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.EmptyServicesCard
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.NearEventCard
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.Elements.ServiceActiveCard
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.Elements.ServiceQrCard
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
+import com.example.fefu_fitnes_compose.ui.theme.serviceCardColorOne
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 
 
-
-
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MainMenuUI(navController: NavController,mainMenuViewModel: MainMenuViewModel = viewModel()) {
     Surface() {
@@ -59,6 +67,7 @@ fun MainMenuUI(navController: NavController,mainMenuViewModel: MainMenuViewModel
                     NearEventCard(event = mainMenuViewModel.bookingEventData[0])
                 }
                 Spacer(modifier = Modifier.height(4.dp))
+
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -74,6 +83,39 @@ fun MainMenuUI(navController: NavController,mainMenuViewModel: MainMenuViewModel
                         text = "Показать все записи",
                         fontSize = 12.sp
                     )
+                }
+                val pagerState = rememberPagerState()
+                Text(
+                    modifier = Modifier
+                        .padding(top = 20.dp, start = 8.dp, bottom = 8.dp),
+                    text = "Абонементы",
+                    fontSize = 20.sp,
+                )
+                if(!(mainMenuViewModel.bookingEventData.isEmpty() || mainMenuViewModel.bookingEventData[0].eventId == null))
+                    EmptyServicesCard()
+                else{
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        HorizontalPager(
+                            modifier = Modifier.height(150.dp),
+                            count = 5,
+                            state = pagerState
+                        ) {
+                            Box(
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            ) {
+                                ServiceActiveCard(
+                                    serv = Plan("preactive", 1, 300, 1, "Единоразовое посещение"),
+                                    infoDate = "1 месяц",
+                                    id = 1,
+                                    infoColor = serviceCardColorOne
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(0.dp))
+                        HorizontalPagerIndicator(pagerState = pagerState)
+                    }
                 }
                 Text(
                     modifier = Modifier.padding(top=20.dp, start = 8.dp, bottom = 8.dp),

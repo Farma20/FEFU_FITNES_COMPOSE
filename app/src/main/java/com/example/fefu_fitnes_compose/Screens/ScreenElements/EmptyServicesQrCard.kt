@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun EmptyServicesCard() {
+fun EmptyServicesQrCard() {
     Card(
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp, top = 8.dp)
@@ -24,7 +24,7 @@ fun EmptyServicesCard() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Активных абонементов нет",
+                text = "Неактивных абонементов нет",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium
             )
