@@ -11,10 +11,11 @@ import androidx.compose.ui.Modifier
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Screens.BottomNavigate.MainScreen
 import com.example.fefu_fitnes_compose.Screens.Initialization.InitializationNavigationMain
+import com.example.fefu_fitnes_compose.Screens.ScreenElements.QrCard
 
 class MainActivity : ComponentActivity() {
 
-    @SuppressLint("RememberReturnType")
+    @SuppressLint("RememberReturnType", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -22,12 +23,12 @@ class MainActivity : ComponentActivity() {
             val userInitialization = RegisterRepository.userInit
 
 
-                if(!userInitialization)
-                    InitializationNavigationMain()
-                else
-                    MainScreen()
+//                if(!userInitialization)
+//                    InitializationNavigationMain()
+//                else
+//                    MainScreen()
 
-
+                QrCard()
 //            ServiceUI()
         }
     }

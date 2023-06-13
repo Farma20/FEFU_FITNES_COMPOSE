@@ -36,6 +36,7 @@ import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.UI.SubmitUserDia
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.Elements.ServiceCard
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.Elements.ServiceQrCard
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
@@ -244,24 +245,28 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    HorizontalPager(
-                        modifier = Modifier.height(150.dp),
-                        count = 5,
-                        state = pagerState
-                    ) {
-                        Box(
-                            modifier = Modifier.padding(horizontal = 16.dp)
+                    if (false){
+                        EmptyServicesCard()
+                    }else{
+                        HorizontalPager(
+                            modifier = Modifier.height(150.dp),
+                            count = 5,
+                            state = pagerState
                         ) {
-                            ServiceCard(
-                                serv = Plan("preactive", 1, 300, 1, "Единоразовое посещение"),
-                                infoDate = "1 месяц",
-                                id = 1,
-                                infoColor = serviceCardColorOne
-                            )
+                            Box(
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            ) {
+                                ServiceQrCard(
+                                    serv = Plan("preactive", 1, 300, 1, "Единоразовое посещение"),
+                                    infoDate = "1 месяц",
+                                    id = 1,
+                                    infoColor = serviceCardColorOne
+                                )
+                            }
                         }
+                        Spacer(modifier = Modifier.height(0.dp))
+                        HorizontalPagerIndicator(pagerState = pagerState)
                     }
-                    Spacer(modifier = Modifier.height(0.dp))
-                    HorizontalPagerIndicator(pagerState = pagerState)
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }

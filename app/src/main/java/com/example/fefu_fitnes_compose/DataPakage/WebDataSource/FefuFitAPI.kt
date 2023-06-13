@@ -69,6 +69,9 @@ interface FefuFitAPI {
     @POST("/api/qr/get_next_bookings")
     suspend fun getQrNextBookingData(@Body scanUserData:ScanUserData):List<EventAllDataModel>
 
+//    @POST("/api/plan/view_preactive")
+//    suspend fun getQrUserServices(@Body scanUserData: ScanUserData): List
+
 
     //sevices
     @POST("/api/plan/view")

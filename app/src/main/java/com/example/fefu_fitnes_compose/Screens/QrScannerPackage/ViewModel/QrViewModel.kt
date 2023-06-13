@@ -21,7 +21,8 @@ import java.time.format.DateTimeFormatter
 
 class QrViewModel:ViewModel() {
 
-    var qrUserDataShort: MutableState<QrUserDataShort?> = mutableStateOf(null)
+//    var qrUserDataShort: MutableState<QrUserDataShort?> = mutableStateOf(null)
+    var qrUserDataShort: MutableState<QrUserDataShort?> = mutableStateOf(QrUserDataShort("Юрий", "Кустов", "Сергеевич", true))
     var qrUserDataFool: MutableState<QrUserDataFool?> = mutableStateOf(null)
     var qrUserNearEventData: MutableState<UpdateEventDataModel?> = mutableStateOf(null)
     var qrNextBooking: MutableState<List<UpdateEventDataModel>?> = mutableStateOf(null)
