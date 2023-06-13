@@ -30,15 +30,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.Plan
 import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.UI.SubmitUserDialog
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
+import com.example.fefu_fitnes_compose.Screens.ServicesPackage.UI.Elements.ServiceCard
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.Yellow
+import com.example.fefu_fitnes_compose.ui.theme.serviceCardColorOne
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 
+@OptIn(ExperimentalPagerApi::class)
 @Preview(showBackground = true)
 @Composable
 fun QrCard(qrViewModel: QrViewModel = viewModel()) {
@@ -157,7 +165,7 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                        .padding(top = 5.dp, start = 8.dp, bottom = 0.dp),
                    onClick = {isClicked = true},
                    colors = ButtonDefaults.buttonColors(
-                       backgroundColor = if (isClicked) Yellow else Color.White,
+                       backgroundColor = if (isClicked) BlueLight else Color.White,
                        contentColor = if (isClicked) Color.White else Color.Black
                    )
                ) {
@@ -172,7 +180,7 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                        .padding(top = 5.dp, start = 8.dp, bottom = 0.dp, end = 8.dp),
                    onClick = {isClicked = false},
                    colors = ButtonDefaults.buttonColors(
-                       backgroundColor = if (!isClicked) Yellow else Color.White,
+                       backgroundColor = if (!isClicked) BlueLight else Color.White,
                        contentColor = if (!isClicked) Color.White else Color.Black
                    )
                ) {
@@ -231,7 +239,31 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
             AnimatedVisibility(
                 visible = !isClicked,
             ) {
-                EmptyCard()
+                val pagerState = rememberPagerState()
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    HorizontalPager(
+                        modifier = Modifier.height(150.dp),
+                        count = 5,
+                        state = pagerState
+                    ) {
+                        Box(
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        ) {
+                            ServiceCard(
+                                serv = Plan("preactive", 1, 300, 1, "Единоразовое посещение"),
+                                infoDate = "1 месяц",
+                                id = 1,
+                                infoColor = serviceCardColorOne
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(0.dp))
+                    HorizontalPagerIndicator(pagerState = pagerState)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
         }
     }
