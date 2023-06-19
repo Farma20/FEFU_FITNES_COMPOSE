@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.Plan
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.Elements.QrPlanCard
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.UI.SubmitUserDialog
 import com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel.QrViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
@@ -254,20 +255,12 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                             state = pagerState
                         ) {id->
                             Box(
-                                modifier = Modifier.padding(horizontal = 16.dp)
+                                modifier = Modifier.padding(horizontal = 8.dp)
                             ) {
-                                ServiceQrCard(
-                                    serv = Plan(
-                                        qrViewModel.qrUserPlans.value[id].planStatus,
-                                        qrViewModel.qrUserPlans.value[id].planTypeCapacity,
-                                        qrViewModel.qrUserPlans.value[id].planTypeCost,
-                                        qrViewModel.qrUserPlans.value[id].planId,
-                                        qrViewModel.qrUserPlans.value[id].serviceName
-                                    ),
-                                    infoDate = "1 месяц",
-                                    id = 1,
-                                    infoColor = serviceCardColorOne
-                                )
+                                QrPlanCard(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    planData = qrViewModel.qrUserPlans.value[id],
+                                    qrViewModel = qrViewModel)
                             }
                         }
                         Spacer(modifier = Modifier.height(0.dp))

@@ -252,6 +252,7 @@ object MainRepository: ViewModel() {
                 val result: Map<String, String> = FefuFitRetrofit.retrofitService.activateQrUserPlan(
                     ActivateQrPlan(planId, token)
                 )
+                getQrUserPlansFromServer()
             }catch (e:Exception){
                 println(e)
             }
@@ -266,6 +267,7 @@ object MainRepository: ViewModel() {
                 )
             }catch (e:Exception){
                 println(e)
+                getQrUserPlansFromServer()
             }
         }
     }
