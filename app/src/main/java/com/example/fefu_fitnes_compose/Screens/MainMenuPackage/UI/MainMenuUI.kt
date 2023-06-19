@@ -28,6 +28,7 @@ import com.example.fefu_fitnes_compose.R
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Navigation.Screen
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.QrCode.GenerateQRCode
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.QrCode.QrCodeDialog
+import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.UI.Elements.MainPlanCard
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.ViewModel.MainMenuViewModel
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.EmptyCard
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.EmptyServicesCard
@@ -91,7 +92,7 @@ fun MainMenuUI(navController: NavController,mainMenuViewModel: MainMenuViewModel
                     text = "Абонементы",
                     fontSize = 20.sp,
                 )
-                if(!(mainMenuViewModel.bookingEventData.isEmpty() || mainMenuViewModel.bookingEventData[0].eventId == null))
+                if(mainMenuViewModel.userPlans.isEmpty())
                     EmptyServicesCard()
                 else{
                     Column(
@@ -99,17 +100,15 @@ fun MainMenuUI(navController: NavController,mainMenuViewModel: MainMenuViewModel
                     ) {
                         HorizontalPager(
                             modifier = Modifier.height(150.dp),
-                            count = 5,
+                            count = mainMenuViewModel.userPlans.size,
                             state = pagerState
-                        ) {
+                        ) {id->
                             Box(
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             ) {
-                                ServiceActiveCard(
-                                    serv = Plan("preactive", 1, 300, 1, "Единоразовое посещение"),
-                                    infoDate = "1 месяц",
-                                    id = 1,
-                                    infoColor = serviceCardColorOne
+                                MainPlanCard(
+                                    modifier = Modifier,
+                                    planData = mainMenuViewModel.userPlans[id]
                                 )
                             }
                         }

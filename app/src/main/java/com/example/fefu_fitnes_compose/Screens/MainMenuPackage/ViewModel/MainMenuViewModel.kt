@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.UserPlans
 import com.example.fefu_fitnes_compose.Domain.use_case.dataConverters.convertAllEventsToUpdate
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.NewsDataModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
@@ -20,7 +21,7 @@ import java.time.LocalDate
 class MainMenuViewModel:ViewModel() {
     private val _currentNews = MutableLiveData<List<NewsDataModel>>()
     val currentNews:LiveData<List<NewsDataModel>> = _currentNews
-
+    var userPlans by mutableStateOf(UserPlans())
     var userData by mutableStateOf(UserDataModel())
     var bookingEventData by mutableStateOf(mutableListOf(UpdateEventDataModel()))
 
@@ -31,6 +32,7 @@ class MainMenuViewModel:ViewModel() {
     init {
         MainRepository.getUserDataFromServer()
         MainRepository.getUserNextBookingFromServer()
+        MainRepository.getActiveUserPlans()
 
         MainRepository.currentUser.observeForever{
             userData = it
@@ -42,6 +44,10 @@ class MainMenuViewModel:ViewModel() {
 
         MainRepository.currentNews.observeForever{
             _currentNews.value = it
+        }
+
+        MainRepository.userActivePlans.observeForever{
+            userPlans = it
         }
     }
 
