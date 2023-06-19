@@ -25,7 +25,6 @@ import java.time.format.DateTimeFormatter
 @SuppressLint("MutableCollectionMutableState")
 class QrViewModel:ViewModel() {
 
-//    var qrUserDataShort: MutableState<QrUserDataShort?> = mutableStateOf(null)
     var qrUserDataShort: MutableState<QrUserDataShort?> = mutableStateOf(QrUserDataShort("", "", "", true))
     var qrUserDataFool: MutableState<QrUserDataFool?> = mutableStateOf(null)
     var qrUserNearEventData: MutableState<UpdateEventDataModel?> = mutableStateOf(null)

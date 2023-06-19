@@ -245,19 +245,25 @@ fun QrCard(qrViewModel: QrViewModel = viewModel()) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (false){
+                    if (qrViewModel.qrUserPlans.value.isEmpty()){
                         EmptyServicesQrCard()
                     }else{
                         HorizontalPager(
                             modifier = Modifier.height(150.dp),
-                            count = 5,
+                            count = qrViewModel.qrUserPlans.value.size,
                             state = pagerState
-                        ) {
+                        ) {id->
                             Box(
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             ) {
                                 ServiceQrCard(
-                                    serv = Plan("preactive", 1, 300, 1, "Единоразовое посещение"),
+                                    serv = Plan(
+                                        qrViewModel.qrUserPlans.value[id].planStatus,
+                                        qrViewModel.qrUserPlans.value[id].planTypeCapacity,
+                                        qrViewModel.qrUserPlans.value[id].planTypeCost,
+                                        qrViewModel.qrUserPlans.value[id].planId,
+                                        qrViewModel.qrUserPlans.value[id].serviceName
+                                    ),
                                     infoDate = "1 месяц",
                                     id = 1,
                                     infoColor = serviceCardColorOne

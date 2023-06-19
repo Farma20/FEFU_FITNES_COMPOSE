@@ -139,6 +139,7 @@ object MainRepository: ViewModel() {
                 getQrUserDataShortFromServer(result["user_id"]!!, token)
                 getQrNearBookingDataFromServer(result["user_id"]!!, token)
                 getNextBookingOnServer(result["user_id"]!!, token)
+                getQrUserPlansFromServer(result["user_id"]!!, token)
                 scanQrError.postValue(false)
             }catch (e:Exception){
                 scanQrError.postValue(true)
@@ -232,7 +233,7 @@ object MainRepository: ViewModel() {
     }
 
     //Services QR function
-    fun getQrUserPlansFromServer(userId: Int =  qrUserId.value!!, token: String = RegisterRepository.userToken) {
+    private fun getQrUserPlansFromServer(userId: Int =  qrUserId.value!!, token: String = RegisterRepository.userToken) {
         viewModelScope.launch {
             try {
                 qrUserPlansData.postValue(FefuFitRetrofit.retrofitService.getQrUserPlans(

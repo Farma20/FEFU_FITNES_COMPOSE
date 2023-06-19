@@ -41,6 +41,8 @@ import com.example.fefu_fitnes_compose.ui.theme.serviceCardColorOne
 import com.example.fefu_fitnes_compose.ui.theme.serviceCardTextColor
 import kotlinx.coroutines.delay
 
+
+
 @Composable
 fun ServiceCard(
     serv: Plan,
@@ -118,17 +120,22 @@ fun ServiceCard(
                     contentAlignment = Alignment.Center
                 ) {
                     Button(
-                        modifier = Modifier.size(78.dp, 26.dp),
+                        modifier = Modifier.size(100.dp, 26.dp),
+                        enabled = status != "activate",
                         onClick = {
-                            status = if (status == "inactive"){
-                                MainRepository.serviceOrderOnServer(serv.planTypeId)
-                                "preactive"
-                            } else{
-                                MainRepository.serviceUnOrderOnServer(serv.planTypeId)
-                                "inactive"
+                            when(status){
+                                "inactive" -> {
+                                    MainRepository.serviceOrderOnServer(serv.planTypeId)
+                                    status = "proactive"
+                                    click = true
+                                }
+                                "active" -> {}
+                                else -> {
+                                    MainRepository.serviceUnOrderOnServer(serv.planTypeId)
+                                    status = "inactive"
+                                    click = true
+                                }
                             }
-
-                            click = true
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = serviceCardTextColor,
@@ -136,7 +143,11 @@ fun ServiceCard(
                     ) {}
                     if (!click){
                         Text(
-                            text = if (status == "inactive")"Купить" else "Отмена",
+                            text = when(status){
+                                "inactive" -> "Купить"
+                                "active" -> "Активирован"
+                                else -> "Отмена"
+                            },
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Light
                         )
