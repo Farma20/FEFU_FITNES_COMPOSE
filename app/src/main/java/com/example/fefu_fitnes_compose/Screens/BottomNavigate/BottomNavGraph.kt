@@ -1,5 +1,6 @@
 package com.example.fefu_fitnes_compose.Screens.BottomNavigate
 
+import TimeTableNav
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -56,7 +57,7 @@ fun BottomNavGraph(navController: NavHostController){
                 ExitTransition.None
             }
         ){
-            TimeTableUI()
+            TimeTableNav()
         }
 
         composable(

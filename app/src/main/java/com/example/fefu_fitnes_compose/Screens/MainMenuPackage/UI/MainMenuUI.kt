@@ -92,7 +92,8 @@ fun MainMenuUI(navController: NavController,mainMenuViewModel: MainMenuViewModel
                     text = "Абонементы",
                     fontSize = 20.sp,
                 )
-                if(mainMenuViewModel.userPlans.isEmpty())
+                if(mainMenuViewModel.userPlans.size == 0)
+
                     EmptyServicesCard()
                 else{
                     Column(
@@ -103,13 +104,15 @@ fun MainMenuUI(navController: NavController,mainMenuViewModel: MainMenuViewModel
                             count = mainMenuViewModel.userPlans.size,
                             state = pagerState
                         ) {id->
-                            Box(
-                                modifier = Modifier.padding(horizontal = 16.dp)
-                            ) {
-                                MainPlanCard(
-                                    modifier = Modifier,
-                                    planData = mainMenuViewModel.userPlans[id]
-                                )
+                            if(mainMenuViewModel.userPlans.size!= 0){
+                                Box(
+                                    modifier = Modifier.padding(horizontal = 16.dp)
+                                ) {
+                                    MainPlanCard(
+                                        modifier = Modifier,
+                                        planData = mainMenuViewModel.userPlans[id]
+                                    )
+                                }
                             }
                         }
                         Spacer(modifier = Modifier.height(0.dp))

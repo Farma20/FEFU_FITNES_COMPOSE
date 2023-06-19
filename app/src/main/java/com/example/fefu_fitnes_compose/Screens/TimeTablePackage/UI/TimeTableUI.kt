@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
 import com.example.fefu_fitnes_compose.R
@@ -42,9 +43,8 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-@Preview(showBackground = true)
 @Composable
-fun TimeTableUI(){
+fun TimeTableUI(navController: NavController){
    Surface() {
        Column() {
            val currentData = remember {
