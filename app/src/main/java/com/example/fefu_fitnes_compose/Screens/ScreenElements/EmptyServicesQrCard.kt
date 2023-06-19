@@ -24,7 +24,7 @@ fun EmptyServicesQrCard() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Неактивных абонементов нет",
+                text = "Абонементов нет",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium
             )
