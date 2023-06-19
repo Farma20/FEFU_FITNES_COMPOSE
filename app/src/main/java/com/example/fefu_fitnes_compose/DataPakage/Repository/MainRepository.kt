@@ -7,8 +7,11 @@ import com.example.fefu_fitnes_compose.DataPakage.Models.ConfirmUserData
 import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanQrData
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanUserData
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.ActivateQrPlan
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.AllServiceModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.OrderServiceModel
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.QrUserPlans
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.UserPlans
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.NewsDataModel
@@ -24,7 +27,7 @@ object MainRepository: ViewModel() {
 
     private val _currentNews = MutableLiveData<List<NewsDataModel>>()
     val currentNews:LiveData<List<NewsDataModel>> = _currentNews
-
+    val userActivePlans = MutableLiveData<UserPlans>()
     val registrationUserData = MutableLiveData<RegistrationFromStateModel>()
 
 
@@ -78,6 +81,16 @@ object MainRepository: ViewModel() {
         }
     }
 
+    fun getActiveUserPlans(token: String = RegisterRepository.userToken){
+        viewModelScope.launch{
+            try {
+                userActivePlans.postValue(FefuFitRetrofit.retrofitService.getActiveUserPlans(mapOf("token" to token)))
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
 
     fun addEventsBookingOnServer(eventId: Int ,token: String = RegisterRepository.userToken){
         viewModelScope.launch {
@@ -114,6 +127,7 @@ object MainRepository: ViewModel() {
     val qrUserDataFool = MutableLiveData<QrUserDataFool>()
     val qrUserNearBookingData = MutableLiveData<EventAllDataModel>()
     val qrNextBookingData = MutableLiveData<List<EventAllDataModel>>()
+    val qrUserPlansData = MutableLiveData<QrUserPlans>()
     private val qrUserId = MutableLiveData<Int>()
 
     val scanQrError = MutableLiveData<Boolean>().apply { this.value = null }
@@ -217,6 +231,44 @@ object MainRepository: ViewModel() {
         }
     }
 
+    //Services QR function
+    fun getQrUserPlansFromServer(userId: Int =  qrUserId.value!!, token: String = RegisterRepository.userToken) {
+        viewModelScope.launch {
+            try {
+                qrUserPlansData.postValue(FefuFitRetrofit.retrofitService.getQrUserPlans(
+                    ScanUserData(userId, token)
+                ))
+            }
+            catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
+    fun activateQrUserPlanInServer(planId: Int, token: String = RegisterRepository.userToken){
+        viewModelScope.launch{
+            try {
+                val result: Map<String, String> = FefuFitRetrofit.retrofitService.activateQrUserPlan(
+                    ActivateQrPlan(planId, token)
+                )
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
+    fun deactivateQrUserPlanInServer(planId: Int, token: String = RegisterRepository.userToken){
+        viewModelScope.launch{
+            try {
+                val result: Map<String, String> = FefuFitRetrofit.retrofitService.deactivateQrUserPlan(
+                    ActivateQrPlan(planId, token)
+                )
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
     //Services function
 
     val allServicesData = MutableLiveData<AllServiceModel>()
@@ -255,6 +307,8 @@ object MainRepository: ViewModel() {
             }
         }
     }
+
+
 
 
     init {

@@ -1,5 +1,6 @@
 package com.example.fefu_fitnes_compose.Screens.QrScannerPackage.ViewModel
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,6 +8,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository.qrUserDataFool
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.QrUserPlans
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.QrUserPlansItem
 import com.example.fefu_fitnes_compose.Domain.use_case.dataConverters.convertAllEventsToUpdate
 import com.example.fefu_fitnes_compose.Domain.use_case.dataConverters.convertEventToUpdate
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.RegistrationFromStateModel
@@ -19,13 +22,15 @@ import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEve
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@SuppressLint("MutableCollectionMutableState")
 class QrViewModel:ViewModel() {
 
 //    var qrUserDataShort: MutableState<QrUserDataShort?> = mutableStateOf(null)
-    var qrUserDataShort: MutableState<QrUserDataShort?> = mutableStateOf(QrUserDataShort("Юрий", "Кустов", "Сергеевич", true))
+    var qrUserDataShort: MutableState<QrUserDataShort?> = mutableStateOf(QrUserDataShort("", "", "", true))
     var qrUserDataFool: MutableState<QrUserDataFool?> = mutableStateOf(null)
     var qrUserNearEventData: MutableState<UpdateEventDataModel?> = mutableStateOf(null)
     var qrNextBooking: MutableState<List<UpdateEventDataModel>?> = mutableStateOf(null)
+    val qrUserPlans: MutableState<QrUserPlans> = mutableStateOf(QrUserPlans())
     
 
     init {
@@ -50,6 +55,18 @@ class QrViewModel:ViewModel() {
             else
                 null
         }
+
+        MainRepository.qrUserPlansData.observeForever{
+            qrUserPlans.value = it
+        }
+    }
+
+    fun activateQrPlan(planId: Int){
+        MainRepository.activateQrUserPlanInServer(planId)
+    }
+
+    fun deactivateQrPlan(planId: Int){
+        MainRepository.deactivateQrUserPlanInServer(planId)
     }
 
     fun onEvent(event: SubmitUserEvent){

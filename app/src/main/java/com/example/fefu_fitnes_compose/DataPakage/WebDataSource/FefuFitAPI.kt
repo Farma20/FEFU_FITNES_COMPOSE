@@ -4,8 +4,11 @@ import com.example.fefu_fitnes_compose.DataPakage.Models.ConfirmUserData
 import com.example.fefu_fitnes_compose.DataPakage.Models.PushNewBookingDataModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanQrData
 import com.example.fefu_fitnes_compose.DataPakage.Models.ScanUserData
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.ActivateQrPlan
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.AllServiceModel
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.OrderServiceModel
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.QrUserPlans
+import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.UserPlans
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.NewServer.RegistrationDataModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.initializationPackage.Models.NewServer.EnterDataModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
@@ -69,8 +72,17 @@ interface FefuFitAPI {
     @POST("/api/qr/get_next_bookings")
     suspend fun getQrNextBookingData(@Body scanUserData:ScanUserData):List<EventAllDataModel>
 
-//    @POST("/api/plan/view_preactive")
-//    suspend fun getQrUserServices(@Body scanUserData: ScanUserData): List
+    @POST("/api/plan/view_user_plans")
+    suspend fun getQrUserPlans(@Body scanUserData: ScanUserData): QrUserPlans
+
+    @POST("/api/plan/activate")
+    suspend fun activateQrUserPlan(@Body scanPlanData: ActivateQrPlan): Map<String, String>
+
+    @POST("/api/plan/deactivate")
+    suspend fun deactivateQrUserPlan(@Body scanPlanData: ActivateQrPlan): Map<String, String>
+
+    @POST("/api/plan/view_next")
+    suspend fun getActiveUserPlans(@Body token: Map<String, String>): UserPlans
 
 
     //sevices
