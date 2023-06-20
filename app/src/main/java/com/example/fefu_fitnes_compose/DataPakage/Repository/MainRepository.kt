@@ -324,8 +324,6 @@ object MainRepository: ViewModel() {
             NewsDataModel("Чем заняться в свободное время на каникулах?")
         )
 
-        qetAllServicesDataFromServer()
-
         registrationUserData.value = RegistrationFromStateModel()
     }
 }

@@ -30,11 +30,7 @@ import coil.compose.rememberImagePainter
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
 
 
-private data class ServiceData(
-    val servicesName: String,
-    val servicesImage: Int,
-    val servicesEvent: List<String>
-)
+
 
 
 @Composable

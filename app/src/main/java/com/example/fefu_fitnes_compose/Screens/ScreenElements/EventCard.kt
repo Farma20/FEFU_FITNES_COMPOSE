@@ -36,7 +36,7 @@ import java.time.LocalDate
 @Composable
 fun EventCard(
     event: UpdateEventDataModel,
-    timeTableViewModel: NewTimeTableViewModel = viewModel()
+    timeTableViewModel: NewTimeTableViewModel
 ) {
     val openDialog = remember { mutableStateOf(false) }
     var loadingAnimationOn by remember { mutableStateOf(false) }
@@ -148,7 +148,7 @@ fun EventCard(
                         onClick = {
                             loadingAnimationOn = true
                             if(event.status == "not booked"){
-                                timeTableViewModel.addNewBooking(event.eventId!!)
+                                timeTableViewModel.addNewBooking(event.eventId!!, event.eventName!!)
                             }
                             else
                                 timeTableViewModel.cancelBooking(event.eventId!!)

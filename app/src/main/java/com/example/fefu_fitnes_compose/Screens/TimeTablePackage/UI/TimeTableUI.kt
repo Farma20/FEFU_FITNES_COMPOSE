@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
-fun TimeTableUI(navController: NavController){
+fun TimeTableUI(navController: NavController, timeTableViewModel: NewTimeTableViewModel){
    Surface() {
        Column() {
            val currentData = remember {
@@ -52,7 +52,7 @@ fun TimeTableUI(navController: NavController){
            }
 
            UpBar(currentData)
-           TabLayout(currentData)
+           TabLayout(currentData, timeTableViewModel)
        }
    }
 }
@@ -120,7 +120,7 @@ private fun UpBar(currentData:MutableState<LocalDate>){
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: NewTimeTableViewModel = viewModel()){
+private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: NewTimeTableViewModel){
 
     val buttonList = listOf("Все занятия", "Мои занятия")
     val pagerState = rememberPagerState()
@@ -208,7 +208,7 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
                         }
                         else if (currentDayEvents!!.isNotEmpty()){
                             items(currentDayEvents!!.size){id->
-                                EventCard(currentDayEvents!![id])
+                                EventCard(currentDayEvents!![id], timeTableViewModel)
                             }
                         }else{
                             item {
@@ -248,7 +248,7 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
                         }
                         else if (currentDayBookingEvent!!.isNotEmpty()){
                             items(currentDayBookingEvent!!.size){id->
-                                EventCard(currentDayBookingEvent!![id])
+                                EventCard(currentDayBookingEvent!![id], viewModel())
                             }
                         }else{
                             item {
