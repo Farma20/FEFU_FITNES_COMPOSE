@@ -1,10 +1,14 @@
 package com.example.fefu_fitnes_compose.Screens.ProfilePackage
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.service.autofill.UserData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,13 +17,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContextCompat.startActivity
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
@@ -33,6 +44,11 @@ import java.time.LocalDate
 
 @Composable
 fun ProfileUI(){
+
+    val telegramChannelUrl = "https://t.me/+6VdMCPodJRYxNTUy"
+    val context = LocalContext.current
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(telegramChannelUrl))
+
     Surface {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -48,6 +64,16 @@ fun ProfileUI(){
                 text = "Данный раздел еще в разработке",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Light
+            )
+            Spacer(modifier = Modifier.height(76.dp))
+            HyperlinkText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp),
+                fullText = "В случае возникновения неполадок в работе приложения, а также для предложений по развитию, можно связаться c отделом разработки по ссылке: https://t.me/+6VdMCPodJRYxNTUy",
+                hyperLinks = mutableMapOf("https://t.me/+6VdMCPodJRYxNTUy" to "https://t.me/+6VdMCPodJRYxNTUy"),
+                context = context,
+                intent = intent
             )
         }
     }
@@ -187,3 +213,67 @@ fun ExitDialog(openDialog: MutableState<Boolean>){
         }
     }
 }
+
+@Composable
+fun HyperlinkText(
+    modifier: Modifier = Modifier,
+    fullText: String,
+    hyperLinks: Map<String, String>,
+    textStyle: TextStyle = TextStyle.Default,
+    linkTextColor: Color = Color.Blue,
+    linkTextFontWeight: FontWeight = FontWeight.Normal,
+    linkTextDecoration: TextDecoration = TextDecoration.None,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    intent: Intent,
+    context: Context
+) {
+    val annotatedString = buildAnnotatedString {
+        append(fullText)
+
+        for((key, value) in hyperLinks){
+
+            val startIndex = fullText.indexOf(key)
+            val endIndex = startIndex + key.length
+            addStyle(
+                style = SpanStyle(
+                    color = linkTextColor,
+                    fontSize = fontSize,
+                    fontWeight = linkTextFontWeight,
+                    textDecoration = linkTextDecoration
+                ),
+                start = startIndex,
+                end = endIndex
+            )
+            addStringAnnotation(
+                tag = "URL",
+                annotation = value,
+                start = startIndex,
+                end = endIndex
+            )
+        }
+        addStyle(
+            style = SpanStyle(
+                fontSize = fontSize
+            ),
+            start = 0,
+            end = fullText.length
+        )
+    }
+
+    val uriHandler = LocalUriHandler.current
+
+    ClickableText(
+        modifier = modifier,
+        text = annotatedString,
+        style = textStyle,
+        onClick = {
+            annotatedString
+                .getStringAnnotations("URL", it, it)
+                .firstOrNull()?.let { stringAnnotation ->
+                    context.startActivity(intent)
+                }
+        }
+    )
+}
+
+
