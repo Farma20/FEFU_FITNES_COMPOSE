@@ -21,77 +21,77 @@ import retrofit2.http.POST
 interface FefuFitAPI {
 
     //Регистрация и инициализация
-    @POST("/fefufit/api/stable/api/auth/signup")
+    @POST("/api/auth/signup")
     suspend fun registerData(@Body registerData: RegistrationDataModel):Map<String, String>
 
-    @POST("/fefufit/api/stable/api/auth/login")
+    @POST("/api/auth/login")
     suspend fun pushLogin(@Body userEnterData: EnterDataModel):Map<String,Any>
 
     //Данные главной страницы
-    @POST("/fefufit/api/stable/api/user/user/view_self")
+    @POST("/api/user/user/view_self")
     suspend fun getUserData(@Body token:Map<String, String>):UserDataModel
 
-    @POST("/fefufit/api/stable/api/booking/get_next")
+    @POST("/api/booking/get_next")
     suspend fun getUserNextBooking(@Body token:Map<String, String>):List<EventAllDataModel>
 
     //Данные тренировок
-    @POST("/fefufit/api/stable/api/timetable/event/user/view_all")
+    @POST("/api/timetable/event/user/view_all")
     suspend fun getEventsAll(@Body token:Map<String, String>):List<EventAllDataModel>
 
-    @POST("/fefufit/api/stable/api/timetable/booking/user/view_all")
+    @POST("/api/timetable/booking/user/view_all")
     suspend fun getEventsBooking(@Body token:Map<String, String>):List<EventAllDataModel>
 
-    @POST("/fefufit/api/stable/api/timetable/booking/user/add")
+    @POST("/api/timetable/booking/user/add")
     suspend fun addEventsBooking(@Body addBookingData:PushNewBookingDataModel):Map<String, String>
 
-    @POST("/fefufit/api/stable/api/timetable/booking/user/cancel")
+    @POST("/api/timetable/booking/user/cancel")
     suspend fun cancelEventsBooking(@Body addBookingData:PushNewBookingDataModel):Map<String, String>
 
     //Qr code
-    @POST("/fefufit/api/stable/api/auth/scan_qr")
+    @POST("/api/auth/scan_qr")
     suspend fun scanQrCode(@Body scanQrData:ScanQrData):Map<String, Int>
 
-    @POST("/fefufit/api/stable/api/user/admin/view_one_short")
+    @POST("/api/user/admin/view_one_short")
     suspend fun getQrUserDataShort(@Body scanUserData:ScanUserData): QrUserDataShort
 
-    @POST("/fefufit/api/stable/api/user/admin/view_one_full")
+    @POST("/api/user/admin/view_one_full")
     suspend fun getQrUserDataFool(@Body scanUserData:ScanUserData): QrUserDataFool
 
-    @POST("/fefufit/api/stable/api/user/edit")
+    @POST("/api/user/edit")
     suspend fun conformUser(@Body userData: QrUserDataFool):Map<String, String>
 
-    @POST("/fefufit/api/stable/api/qr/get_booking")
+    @POST("/api/qr/get_booking")
     suspend fun getQrNearBookingData(@Body scanUserData:ScanUserData):EventAllDataModel
 
-    @POST("/fefufit/api/stable/api/qr/confirm_booking")
+    @POST("/api/qr/confirm_booking")
     suspend fun pushQrConfirmBookingData(@Body confirmData:ConfirmUserData):Map<String, String>
 
-    @POST("/fefufit/api/stable/api/qr/unconfirm_booking")
+    @POST("/api/qr/unconfirm_booking")
     suspend fun pushQrUnConfirmBookingData(@Body confirmData:ConfirmUserData):Map<String, String>
 
-    @POST("/fefufit/api/stable/api/qr/get_next_bookings")
+    @POST("/api/qr/get_next_bookings")
     suspend fun getQrNextBookingData(@Body scanUserData:ScanUserData):List<EventAllDataModel>
 
-    @POST("/fefufit/api/stable/api/plan/view_user_plans")
+    @POST("/api/plan/view_user_plans")
     suspend fun getQrUserPlans(@Body scanUserData: ScanUserData): QrUserPlans
 
-    @POST("/fefufit/api/stable/api/plan/activate")
+    @POST("/api/plan/activate")
     suspend fun activateQrUserPlan(@Body scanPlanData: ActivateQrPlan): Map<String, String>
 
-    @POST("/fefufit/api/stable/api/plan/deactivate")
+    @POST("/api/plan/deactivate")
     suspend fun deactivateQrUserPlan(@Body scanPlanData: ActivateQrPlan): Map<String, String>
 
-    @POST("/fefufit/api/stable/api/plan/view_next")
+    @POST("/api/plan/view_next")
     suspend fun getActiveUserPlans(@Body token: Map<String, String>): UserPlans
 
     //sevices
-    @POST("/fefufit/api/stable/api/plan/view")
+    @POST("/api/plan/view")
     suspend fun getAllServicesData(@Body token: Map<String, String>):AllServiceModel
 
-    @POST("/fefufit/api/stable/api/plan/order")
+    @POST("/api/plan/order")
     suspend fun orderService(@Body serviceData: OrderServiceModel)
 
-    @POST("/fefufit/api/stable/api/plan/unorder")
+    @POST("/api/plan/unorder")
     suspend fun unOrderService(@Body serviceData: OrderServiceModel)
 
 }
