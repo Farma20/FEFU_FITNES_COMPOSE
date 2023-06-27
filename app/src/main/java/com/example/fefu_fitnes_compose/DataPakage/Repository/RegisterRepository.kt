@@ -10,6 +10,7 @@ import androidx.room.Room
 import com.example.fefu_fitnes.UI.RegisterPackage.Models.UserEnterModel
 import com.example.fefu_fitnes_compose.Screens.Initialization.RegistrationPackage.Models.UserRegisterModel
 import com.example.fefu_fitnes.adadadad.WebDataSource.FefuFitRetrofit
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Dao.FastEnterDao
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Models.User
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
@@ -90,6 +91,7 @@ object RegisterRepository: ViewModel() {
                             )
                         }
                     }
+                    MainRepository.getUserDataFromServerBottomNav()
                 }
 
             }catch (cause:Throwable){

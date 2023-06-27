@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -22,8 +23,10 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import com.example.fefu_fitnes_compose.ui.theme.GreyDark
@@ -36,6 +39,7 @@ import com.google.accompanist.navigation.animation.composable
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen() {
+
     val navController = rememberAnimatedNavController()
     Scaffold(
         bottomBar = { BottomBar(navController = navController)},
@@ -61,14 +65,14 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-
+    val currentUser = MainRepository.userData.observeAsState(initial = UserDataModel())
 
     BottomNavigation(
         backgroundColor = Color.White
     ) {
         screens.forEach { screen ->
             if (
-                !(RegisterRepository.userType == "admin" || RegisterRepository.userType == "coach") &&
+                !(currentUser.value.type == "admin" || currentUser.value.type == "coach") &&
                 screen.rout == "qrScannerScreen"
             ) {
 

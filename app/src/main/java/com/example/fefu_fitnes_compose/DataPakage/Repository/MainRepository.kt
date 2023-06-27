@@ -35,11 +35,24 @@ object MainRepository: ViewModel() {
     val currentUser = MutableLiveData<UserDataModel>().apply {
         this.value = UserDataModel()
     }
+    val userData = MutableLiveData<UserDataModel>().apply {
+        this.value = UserDataModel()
+    }
 
     fun getUserDataFromServer(token: String = RegisterRepository.userToken){
         viewModelScope.launch {
             try {
                 currentUser.postValue(FefuFitRetrofit.retrofitService.getUserData(mapOf("token" to token)))
+            }catch (e:Exception){
+                println(e)
+            }
+        }
+    }
+
+    fun getUserDataFromServerBottomNav(token: String = RegisterRepository.userToken){
+        viewModelScope.launch {
+            try {
+                userData.postValue(FefuFitRetrofit.retrofitService.getUserData(mapOf("token" to token)))
             }catch (e:Exception){
                 println(e)
             }

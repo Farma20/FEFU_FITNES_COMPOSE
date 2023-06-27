@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Models.User
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
@@ -39,6 +40,7 @@ fun SplashScreenUI(navController: NavController) {
                 RegisterRepository.userToken = it[0].userToken
                 RegisterRepository.qrToken = it[0].qrToken
                 RegisterRepository.userType = it[0].userType
+                MainRepository.getUserDataFromServerBottomNav()
                 RegisterRepository.userInit = true
             }
         }

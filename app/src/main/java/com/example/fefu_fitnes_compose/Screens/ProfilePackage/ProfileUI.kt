@@ -35,6 +35,7 @@ import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.DataPakage.RoomDataBase.Repository.DataBaseRepository
 import com.example.fefu_fitnes_compose.R
+import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.UI.Calendar
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
@@ -197,6 +198,7 @@ fun ExitDialog(openDialog: MutableState<Boolean>){
                               RegisterRepository.userToken = ""
                               RegisterRepository.qrToken = ""
                               RegisterRepository.userType = ""
+                              MainRepository.userData.value = UserDataModel()
                               RegisterRepository.userInit = false
                           }
                         },

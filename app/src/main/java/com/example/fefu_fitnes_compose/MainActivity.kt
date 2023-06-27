@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.DataPakage.Repository.RegisterRepository
 import com.example.fefu_fitnes_compose.Screens.BottomNavigate.MainScreen
 import com.example.fefu_fitnes_compose.Screens.Initialization.InitializationNavigationMain
@@ -23,10 +24,13 @@ class MainActivity : ComponentActivity() {
             val userInitialization = RegisterRepository.userInit
 
 
-                if(!userInitialization)
-                    InitializationNavigationMain()
-                else
-                    MainScreen()
+            if(!userInitialization){
+                InitializationNavigationMain()
+            }
+            else{
+                MainScreen()
+            }
+
 
 //                QrCard()
 //            ServiceUI()
