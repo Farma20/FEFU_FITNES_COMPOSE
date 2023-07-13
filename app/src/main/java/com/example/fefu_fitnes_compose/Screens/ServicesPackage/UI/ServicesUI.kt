@@ -24,17 +24,22 @@ import com.example.fefu_fitnes_compose.Screens.ServicesPackage.ViewModel.Service
 import com.example.fefu_fitnes_compose.ui.theme.BlueDark
 import com.example.fefu_fitnes_compose.ui.theme.BlueLight
 import androidx.compose.foundation.Image
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
 import coil.compose.rememberImagePainter
 import com.example.fefu_fitnes_compose.Screens.ScreenElements.Animation.LoadingAnimation
-
-
-
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 
 @Composable
 fun ServicesUI(navController: NavController, servicesViewModel: ServicesViewModel){
+
+    val isLoading by servicesViewModel.isLoading.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
 
     Surface() {
         val scrollState = rememberScrollState()
@@ -43,37 +48,50 @@ fun ServicesUI(navController: NavController, servicesViewModel: ServicesViewMode
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             UpBar()
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-            ) {
-                if (servicesViewModel.allServicesData.value != null){
-                    for (service in servicesViewModel.allServicesData.value!!) {
-                        println(service.categoryPhoto.toString())
-                        ServicesClassSportCard(
-                            navController = navController,
-                            serviceName = service.categoryName,
-                            serviceImage = service.categoryPhoto,
-                            eventNameList = service.services,
-                            servicesViewModel = servicesViewModel
-                        )
-                    }
-                }else{
-                    Box(
-                        modifier = Modifier.fillMaxSize().padding(top = 300.dp),
-                        contentAlignment = Alignment.Center
-                    ){
-                        LoadingAnimation(
-                            circleSize = 8.dp,
-                            circleColor = BlueLight,
-                            spaceBetween = 4.dp,
-                            travelDistance = 6.dp
-                        )
-                    }
+            SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = servicesViewModel::loadStaff,
+                indicator = {state, refreshTrigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = refreshTrigger,
+                        contentColor = BlueLight
+                    )
                 }
-                Spacer(modifier = Modifier.height(14.dp))
+            ){
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                ) {
+                    if (servicesViewModel.allServicesData.value != null){
+                        for (service in servicesViewModel.allServicesData.value!!) {
+                            println(service.categoryPhoto.toString())
+                            ServicesClassSportCard(
+                                navController = navController,
+                                serviceName = service.categoryName,
+                                serviceImage = service.categoryPhoto,
+                                eventNameList = service.services,
+                                servicesViewModel = servicesViewModel
+                            )
+                        }
+                    }else{
+                        Box(
+                            modifier = Modifier.fillMaxSize().padding(top = 300.dp),
+                            contentAlignment = Alignment.Center
+                        ){
+                            LoadingAnimation(
+                                circleSize = 8.dp,
+                                circleColor = BlueLight,
+                                spaceBetween = 4.dp,
+                                travelDistance = 6.dp
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(14.dp))
+                }
             }
+
         }
     }
 }
