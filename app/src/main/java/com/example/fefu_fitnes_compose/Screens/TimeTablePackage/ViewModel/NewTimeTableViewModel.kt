@@ -55,6 +55,8 @@ class NewTimeTableViewModel(private val navController: NavController): ViewModel
         viewModelScope.launch {
             MainRepository.getEventsAllFromServer()
             MainRepository.getEventsBookingFromServer()
+            MainRepository.qetAllServicesDataFromServer()
+            MainRepository.getActiveUserPlans()
             isLoading.value = true
             delay(3000L)
             isLoading.value = false
@@ -68,6 +70,7 @@ class NewTimeTableViewModel(private val navController: NavController): ViewModel
         MainRepository.getEventsAllFromServer()
         MainRepository.getEventsBookingFromServer()
         MainRepository.qetAllServicesDataFromServer()
+        MainRepository.getActiveUserPlans()
 
         MainRepository.allEvents.observeForever{
             if (it != null)
