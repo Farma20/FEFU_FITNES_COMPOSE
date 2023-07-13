@@ -7,15 +7,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.fefu_fitnes.dadadada.Repository.MainRepository
 import com.example.fefu_fitnes_compose.DataPakage.Models.ServicesModels.UserPlans
 import com.example.fefu_fitnes_compose.Domain.use_case.dataConverters.convertAllEventsToUpdate
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.NewsDataModel
 import com.example.fefu_fitnes_compose.Screens.MainMenuPackage.Models.UserDataModel
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.BookingDataModel
-import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.NewServer.EventAllDataModel
 import com.example.fefu_fitnes_compose.Screens.TimeTablePackage.Models.UpdateEventDataModel
-import java.time.LocalDate
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 @SuppressLint("MutableCollectionMutableState")
 class MainMenuViewModel:ViewModel() {
@@ -24,9 +25,21 @@ class MainMenuViewModel:ViewModel() {
     var userPlans by mutableStateOf(UserPlans())
     var userData by mutableStateOf(UserDataModel())
     var bookingEventData by mutableStateOf(mutableListOf(UpdateEventDataModel()))
+    var isLoading = MutableStateFlow(false)
 
     fun cancelBooking(eventId: Int){
         MainRepository.cancelEventsBookingOnServer(eventId)
+    }
+
+    fun loadStaff(){
+        viewModelScope.launch {
+            MainRepository.getUserDataFromServer()
+            MainRepository.getUserNextBookingFromServer()
+            MainRepository.getActiveUserPlans()
+            isLoading.value = true
+            delay(3000L)
+            isLoading.value = false
+        }
     }
 
     init {
@@ -50,6 +63,4 @@ class MainMenuViewModel:ViewModel() {
             userPlans = it
         }
     }
-
-
 }

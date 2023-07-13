@@ -42,89 +42,109 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MainMenuUI(navController: NavController,mainMenuViewModel: MainMenuViewModel = viewModel()) {
+    val isLoading by mainMenuViewModel.isLoading.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
+
     Surface() {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())) {
-            UppBar(mainMenuViewModel)
-            Column {
-                NewsList(mainMenuViewModel)
-                Text(
-                    modifier = Modifier
-                        .padding(top = 20.dp, start = 8.dp, bottom = 8.dp),
-                    text = "Ближайшая запись",
-                    fontSize = 20.sp,
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = mainMenuViewModel::loadStaff,
+            indicator = {state, refreshTrigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = refreshTrigger,
+                    contentColor = BlueLight
                 )
+            }
+        ){
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())) {
+                UppBar(mainMenuViewModel)
 
-                if(mainMenuViewModel.bookingEventData.isEmpty() || mainMenuViewModel.bookingEventData[0].eventId == null)
-                    EmptyCard()
-                else{
-                    NearEventCard(event = mainMenuViewModel.bookingEventData[0])
-                }
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(30.dp)
-                        .padding(horizontal = 8.dp),
-                    colors = ButtonDefaults.textButtonColors(
-                        backgroundColor =  BlueLight,
-                        contentColor = Color.White
-                    ),
-                    onClick = {navController.navigate(Screen.AllBookingScreen.route)}
-                ) {
+                Column {
+                    NewsList(mainMenuViewModel)
                     Text(
-                        text = "Показать все записи",
-                        fontSize = 12.sp
+                        modifier = Modifier
+                            .padding(top = 20.dp, start = 8.dp, bottom = 8.dp),
+                        text = "Ближайшая запись",
+                        fontSize = 20.sp,
                     )
-                }
-                val pagerState = rememberPagerState()
-                Text(
-                    modifier = Modifier
-                        .padding(top = 20.dp, start = 8.dp, bottom = 8.dp),
-                    text = "Абонементы",
-                    fontSize = 20.sp,
-                )
-                if(mainMenuViewModel.userPlans.size == 0)
 
-                    EmptyServicesCard()
-                else{
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    if(mainMenuViewModel.bookingEventData.isEmpty() || mainMenuViewModel.bookingEventData[0].eventId == null)
+                        EmptyCard()
+                    else{
+                        NearEventCard(event = mainMenuViewModel.bookingEventData[0])
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(30.dp)
+                            .padding(horizontal = 8.dp),
+                        colors = ButtonDefaults.textButtonColors(
+                            backgroundColor =  BlueLight,
+                            contentColor = Color.White
+                        ),
+                        onClick = {navController.navigate(Screen.AllBookingScreen.route)}
                     ) {
-                        HorizontalPager(
-                            modifier = Modifier.height(150.dp),
-                            count = mainMenuViewModel.userPlans.size,
-                            state = pagerState
-                        ) {id->
-                            if(mainMenuViewModel.userPlans.size!= 0){
-                                Box(
-                                    modifier = Modifier.padding(horizontal = 16.dp)
-                                ) {
-                                    MainPlanCard(
-                                        modifier = Modifier,
-                                        planData = mainMenuViewModel.userPlans[id]
-                                    )
+                        Text(
+                            text = "Показать все записи",
+                            fontSize = 12.sp
+                        )
+                    }
+                    val pagerState = rememberPagerState()
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 20.dp, start = 8.dp, bottom = 8.dp),
+                        text = "Абонементы",
+                        fontSize = 20.sp,
+                    )
+                    if(mainMenuViewModel.userPlans.size == 0)
+
+                        EmptyServicesCard()
+                    else{
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            HorizontalPager(
+                                modifier = Modifier.height(150.dp),
+                                count = mainMenuViewModel.userPlans.size,
+                                state = pagerState
+                            ) {id->
+                                if(mainMenuViewModel.userPlans.size!= 0){
+                                    Box(
+                                        modifier = Modifier.padding(horizontal = 16.dp)
+                                    ) {
+                                        MainPlanCard(
+                                            modifier = Modifier,
+                                            planData = mainMenuViewModel.userPlans[id]
+                                        )
+                                    }
                                 }
                             }
+                            Spacer(modifier = Modifier.height(0.dp))
+                            HorizontalPagerIndicator(pagerState = pagerState)
                         }
-                        Spacer(modifier = Modifier.height(0.dp))
-                        HorizontalPagerIndicator(pagerState = pagerState)
                     }
+                    Text(
+                        modifier = Modifier.padding(top=20.dp, start = 8.dp, bottom = 8.dp),
+                        text = "Активность",
+                        fontSize = 20.sp,
+                    )
+                    UserActive()
                 }
-                Text(
-                    modifier = Modifier.padding(top=20.dp, start = 8.dp, bottom = 8.dp),
-                    text = "Активность",
-                    fontSize = 20.sp,
-                )
-                UserActive()
+
             }
         }
     }
