@@ -249,7 +249,7 @@ private fun TabLayout(currentData: MutableState<LocalDate>, timeTableViewModel: 
                         }
                         else if (currentDayBookingEvent!!.isNotEmpty()){
                             items(currentDayBookingEvent!!.size){id->
-                                EventCard(currentDayBookingEvent!![id], viewModel())
+                                EventCard(currentDayBookingEvent!![id], timeTableViewModel)
                             }
                         }else{
                             item {
