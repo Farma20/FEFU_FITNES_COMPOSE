@@ -58,7 +58,7 @@ object RegisterRepository: ViewModel() {
                                 "not an email" -> "Произошла ошибка при регистрации, несуществующая почта"
                                 "wrong birthdate" -> "Произошла ошибка при регистрации, некорректная дата рождения"
                                 "user already exists" -> "Произошла ошибка при регистрации, пользователь с данной почтой уже существует"
-                                else -> "Произошла ошибка при регистрации, проверьте правильность введенных данных"
+                                else -> "Произошла ошибка при регистрации, проверьте правильность введенных данных (номер телефона)"
                             }
                         }
 
@@ -97,8 +97,13 @@ object RegisterRepository: ViewModel() {
             }catch (cause:Throwable){
                 when (cause) {
                     is HttpException -> {
+                        val result = JSONObject(cause.response()?.errorBody()?.string().toString()).toMap()
                         if (cause.code() == 400)
-                            initializationStatus = "Ошибка входа. Проверьте корректность введенных данных или зарегистрируйтесь"
+                            initializationStatus = when(result["msg"]){
+                                "user doesn't exist" -> "Пользователя c данным email не существует"
+                                "wrong auth data" -> "Был введен неверный пароль"
+                                else -> "Ошибка входа. Проверьте корректность введенных данных или зарегистрируйтесь"
+                            }
                     }
                     else -> initializationStatus = "Ошибка входа. Проверьте соединение с интернетом или свяжитесь с разработчиками"
                 }
